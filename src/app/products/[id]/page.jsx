@@ -1,4 +1,4 @@
-import AddToCartButton from "../../../components/AddToCartButton";
+import AddToCartButton from "../../../AddToCartButton";
 
 
 async function getProduct(id) {

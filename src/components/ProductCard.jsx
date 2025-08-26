@@ -1,17 +1,36 @@
-import Link from "next/link"
+"use client";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/slices/cartSlice";
 
 export default function ProductCard({ product }) {
+  const dispatch = useDispatch();
+
   return (
-    <div className="p-4 border rounded-xl shadow hover:shadow-lg transition">
-      <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-lg" />
-      <h2 className="mt-3 text-xl font-semibold">{product.name}</h2>
+    <div className="bg-white shadow-md rounded-xl p-4 flex flex-col">
+      <img
+        src={product.image}
+        alt={product.title}
+        className="w-full h-40 object-cover rounded-lg"
+      />
+      <h2 className="mt-2 font-semibold">{product.title}</h2>
       <p className="text-gray-600">₹{product.price}</p>
-      <Link
-        href={`/product/${product.id}`}
-        className="mt-4 inline-block bg-black text-white px-4 py-2 rounded-lg"
-      >
-        View Details
-      </Link>
+
+      <div className="mt-auto flex gap-2">
+        {/* View Details Button */}
+        <button
+          className="flex-1 bg-black text-white px-3 py-2 rounded-lg hover:bg-gray-800"
+        >
+          View Details
+        </button>
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={() => dispatch(addToCart(product))}
+          className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700"
+        >
+          Add to Cart
+        </button>
+      </div>
     </div>
-  )
+  );
 }
