@@ -1,35 +1,46 @@
 "use client";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/slices/cartSlice";
+import AddToCartButton from "./AddToCartButton";
 
 export default function ProductCard({ product }) {
-  const dispatch = useDispatch();
-
   return (
-    <div className="bg-white shadow-md rounded-xl p-4 flex flex-col">
-      <img
-        src={product.image}
-        alt={product.title}
-        className="w-full h-40 object-cover rounded-lg"
-      />
-      <h2 className="mt-2 font-semibold">{product.title}</h2>
-      <p className="text-gray-600">₹{product.price}</p>
+    <div className="group relative bg-white/90 backdrop-blur-sm shadow-lg rounded-3xl p-5 flex flex-col transition-all duration-300 hover:shadow-2xl hover:scale-[1.03] border border-gray-200">
+      
+      {/* Product Image */}
+      <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl" />
+      </div>
 
-      <div className="mt-auto flex gap-2">
-        {/* View Details Button */}
-        <button
-          className="flex-1 bg-black text-white px-3 py-2 rounded-lg hover:bg-gray-800"
-        >
+      {/* Product Info */}
+      <div className="mt-4 flex flex-col gap-1">
+        {/* Category Badge */}
+        <span className="text-xs font-semibold text-white bg-blue-600 px-2 py-1 rounded-full w-max">
+          {product.category}
+        </span>
+
+        {/* Title */}
+        <h2 className="font-semibold text-lg text-gray-900 group-hover:text-black line-clamp-2">
+          {product.title}
+        </h2>
+
+        {/* Price */}
+        <p className="text-xl font-bold text-green-700">₹{product.price}</p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="mt-5 flex gap-3">
+        {/* View Details */}
+        <button className="flex-1 bg-gradient-to-r from-gray-900 to-gray-700 text-white px-4 py-2 rounded-2xl font-medium shadow-sm hover:shadow-lg hover:opacity-90 transition">
           View Details
         </button>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={() => dispatch(addToCart(product))}
-          className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700"
-        >
-          Add to Cart
-        </button>
+        {/* Add to Cart */}
+        <AddToCartButton product={product} />
       </div>
     </div>
   );

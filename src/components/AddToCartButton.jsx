@@ -1,4 +1,3 @@
-// components/AddToCartButton.jsx
 "use client";
 
 import { useState } from "react";
@@ -11,35 +10,28 @@ const AddToCartButton = ({ product, className = "" }) => {
   const [isAdded, setIsAdded] = useState(false);
 
   const handleAddToCart = () => {
-    // Make sure the product has all required properties
+    if (!product.id) return;
+
     const cartProduct = {
       id: product.id,
-      title: product.name || product.title,
+      title: product.title,
       price: product.price,
       image: product.image,
-      qty: quantity
+      qty: quantity,
+      category: product.category,
+      description: product.description,
     };
-    
-    console.log("Adding to cart:", cartProduct);
-    
-    dispatch(addToCart(cartProduct));
-    
-    setIsAdded(true);
-    
-    // Reset the confirmation after 2 seconds
-    setTimeout(() => {
-      setIsAdded(false);
-      setQuantity(1);
-    }, 2000);
-  };
 
-  const incrementQuantity = () => {
-    setQuantity(prev => prev + 1);
-  };
+    try {
+      dispatch(addToCart(cartProduct)); // redux-persist ensures this stays after refresh
+      setIsAdded(true);
 
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(prev => prev - 1);
+      setTimeout(() => {
+        setIsAdded(false);
+        setQuantity(1); // reset quantity selector
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
     }
   };
 
@@ -47,12 +39,11 @@ const AddToCartButton = ({ product, className = "" }) => {
     <div className={`flex flex-col space-y-4 ${className}`}>
       {/* Quantity Selector */}
       <div className="flex items-center">
-        <span className="mr-3 text-gray-700 dark:text-gray-300">Quantity:</span>
+        <span className="mr-3 text-gray-700">Quantity:</span>
         <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
           <button
-            onClick={decrementQuantity}
+            onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
             className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-            disabled={quantity <= 1}
           >
             -
           </button>
@@ -60,7 +51,7 @@ const AddToCartButton = ({ product, className = "" }) => {
             {quantity}
           </span>
           <button
-            onClick={incrementQuantity}
+            onClick={() => setQuantity((prev) => prev + 1)}
             className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
           >
             +
@@ -110,15 +101,14 @@ const AddToCartButton = ({ product, className = "" }) => {
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            Add to Cart - ₹{(product.price * quantity / 100).toFixed(2)}
+            Add to Cart - ₹{product.price * quantity}
           </>
         )}
       </button>
 
-      {/* Quick View of Cart Info */}
       {isAdded && (
         <div className="mt-2 text-sm text-green-600 font-medium animate-pulse">
-          {quantity} item{quantity > 1 ? 's' : ''} added to your cart
+          {quantity} item{quantity > 1 ? "s" : ""} added to your cart
         </div>
       )}
     </div>
