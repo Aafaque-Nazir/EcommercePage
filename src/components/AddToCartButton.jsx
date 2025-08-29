@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
+import { motion } from "framer-motion";
 
 const AddToCartButton = ({ product, className = "" }) => {
   const dispatch = useDispatch();
@@ -23,12 +24,12 @@ const AddToCartButton = ({ product, className = "" }) => {
     };
 
     try {
-      dispatch(addToCart(cartProduct)); // redux-persist ensures this stays after refresh
+      dispatch(addToCart(cartProduct));
       setIsAdded(true);
 
       setTimeout(() => {
         setIsAdded(false);
-        setQuantity(1); // reset quantity selector
+        setQuantity(1);
       }, 2000);
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -36,37 +37,35 @@ const AddToCartButton = ({ product, className = "" }) => {
   };
 
   return (
-    <div className={`flex flex-col space-y-4 ${className}`}>
+    <div className={`flex flex-col sm:flex-row sm:items-center gap-3 w-full ${className}`}>
       {/* Quantity Selector */}
-      <div className="flex items-center">
-        <span className="mr-3 text-gray-700">Quantity:</span>
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-          <button
-            onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-          >
-            -
-          </button>
-          <span className="px-4 py-2 bg-white text-gray-800 font-medium">
-            {quantity}
-          </span>
-          <button
-            onClick={() => setQuantity((prev) => prev + 1)}
-            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-          >
-            +
-          </button>
-        </div>
+      <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm w-max mx-auto sm:mx-0">
+        <button
+          onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+        >
+          -
+        </button>
+        <span className="px-4 py-2 text-gray-800 dark:text-gray-100 font-medium min-w-[32px] text-center">
+          {quantity}
+        </span>
+        <button
+          onClick={() => setQuantity((prev) => prev + 1)}
+          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+        >
+          +
+        </button>
       </div>
 
       {/* Add to Cart Button */}
-      <button
+      <motion.button
+        whileTap={{ scale: 0.95 }}
         onClick={handleAddToCart}
         disabled={isAdded}
-        className={`flex items-center justify-center py-3 px-6 rounded-lg font-medium transition-all ${
+        className={`flex-1 flex items-center justify-center py-3 px-5 rounded-xl font-medium shadow-md transition-all ${
           isAdded
             ? "bg-green-600 text-white"
-            : "bg-blue-600 hover:bg-blue-700 text-white"
+            : "bg-gradient-to-r from-purple-600 to-pink-500 hover:opacity-90 text-white"
         }`}
       >
         {isAdded ? (
@@ -84,7 +83,7 @@ const AddToCartButton = ({ product, className = "" }) => {
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            Added to Cart!
+            Added!
           </>
         ) : (
           <>
@@ -101,16 +100,10 @@ const AddToCartButton = ({ product, className = "" }) => {
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            Add to Cart - ₹{product.price * quantity}
+            Add ₹{product.price * quantity}
           </>
         )}
-      </button>
-
-      {isAdded && (
-        <div className="mt-2 text-sm text-green-600 font-medium animate-pulse">
-          {quantity} item{quantity > 1 ? "s" : ""} added to your cart
-        </div>
-      )}
+      </motion.button>
     </div>
   );
 };

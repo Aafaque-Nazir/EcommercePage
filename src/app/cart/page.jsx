@@ -1,4 +1,5 @@
 "use client";
+
 import { useSelector, useDispatch } from "react-redux";
 import {
   removeFromCart,
@@ -7,6 +8,11 @@ import {
   clearCart,
 } from "../../redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
+
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
 
 export default function CartPage() {
   const items = useSelector((state) => state.cart.items);
@@ -20,105 +26,118 @@ export default function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
+      <div className="max-w-5xl mx-auto px-6">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-10 flex items-center gap-3">
+          <ShoppingBag className="w-8 h-8 text-blue-600" />
           Your Shopping Cart
         </h1>
 
         {items.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <h3 className="mt-4 text-lg font-medium text-gray-900">
-              Your cart is empty
+          <Card className="p-10 text-center shadow-lg bg-white rounded-2xl">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Your cart is empty 🛒
             </h3>
-            <div className="mt-6">
-              <button
-                onClick={handleContinueShopping}
-                className="px-4 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Continue Shopping
-              </button>
-            </div>
-          </div>
+            <p className="text-gray-500 mt-2">
+              Start adding products to see them here.
+            </p>
+            <Button
+              onClick={handleContinueShopping}
+              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl"
+            >
+              Continue Shopping
+            </Button>
+          </Card>
         ) : (
-          <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium text-gray-900">Cart Items</h2>
-            </div>
-
-            <div className="divide-y divide-gray-200">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between"
-                >
-                  <div className="flex items-start space-x-4">
-                    <img
-                      className="h-20 w-20 rounded-md object-cover"
-                      src={item.image || "/api/placeholder/80/80"}
-                      alt={item.title}
-                    />
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-500 mt-1">₹{item.price} each</p>
-                      <p className="text-gray-900 font-medium mt-1">
-                        ₹{item.price * item.qty} total
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 sm:mt-0 flex items-center space-x-4">
-                    <div className="flex items-center border border-gray-300 rounded-md">
-                      <button
-                        onClick={() => dispatch(decreaseQty(item.id))}
-                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md"
-                        disabled={item.qty <= 1}
-                      >
-                        -
-                      </button>
-                      <span className="px-3 py-1 text-gray-900 font-medium">
-                        {item.qty}
-                      </span>
-                      <button
-                        onClick={() => dispatch(increaseQty(item.id))}
-                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md"
-                      >
-                        +
-                      </button>
+          <Card className="overflow-hidden shadow-xl rounded-2xl">
+            <CardContent className="p-0">
+              <AnimatePresence>
+                {items.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between border-b last:border-none"
+                  >
+                    <div className="flex items-start gap-5">
+                      <img
+                        className="h-24 w-24 rounded-xl object-cover shadow-md"
+                        src={item.image || "/api/placeholder/100/100"}
+                        alt={item.title}
+                      />
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-500 mt-1">
+                          ₹{item.price.toLocaleString()} each
+                        </p>
+                        <p className="text-gray-900 font-medium mt-1">
+                          ₹{(item.price * item.qty).toLocaleString()} total
+                        </p>
+                      </div>
                     </div>
 
-                    <button
-                      onClick={() => dispatch(removeFromCart(item.id))}
-                      className="p-2 text-red-600 hover:bg-red-100 rounded-full"
-                      title="Remove item"
-                    >
-                      ❌
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    <div className="mt-5 sm:mt-0 flex items-center gap-4">
+                      <div className="flex items-center border rounded-lg shadow-sm">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => dispatch(decreaseQty(item.id))}
+                          disabled={item.qty <= 1}
+                          className="rounded-l-lg"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </Button>
+                        <span className="px-4 font-medium">{item.qty}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => dispatch(increaseQty(item.id))}
+                          className="rounded-r-lg"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </div>
 
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Total: ₹{total}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => dispatch(removeFromCart(item.id))}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </CardContent>
+
+            <div className="px-6 py-6 bg-gray-50 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Total: ₹{total.toLocaleString()}
                 </h2>
-                <button
+                <Button
+                  variant="outline"
                   onClick={() => dispatch(clearCart())}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="mt-2"
                 >
                   Clear Cart
-                </button>
+                </Button>
               </div>
 
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-medium">
+              <Button
+                onClick={() => router.push("/checkout")}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow-md"
+              >
                 Proceed to Checkout
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </div>

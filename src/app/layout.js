@@ -1,6 +1,7 @@
 import "../app/globals.css";
 import Providers from "./Providers";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export const metadata = {
   title: "Shopster",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
           <main className="container mx-auto px-4 py-8">
             {children}
           </main>
+          <Footer />
         </Providers>
       </body>
     </html>
