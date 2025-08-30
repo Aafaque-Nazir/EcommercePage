@@ -6,8 +6,6 @@ const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/products`, { cac
 const list = await res.json();
   return list.find((p) => p.id.toString() === id.toString());
 }
-
-
 export default async function ProductDetail({ params }) {
 const product = await getProduct(params.id);
 if (!product) return <div>Not found</div>;

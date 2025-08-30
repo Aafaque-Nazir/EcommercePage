@@ -20,18 +20,41 @@ export default function CheckoutPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const paymentMethod = e.target.payment.value;
 
-    const order = {
-      customer: form,
-      items: cartItems,
-      total: cartItems.reduce((sum, item) => sum + item.price * item.qty, 0),
-    };
-    localStorage.setItem("lastOrder", JSON.stringify(order));
+    if (paymentMethod === "cod") {
+      // Cash on Delivery flow
+      const order = {
+        customer: form,
+        items: cartItems,
+        total: cartItems.reduce((sum, item) => sum + item.price * item.qty, 0),
+      };
+      localStorage.setItem("lastOrder", JSON.stringify(order));
+      dispatch(clearCart());
+      router.push("/order-success");
+    } else {
+      // Stripe Checkout flow
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: cartItems, customer: form }),
+        });
 
-    dispatch(clearCart());
-    router.push("/order-success");
+        const data = await res.json();
+
+        if (data.url) {
+          window.location.href = data.url; // Redirect to Stripe checkout page
+        } else {
+          alert("Failed to start payment session.");
+        }
+      } catch (err) {
+        console.error("Payment error:", err);
+        alert("Something went wrong. Try again.");
+      }
+    }
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -77,16 +100,16 @@ export default function CheckoutPage() {
             required
           />
 
-          {/* Payment options placeholder */}
+          {/* Payment Options */}
           <div className="space-y-3">
             <h2 className="text-lg font-semibold">Payment Method</h2>
             <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:border-black">
-              <input type="radio" name="payment" defaultChecked />
+              <input type="radio" name="payment" value="cod" defaultChecked />
               <CreditCard size={18} />
               <span>Cash on Delivery</span>
             </label>
             <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:border-black">
-              <input type="radio" name="payment" />
+              <input type="radio" name="payment" value="online" />
               <CreditCard size={18} />
               <span>UPI / Card / Netbanking</span>
             </label>
