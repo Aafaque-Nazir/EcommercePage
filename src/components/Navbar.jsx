@@ -13,6 +13,7 @@ export default function Navbar() {
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
     { name: "FAQ", href: "/faq" },
+    { name: "Orders", href: "/orders" },
   ];
 
   // Example cart count (later hook into Redux/cartSlice)

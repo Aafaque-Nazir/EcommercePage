@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import cartReducer from "./slices/cartSlice";
 import wishlistReducer from "./slices/wishlistSlice";
 import productsReducer from "./slices/productsSlice";
+import orderReducer from "./slices/orderSlice";
 
 // Persist config for cart
 const cartPersistConfig = {
@@ -12,18 +13,26 @@ const cartPersistConfig = {
   whitelist: ["items"],
 };
 
+// Persist config for orders
+const orderPersistConfig = {
+  key: "orders",
+  storage,
+  whitelist: ["orders"], // persist the orders array
+};
+
 const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
+const persistedOrderReducer = persistReducer(orderPersistConfig, orderReducer); // ✅ define this
 
 export const store = configureStore({
   reducer: {
     cart: persistedCartReducer,
     wishlist: wishlistReducer,
     products: productsReducer,
+    orders: persistedOrderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore redux-persist actions
         ignoredActions: [
           "persist/PERSIST",
           "persist/FLUSH",

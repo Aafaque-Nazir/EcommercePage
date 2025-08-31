@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ShieldCheck, Truck, CreditCard } from "lucide-react";
 
+
 export default function CheckoutPage() {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const router = useRouter();
+
+
 
   const [form, setForm] = useState({
     name: "",
