@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.orders.orders);
+  const orders = useSelector((state) => state.orders.list);
 
   const handleCancel = (id) => {
     dispatch(cancelOrder(id));
   };
 
-  if (orders.length === 0) {
+  if (!orders || orders.length === 0) {
     return (
       <div className="flex items-center justify-center h-[80vh]">
         <p className="text-gray-500 text-lg">No orders placed yet.</p>
@@ -68,7 +68,6 @@ export default function OrdersPage() {
                 )}
               </div>
 
-              {/* Order items */}
               <div className="mt-4 border-t pt-4">
                 <h3 className="font-semibold mb-2">Items:</h3>
                 <ul className="space-y-1">

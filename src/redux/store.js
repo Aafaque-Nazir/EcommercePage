@@ -1,27 +1,28 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import cartReducer from "./slices/cartSlice";
 import wishlistReducer from "./slices/wishlistSlice";
 import productsReducer from "./slices/productsSlice";
-import orderReducer from "./slices/orderSlice";
+import orderReducer from "./slices/orderSlice"; // This is ordersSlice.reducer
 
-// Persist config for cart
+// ✅ Persist cart: items
 const cartPersistConfig = {
   key: "cart",
   storage,
   whitelist: ["items"],
 };
 
-// Persist config for orders
+// ✅ Fix: Persist orderSlice's `list` field, not `orders`
 const orderPersistConfig = {
   key: "orders",
   storage,
-  whitelist: ["orders"], // persist the orders array
+  whitelist: ["list"], // ✅ This is correct — matches initialState.list
 };
 
+// Apply persist
 const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
-const persistedOrderReducer = persistReducer(orderPersistConfig, orderReducer); // ✅ define this
+const persistedOrderReducer = persistReducer(orderPersistConfig, orderReducer);
 
 export const store = configureStore({
   reducer: {

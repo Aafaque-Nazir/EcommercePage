@@ -1,17 +1,39 @@
 "use client";
+
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { CheckCircle, Package, IndianRupee } from "lucide-react";
+import { addOrder } from "../../redux/slices/orderSlice";
 
 export default function OrderSuccessPage() {
   const [order, setOrder] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    // Read the last order from localStorage (temporary storage)
     const savedOrder = localStorage.getItem("lastOrder");
     if (savedOrder) {
-      setOrder(JSON.parse(savedOrder));
+      const parsedOrder = JSON.parse(savedOrder);
+
+      // Create the new order object
+      const newOrder = {
+        ...parsedOrder,
+        id: Date.now(), // Unique ID
+        date: new Date().toLocaleString(), // Timestamp
+        status: "placed", // Lowercase, consistent
+      };
+
+      // ✅ Dispatch to Redux (redux-persist will handle localStorage)
+      dispatch(addOrder(newOrder));
+
+      // Set local state for display
+      setOrder(newOrder);
+
+      // 🔁 Optional: Remove only the temp order key
+      localStorage.removeItem("lastOrder");
     }
-  }, []);
+  }, [dispatch]);
 
   if (!order) {
     return (
@@ -32,9 +54,7 @@ export default function OrderSuccessPage() {
       {/* Success Header */}
       <div className="bg-green-50 border border-green-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-sm">
         <CheckCircle className="w-14 h-14 text-green-600 mb-3" />
-        <h1 className="text-3xl font-bold text-green-700">
-          Order Successful 🎉
-        </h1>
+        <h1 className="text-3xl font-bold text-green-700">Order Successful 🎉</h1>
         <p className="text-gray-600 mt-2">
           Thank you, <span className="font-semibold">{order.customer.name}</span>! 
           Your order has been placed successfully.
@@ -47,17 +67,12 @@ export default function OrderSuccessPage() {
 
         <div className="divide-y">
           {order.items.map((item) => (
-            <div
-              key={item.id}
-              className="flex justify-between items-center py-3"
-            >
+            <div key={item.id} className="flex justify-between items-center py-3">
               <div className="flex flex-col">
                 <span className="font-medium">{item.title}</span>
                 <span className="text-sm text-gray-500">Qty: {item.qty}</span>
               </div>
-              <span className="font-semibold text-gray-700">
-                ₹{item.price * item.qty}
-              </span>
+              <span className="font-semibold text-gray-700">₹{item.price * item.qty}</span>
             </div>
           ))}
         </div>
@@ -66,21 +81,19 @@ export default function OrderSuccessPage() {
           <span className="text-lg font-semibold flex items-center gap-1">
             <IndianRupee className="w-5 h-5" /> Total
           </span>
-          <span className="text-xl font-bold text-green-700">
-            ₹{order.total}
-          </span>
+          <span className="text-xl font-bold text-green-700">₹{order.total}</span>
         </div>
       </div>
 
-      {/* CTA */}
+      {/* CTA Button */}
       <div className="mt-8 flex justify-center">
         <motion.a
-          href="/products"
+          href="/orders"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.97 }}
-          className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-md hover:bg-green-700 transition"
+          className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-md hover:bg-green-700 transition-colors"
         >
-          Continue Shopping
+          View My Orders
         </motion.a>
       </div>
     </motion.div>
