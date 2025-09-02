@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { cancelOrder } from "../../redux/slices/orderSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ProtectedPage from "@/components/ProtectedPage";
+
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
@@ -22,10 +24,11 @@ export default function OrdersPage() {
   }
 
   return (
+    <ProtectedPage>
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">My Orders</h1>
+      <h1 className="text-3xl font-bold mb-6 mt-6 text-center">My Orders</h1>
 
-      <div className="grid gap-6">
+      <div className="grid gap-6 flex-col-reverse">
         {orders.map((order) => (
           <Card
             key={order.id}
@@ -89,5 +92,6 @@ export default function OrdersPage() {
         ))}
       </div>
     </div>
+    </ProtectedPage>
   );
 }
