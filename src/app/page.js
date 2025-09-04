@@ -488,10 +488,12 @@ export default function HomePage() {
               Start Shopping Now
             </Button>
             </Link>
+            <Link href={"/login"} passHref>
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 rounded-2xl text-lg font-semibold cursor-pointer">
               <Users className="w-5 h-5 mr-2" />
               Create Account
             </Button>
+             </Link>
           </div>
         </div>
       </section>

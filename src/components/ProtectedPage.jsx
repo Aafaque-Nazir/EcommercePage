@@ -10,7 +10,7 @@ export default function ProtectedPage({ children }) {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login"); // ya apna login page
+      router.push("/login");
     }
   }, [status, router]);
 
