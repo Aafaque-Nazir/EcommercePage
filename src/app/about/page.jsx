@@ -290,31 +290,45 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
-        <Card className="rounded-3xl bg-neutral-950 text-white">
-          <CardContent className="grid items-center gap-6 p-8 md:grid-cols-2">
-            <div>
-              <h3 className="text-2xl font-semibold">Join 120k+ happy customers</h3>
-              <p className="mt-2 text-neutral-300">Sign up for launches, price drops, and insider perks.</p>
-              <form className="mt-5 flex max-w-md gap-2">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 rounded-xl border border-neutral-800 bg-neutral-900 p-3 text-sm outline-none focus:border-white"
-                />
-                <Button type="submit" variant="secondary">Subscribe</Button>
-              </form>
-            </div>
-            <div className="relative h-40 w-full md:h-56">
-              <Image
-                src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop"
-                alt="Bestseller collage"
-                fill
-                className="rounded-2xl object-cover"
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+  <Card className="rounded-3xl bg-neutral-950 text-white overflow-hidden">
+    <CardContent className="grid items-center gap-6 p-8 md:grid-cols-2">
+      
+      {/* Text & Form */}
+      <div className="space-y-4">
+        <h3 className="text-2xl font-semibold">Join 120k+ happy customers</h3>
+        <p className="text-neutral-300">Sign up for launches, price drops, and insider perks.</p>
+        
+        <form className="flex flex-col sm:flex-row gap-2 w-full max-w-md">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="flex-1 rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-sm outline-none focus:border-white focus:ring-1 focus:ring-white/20"
+            aria-label="Email address"
+          />
+          <Button 
+            type="submit" 
+            variant="secondary" 
+            className="whitespace-nowrap"
+          >
+            Subscribe
+          </Button>
+        </form>
+      </div>
+
+      {/* Image */}
+      <div className="relative h-40 w-full md:h-56 rounded-2xl overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop"
+          alt="Bestseller collage"
+          fill
+          className="object-cover transition-transform hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
+
+    </CardContent>
+  </Card>
+</section>
     </div>
   );
 }

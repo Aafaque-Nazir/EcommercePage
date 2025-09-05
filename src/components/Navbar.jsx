@@ -24,7 +24,7 @@ export default function Navbar() {
     <nav className="w-full bg-gray-900 text-white shadow-md fixed top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <a href="/" className="text-2xl font-extrabold tracking-wide text-yellow-400">
+        <a href="/" className="text-2xl font-extrabold tracking-wide text-purple-400">
           ShopEase
         </a>
 
@@ -37,18 +37,18 @@ export default function Navbar() {
               className="relative text-sm font-medium group"
             >
               {link.name}
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-yellow-400 transition-all group-hover:w-full" />
+              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full" />
             </a>
           ))}
 
           {/* Cart with Badge */}
           <a
             href="/cart"
-            className="relative flex items-center hover:text-yellow-400 transition"
+            className="relative flex items-center hover:text-purple-400 transition"
           >
             <ShoppingCart size={22} />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-yellow-500 text-gray-900 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              <span className="absolute -top-2 -right-2 bg-white text-gray-900 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                 {cartCount}
               </span>
             )}
