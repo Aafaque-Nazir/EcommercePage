@@ -3,7 +3,7 @@ import AddToCartButton from "./AddToCartButton";
 
 export default function ProductCard({ product }) {
   return (
-    <div className="group relative bg-white/90 backdrop-blur-sm shadow-lg rounded-3xl p-5 flex flex-col transition-all duration-300 hover:shadow-2xl hover:scale-[1.03] border border-gray-200">
+    <div className="group relative bg-white/90 backdrop-blur-sm shadow-lg rounded-3xl p-5 flex flex-col transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] border border-gray-200">
       
       {/* Product Image */}
       <div className="relative w-full h-52 overflow-hidden rounded-2xl">
@@ -28,15 +28,19 @@ export default function ProductCard({ product }) {
         <p className="text-xl font-bold text-green-700">₹{product.price}</p>
       </div>
 
-      {/* Action Buttons */}
-      <div className="mt-5 flex flex-wrap gap-3 w-full">
-        <button className="flex-1 bg-gradient-to-r from-gray-900 to-gray-700 text-white px-4 py-2 rounded-2xl font-medium shadow-sm hover:shadow-lg hover:opacity-90 transition text-sm sm:text-base">
+      {/* Card Footer */}
+      <div className="mt-5 flex flex-col gap-3">
+        {/* View Details Button */}
+        <button
+          className="w-full bg-gray-900 text-white px-5 py-3 rounded-xl 
+                     font-medium shadow-md hover:shadow-lg hover:scale-105 
+                     transition-transform duration-200 text-sm sm:text-base"
+        >
           View Details
         </button>
 
-        <div className="flex-1">
-          <AddToCartButton product={product} className="w-full text-sm sm:text-base" />
-        </div>
+        {/* Add to Cart Button */}
+        <AddToCartButton product={product} />
       </div>
     </div>
   );

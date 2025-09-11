@@ -44,30 +44,49 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center min-h-[85vh] text-center px-6">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500">
-          Run Faster. Shop Smarter.
-        </h1>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8">
-          Experience the future of shopping with{" "}
-          <Badge variant="outline">Next.js</Badge> +{" "}
-          <Badge variant="outline">Redux</Badge> +{" "}
-          <Badge variant="outline">NextAuth</Badge>
-        </p>
-        <div className="flex gap-4 flex-wrap justify-center">
-          <Link href="/products">
-            <Button size="lg" className="px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 hover:opacity-90 text-lg">
-              Browse Products <ChevronRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
-          <Button variant="outline" size="lg" className="px-8 py-4 rounded-xl backdrop-blur-sm">
-            <Play className="w-5 h-5 mr-2" /> Watch Demo
-          </Button>
-        </div>
-      </section>
+ <section
+  className="relative flex items-center justify-center min-h-[90vh] text-center px-6 bg-cover bg-center"
+  style={{
+    backgroundImage:
+      "url('https://media.istockphoto.com/id/1331058264/photo/online-shopping-concept-with-laptop-banner-shopping-cart-lipstick-high-heel-shoe-credit-card.webp?a=1&b=1&s=612x612&w=0&k=20&c=5S6uZtLXYBEQDu4QAKMzaIZ5TSJ1FsxSePjpjvQzwyE=')",
+  
+  }}
+>
+
+  <div 
+    className="absolute inset-0 bg-black/80 opacity-40 z-0" 
+    aria-hidden="true"
+  ></div>
+
+  {/* Content  */}
+  <div className="relative z-10 max-w-3xl mx-auto">
+    <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-white drop-shadow-lg">
+      Run Faster. Shop Smarter.
+    </h1>
+
+    <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 mb-8 leading-relaxed drop-shadow">
+      Discover trendy fashion, latest gadgets, and everyday essentials — all in one place.  
+      Exclusive deals, lightning-fast delivery, and a secure checkout for a smarter shopping experience.  
+    </p>
+
+    <div className="flex gap-4 flex-wrap justify-center">
+      <Link href="/products">
+        <Button
+          size="lg"
+          className="px-8 py-4 rounded-xl  
+                     hover:scale-105 transition-transform duration-300 text-lg text-white shadow-lg"
+        >
+          Browse Products <ChevronRight className="w-5 h-5 ml-2" />
+        </Button>
+      </Link>
+    </div>
+  </div>
+</section>
+
+
 
       {/* Features */}
       <section className="py-16 px-6">

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
 import { motion } from "framer-motion";
 
-const AddToCartButton = ({ product, className = "" }) => {
+const AddToCartButton = ({ product }) => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
@@ -37,12 +37,13 @@ const AddToCartButton = ({ product, className = "" }) => {
   };
 
   return (
-    <div className={`flex flex-col sm:flex-row sm:items-center gap-3 w-full ${className}`}>
+    <div className="flex items-center gap-3 w-full">
       {/* Quantity Selector */}
-      <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm w-max mx-auto sm:mx-0">
+      <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <button
           onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 
+                     dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
         >
           -
         </button>
@@ -51,7 +52,8 @@ const AddToCartButton = ({ product, className = "" }) => {
         </span>
         <button
           onClick={() => setQuantity((prev) => prev + 1)}
-          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+          className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 
+                     dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
         >
           +
         </button>
@@ -76,12 +78,7 @@ const AddToCartButton = ({ product, className = "" }) => {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Added!
           </>
@@ -93,12 +90,7 @@ const AddToCartButton = ({ product, className = "" }) => {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
             Add ₹{product.price * quantity}
           </>

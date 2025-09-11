@@ -69,7 +69,7 @@ export default function ProductsPage() {
         </h1>
 
         {/* Search + Sort */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col items-center gap-3">
           <div className="relative w-64">
             <input
               type="text"
@@ -95,7 +95,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap gap-3 mb-8">
+      <div className="flex flex-wrap  gap-3 mb-8">
         {categories.map((cat) => {
           const isActive = cat === category;
           return (
