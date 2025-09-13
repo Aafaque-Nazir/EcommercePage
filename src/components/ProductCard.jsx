@@ -1,5 +1,6 @@
 "use client";
 import AddToCartButton from "./AddToCartButton";
+import Link from "next/link";
 
 export default function ProductCard({ product }) {
   return (
@@ -31,13 +32,16 @@ export default function ProductCard({ product }) {
       {/* Card Footer */}
       <div className="mt-5 flex flex-col gap-3">
         {/* View Details Button */}
+        <Link href={`/products/${product.id}`} passHref>
         <button
           className="w-full bg-gray-900 text-white px-5 py-3 rounded-xl 
-                     font-medium shadow-md hover:shadow-lg hover:scale-105 
-                     transition-transform duration-200 text-sm sm:text-base"
-        >
+          font-medium shadow-md hover:shadow-lg hover:scale-105 
+          transition-transform duration-200 text-sm sm:text-base"
+          >
           View Details
         </button>
+            </Link>
+         
 
         {/* Add to Cart Button */}
         <AddToCartButton product={product} />

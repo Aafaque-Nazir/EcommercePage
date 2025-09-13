@@ -1,69 +1,87 @@
 "use client";
+
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../../redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ShieldCheck, Truck, CreditCard } from "lucide-react";
 
-
 export default function CheckoutPage() {
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const dispatch = useDispatch();
   const router = useRouter();
-
-
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     address: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 1), 0);
+  const shipping = subtotal > 500 ? 0 : 49;
+  const tax = Math.round(subtotal * 0.05);
+  const total = subtotal + shipping + tax;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const paymentMethod = e.target.payment.value;
 
+    if (!cartItems || cartItems.length === 0) {
+      alert("Cart is empty. Add some products first.");
+      return;
+    }
+
+    if (!form.name || !form.email || !form.address) {
+      alert("Please fill name, email and address.");
+      return;
+    }
+
     if (paymentMethod === "cod") {
-      // Cash on Delivery flow
+      // Cash on Delivery flow - save order locally and clear cart
       const order = {
+        id: `local-${Date.now()}`,
         customer: form,
         items: cartItems,
-        total: cartItems.reduce((sum, item) => sum + item.price * item.qty, 0),
+        total,
+        payment: "COD",
+        createdAt: new Date().toISOString(),
       };
+      // save to localStorage as demo - in real app send to your backend DB
       localStorage.setItem("lastOrder", JSON.stringify(order));
       dispatch(clearCart());
       router.push("/order-success");
-    } else {
-      // Stripe Checkout flow
-      try {
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: cartItems, customer: form }),
-        });
+      return;
+    }
 
-        const data = await res.json();
+    // Online (Stripe) flow
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: cartItems, customer: form }),
+      });
 
-        if (data.url) {
-          window.location.href = data.url; // Redirect to Stripe checkout page
-        } else {
-          alert("Failed to start payment session.");
-        }
-      } catch (err) {
-        console.error("Payment error:", err);
-        alert("Something went wrong. Try again.");
+      const data = await res.json();
+      if (res.ok && data.url) {
+        // Redirect to Stripe Checkout (hosted)
+        window.location.href = data.url;
+      } else {
+        console.error("Checkout error:", data);
+        alert(data.error || "Failed to create checkout session.");
       }
+    } catch (err) {
+      console.error("Payment error:", err);
+      alert("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const shipping = subtotal > 500 ? 0 : 49;
-  const tax = Math.round(subtotal * 0.05);
-  const total = subtotal + shipping + tax;
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -114,31 +132,49 @@ export default function CheckoutPage() {
             <label className="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:border-black">
               <input type="radio" name="payment" value="online" />
               <CreditCard size={18} />
-              <span>UPI / Card / Netbanking</span>
+              <span>UPI / Card / Netbanking (Stripe)</span>
             </label>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-black text-white p-3 rounded-xl font-semibold hover:opacity-90 transition"
+            disabled={loading}
+            className={`w-full p-3 rounded-xl font-semibold transition ${
+              loading ? "bg-gray-400 text-white cursor-not-allowed" : "bg-black text-white hover:opacity-90"
+            }`}
           >
-            Place Order
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Redirecting to payment...
+              </span>
+            ) : (
+              "Place Order"
+            )}
           </button>
         </form>
 
         {/* Right Side - Order Summary */}
         <div className="bg-gray-50 shadow-lg rounded-2xl p-6 space-y-6">
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-64 overflow-y-auto">
             {cartItems.map((item, i) => (
               <div
                 key={i}
                 className="flex justify-between items-center border-b pb-2"
               >
                 <span>
-                  {item.name} x {item.qty}
+                  {item.title || item.name} x {item.qty}
                 </span>
-                <span>₹{item.price * item.qty}</span>
+                <span>₹{(item.price * item.qty).toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -146,7 +182,7 @@ export default function CheckoutPage() {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>₹{subtotal}</span>
+              <span>₹{subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
@@ -158,7 +194,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-between font-bold text-lg pt-2 border-t">
               <span>Total</span>
-              <span>₹{total}</span>
+              <span>₹{total.toLocaleString()}</span>
             </div>
           </div>
 
