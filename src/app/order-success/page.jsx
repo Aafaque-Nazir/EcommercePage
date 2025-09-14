@@ -5,35 +5,48 @@ import { useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import { CheckCircle, Package, IndianRupee } from "lucide-react";
 import { addOrder } from "../../redux/slices/orderSlice";
+import { useSearchParams } from "next/navigation";
 
 export default function OrderSuccessPage() {
   const [order, setOrder] = useState(null);
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Read the last order from localStorage (temporary storage)
+    // 1. COD flow (saved in localStorage)
     const savedOrder = localStorage.getItem("lastOrder");
     if (savedOrder) {
       const parsedOrder = JSON.parse(savedOrder);
-
-      // Create the new order object
       const newOrder = {
         ...parsedOrder,
-        id: Date.now(), // Unique ID
-        date: new Date().toLocaleString(), // Timestamp
-        status: "placed", // Lowercase, consistent
+        id: Date.now(),
+        date: new Date().toLocaleString(),
+        status: "placed",
       };
-
-      // ✅ Dispatch to Redux (redux-persist will handle localStorage)
       dispatch(addOrder(newOrder));
-
-      // Set local state for display
       setOrder(newOrder);
-
-      // 🔁 Optional: Remove only the temp order key
       localStorage.removeItem("lastOrder");
+      return;
     }
-  }, [dispatch]);
+
+    // 2. Online Payment flow (Cashfree/Stripe redirect)
+    const orderId = searchParams.get("order_id");
+    if (orderId) {
+      const newOrder = {
+        id: orderId,
+        date: new Date().toLocaleString(),
+        status: "paid",
+        customer: {
+          name: "Customer",
+          email: "N/A",
+        },
+        items: [], // You can extend this by fetching order details from server/webhook
+        total: 0, // Cashfree webhook/DB should ideally store actual amount
+      };
+      dispatch(addOrder(newOrder));
+      setOrder(newOrder);
+    }
+  }, [dispatch, searchParams]);
 
   if (!order) {
     return (
@@ -56,8 +69,9 @@ export default function OrderSuccessPage() {
         <CheckCircle className="w-14 h-14 text-green-600 mb-3" />
         <h1 className="text-3xl font-bold text-green-700">Order Successful 🎉</h1>
         <p className="text-gray-600 mt-2">
-          Thank you, <span className="font-semibold">{order.customer.name}</span>! 
-          Your order has been placed successfully.
+          Thank you,{" "}
+          <span className="font-semibold">{order.customer?.name || "User"}</span>
+          ! Your order has been placed successfully.
         </p>
       </div>
 
@@ -65,17 +79,28 @@ export default function OrderSuccessPage() {
       <div className="mt-8 bg-white border rounded-2xl shadow-sm p-6 space-y-4">
         <h2 className="text-xl font-semibold border-b pb-2">Order Summary</h2>
 
-        <div className="divide-y">
-          {order.items.map((item) => (
-            <div key={item.id} className="flex justify-between items-center py-3">
-              <div className="flex flex-col">
-                <span className="font-medium">{item.title}</span>
-                <span className="text-sm text-gray-500">Qty: {item.qty}</span>
+        {order.items.length > 0 ? (
+          <div className="divide-y">
+            {order.items.map((item) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center py-3"
+              >
+                <div className="flex flex-col">
+                  <span className="font-medium">{item.title}</span>
+                  <span className="text-sm text-gray-500">Qty: {item.qty}</span>
+                </div>
+                <span className="font-semibold text-gray-700">
+                  ₹{item.price * item.qty}
+                </span>
               </div>
-              <span className="font-semibold text-gray-700">₹{item.price * item.qty}</span>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500 italic text-sm">
+            Order details will be updated soon.
+          </p>
+        )}
 
         <div className="flex justify-between items-center pt-4 border-t">
           <span className="text-lg font-semibold flex items-center gap-1">

@@ -60,27 +60,31 @@ export default function CheckoutPage() {
 
     // Online (Stripe) flow
     setLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: cartItems, customer: form }),
-      });
 
-      const data = await res.json();
-      if (res.ok && data.url) {
-        // Redirect to Stripe Checkout (hosted)
-        window.location.href = data.url;
-      } else {
-        console.error("Checkout error:", data);
-        alert(data.error || "Failed to create checkout session.");
-      }
-    } catch (err) {
-      console.error("Payment error:", err);
-      alert("Something went wrong. Try again.");
-    } finally {
-      setLoading(false);
+  // Cashfree Checkout flow
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: cartItems, customer: form }),
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url; // redirect to Cashfree payment page
+    } else {
+      alert("Failed to start payment session.");
     }
+  } catch (err) {
+    console.error("Payment error:", err);
+    alert("Something went wrong. Try again.");
+  }
+  
+      finally {
+        setLoading(false);
+      }
+
   };
 
   return (

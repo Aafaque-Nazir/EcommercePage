@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "EcommercePage Docs": {
+      "type": "sse",
+      "url": "https://gitmcp.io/Aafaque-Nazir/EcommercePage"
+    }
+  }
+}

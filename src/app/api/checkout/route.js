@@ -1,36 +1,63 @@
-import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export async function POST(req) {
+  function generateCustomerId(email) {
+  return email.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50); // Limit length and replace invalid chars
+}
   try {
-    const { items } = await req.json();
+    const { items, customer } = await req.json();
 
-    // Map cart items into Stripe line items
-    const line_items = items.map((item) => ({
-      price_data: {
-        currency: "inr",
-        product_data: {
-          name: item.title,
-          images: [item.image],
+    // Calculate order total
+    const amount = items.reduce(
+      (sum, item) => sum + item.price * item.qty,
+      0
+    );
+
+    const orderId = "order_" + Date.now();
+
+    const response = await fetch(
+      `https://sandbox.cashfree.com/pg/orders`, // use production URL later
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-client-id": process.env.CASHFREE_APP_ID,
+          "x-client-secret": process.env.CASHFREE_SECRET_KEY,
+          "x-api-version": "2022-09-01",
         },
-        unit_amount: item.price * 100, // Stripe expects in paise
-      },
-      quantity: item.quantity || 1,
-    }));
+        body: JSON.stringify({
+          order_id: orderId,
+          order_amount: amount,
+          order_currency: "INR",
+          customer_details: {
+  customer_id: generateCustomerId(customer.email),
+  customer_name: customer.name,
+  customer_email: customer.email,
+  customer_phone: "9999999999",
+},
+          order_meta: {
+            return_url: `http://localhost:3000/order-success?order_id=${orderId}`,
+          },
+        }),
+      }
+    );
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items,
-      mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/order-success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
-    });
+    const data = await response.json();
 
-    return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error("Stripe error:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (response.ok) {
+      return NextResponse.json({ url: data.payment_link });
+    } else {
+      console.error("Cashfree error:", data);
+      return NextResponse.json(
+        { error: data.message || "Failed to create order" },
+        { status: 500 }
+      );
+    }
+  } catch (err) {
+    console.error("Checkout error:", err);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
   }
 }
