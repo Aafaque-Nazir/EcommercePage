@@ -4,7 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../redux/slices/productsSlice";
 import ProductCard from "../../components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, Filter, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function ProductsPage() {
   const dispatch = useDispatch();
@@ -13,6 +31,7 @@ export default function ProductsPage() {
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("latest");
+  const [loading, setLoading] = useState(true);
 
   const categories = [
     "All",
@@ -25,11 +44,13 @@ export default function ProductsPage() {
   ];
 
   useEffect(() => {
+    setLoading(true);
     fetch("/api/products")
       .then((r) => r.json())
       .then((d) => {
         dispatch(setProducts(d));
         setFiltered(d);
+        setLoading(false);
       });
   }, [dispatch]);
 
@@ -60,87 +81,158 @@ export default function ProductsPage() {
     setFiltered(items);
   }, [category, search, sort, list]);
 
-  return (
-    <section className="p-6">
-      {/* Header */}
-      <div className="flex mt-4 flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-          Explore Products
-        </h1>
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
 
-        {/* Search + Sort */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="relative w-64">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm focus:ring-2 focus:ring-purple-500 outline-none"
-            />
-            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
+  return (
+    <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+      <div className="container mx-auto px-4 max-w-7xl">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              Explore Collection
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Discover our curated list of premium products.
+            </p>
           </div>
 
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
-          >
-            <option value="latest">Latest</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="az">A - Z</option>
-          </select>
-        </div>
-      </div>
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search products..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Select value={sort} onValueChange={setSort}>
+                <SelectTrigger className="w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="latest">Latest Arrivals</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="az">Name: A - Z</SelectItem>
+                </SelectContent>
+              </Select>
 
-      {/* Category Tabs */}
-      <div className="flex flex-wrap  gap-3 mb-8">
-        {categories.map((cat) => {
-          const isActive = cat === category;
-          return (
-            <motion.button
-              whileTap={{ scale: 0.95 }}
+              {/* Mobile Filter Sheet */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="md:hidden bg-white dark:bg-gray-900">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Filters</SheetTitle>
+                    <SheetDescription>
+                      Narrow down your search.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="py-6 space-y-4">
+                    <h3 className="font-medium mb-2">Categories</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {categories.map((cat) => (
+                        <Badge
+                          key={cat}
+                          variant={category === cat ? "default" : "outline"}
+                          className="cursor-pointer px-3 py-1"
+                          onClick={() => setCategory(cat)}
+                        >
+                          {cat}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Categories */}
+        <div className="hidden md:flex flex-wrap gap-2 mb-10">
+          {categories.map((cat) => (
+            <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-5 py-2 rounded-full font-medium transition ${
-                isActive
-                  ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white shadow-lg"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                category === cat
+                  ? "bg-gray-900 text-white dark:bg-white dark:text-black shadow-lg transform scale-105"
+                  : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800"
               }`}
             >
               {cat}
-            </motion.button>
-          );
-        })}
-      </div>
+            </button>
+          ))}
+        </div>
 
-      {/* Products Grid */}
-      {filtered.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400 text-center mt-20">
-          No products found
-        </p>
-      ) : (
-        <AnimatePresence>
-          <motion.div
-            layout
-            className="grid grid-cols md:grid-cols-3 lg:grid-cols-4 gap-6"
-          >
-            {filtered.map((p) => (
-              <motion.div
-                key={p.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ProductCard product={p} />
-              </motion.div>
+        {/* Products Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white dark:bg-gray-900 rounded-3xl h-[400px] animate-pulse border border-gray-100 dark:border-gray-800" />
             ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+              <Search className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No products found</h3>
+            <p className="text-gray-500 dark:text-gray-400 max-w-md">
+              We couldn't find any products matching your search. Try adjusting your filters or search term.
+            </p>
+            <Button 
+              variant="link" 
+              onClick={() => {setCategory("All"); setSearch("");}}
+              className="mt-4 text-purple-600"
+            >
+              Clear all filters
+            </Button>
+          </div>
+        ) : (
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
+            <AnimatePresence mode="popLayout">
+              {filtered.map((p) => (
+                <motion.div
+                  key={p.id}
+                  variants={item}
+                  layout
+                  exit={{ opacity: 0, scale: 0.9 }}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
-        </AnimatePresence>
-      )}
+        )}
+      </div>
     </section>
   );
 }

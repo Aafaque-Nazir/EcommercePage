@@ -1,147 +1,321 @@
-"use client"
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { ChevronRight, Users, Shield, Zap, Truck, RefreshCw, Quote, ShoppingCart, Play } from "lucide-react";
-import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+"use client";
 
-// Testimonials
+import Link from "next/link";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronRight,
+  Users,
+  Shield,
+  Zap,
+  Truck,
+  RefreshCw,
+  ShoppingCart,
+  Star,
+  ArrowRight,
+  TrendingUp,
+  Smartphone,
+  Watch,
+  Headphones,
+  Camera
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+
+// --- Data ---
+
+const categories = [
+  { name: "Electronics", icon: <Smartphone className="w-6 h-6" />, color: "bg-blue-500" },
+  { name: "Fashion", icon: <Watch className="w-6 h-6" />, color: "bg-purple-500" },
+  { name: "Audio", icon: <Headphones className="w-6 h-6" />, color: "bg-pink-500" },
+  { name: "Photography", icon: <Camera className="w-6 h-6" />, color: "bg-orange-500" },
+];
+
 const testimonials = [
   {
     id: 1,
     name: "Sarah Johnson",
     role: "Verified Buyer",
-    content: "Amazing quality and fast delivery. Customer service is outstanding!",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=60&h=60&fit=crop&crop=face"
+    content: "The quality of the products is absolutely unmatched. I'm blown away by the attention to detail!",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=100&h=100&fit=crop&crop=face"
   },
   {
     id: 2,
     name: "Mike Chen",
-    role: "Regular Customer",
-    content: "Best shopping experience online. Products exactly as described!",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+    role: "Tech Enthusiast",
+    content: "Fastest delivery I've ever experienced. The customer support team is also incredibly helpful.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
   },
+  {
+    id: 3,
+    name: "Emily Davis",
+    role: "Fashion Blogger",
+    content: "I love the variety of styles available. Definitely my go-to shop for new trends.",
+    rating: 4,
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face"
+  }
 ];
 
-// Features
 const features = [
-  { icon: <Zap className="w-6 h-6" />, title: "Lightning Fast", description: "Checkout in under 60 seconds" },
-  { icon: <Shield className="w-6 h-6" />, title: "Secure Payments", description: "Bank-level data encryption" },
-  { icon: <Truck className="w-6 h-6" />, title: "Free Shipping", description: "Orders over $50" },
-  { icon: <RefreshCw className="w-6 h-6" />, title: "Easy Returns", description: "30-day hassle free policy" },
+  { icon: <Zap className="w-6 h-6" />, title: "Lightning Fast", description: "Same-day dispatch on all orders placed before 2PM." },
+  { icon: <Shield className="w-6 h-6" />, title: "Secure Payments", description: "256-bit SSL encryption to keep your data safe." },
+  { icon: <Truck className="w-6 h-6" />, title: "Global Shipping", description: "Free worldwide shipping on orders over $150." },
+  { icon: <RefreshCw className="w-6 h-6" />, title: "Easy Returns", description: "No questions asked 30-day return policy." },
 ];
 
-export default function HomePage() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+// --- Components ---
+
+const HeroSection = () => {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-950 text-white">
+      {/* Background with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-gray-900/80 to-black/90 z-10" />
+        <Image
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop"
+          alt="Hero Background"
+          fill
+          className="object-cover opacity-50"
+          priority
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-20 container mx-auto px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <Badge variant="secondary" className="mb-6 py-2 px-4 text-sm uppercase tracking-widest bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20">
+            New Collection 2025
+          </Badge>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400 drop-shadow-sm">
+            Elevate Your <br className="hidden md:block" /> Lifestyle.
+          </h1>
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 mb-10 leading-relaxed font-light">
+            Discover a curated selection of premium products designed to enhance your everyday life. Quality, style, and innovation in one place.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link href="/products">
+              <Button size="lg" className="h-14 px-8 rounded-full text-lg font-semibold bg-white text-black hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+                Shop Now <ChevronRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="outline" size="lg" className="h-14 px-8 rounded-full text-lg font-semibold border-white/30 text-white hover:bg-white/10 backdrop-blur-sm">
+                Learn More
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
+          <div className="w-1 h-2 bg-white rounded-full" />
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+
+const CategorySection = () => {
+  return (
+    <section className="py-24 bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">Shop by Category</h2>
+            <p className="text-gray-500 dark:text-gray-400">Explore our wide range of premium collections</p>
+          </div>
+          <Link href="/products" className="hidden md:flex items-center text-purple-600 hover:text-purple-700 font-medium transition-colors">
+            View All <ArrowRight className="ml-2 w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {categories.map((cat, idx) => (
+            <motion.div
+              key={idx}
+              whileHover={{ y: -10 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Link href={`/products?category=${cat.name.toLowerCase()}`}>
+                <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer bg-white dark:bg-gray-800">
+                  <CardContent className="p-8 flex flex-col items-center justify-center h-64 relative">
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 ${cat.color}`} />
+                    <div className={`w-20 h-20 rounded-full ${cat.color} bg-opacity-10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className="text-gray-900 dark:text-white">
+                        {cat.icon}
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{cat.name}</h3>
+                    <span className="text-sm text-gray-500 dark:text-gray-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                      Explore Collection
+                    </span>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const FeaturesSection = () => {
+  return (
+    <section className="py-24 bg-white dark:bg-gray-950">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {features.map((feature, i) => (
+            <div key={i} className="flex flex-col items-center text-center group">
+              <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-gray-900 flex items-center justify-center mb-6 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-sm">
+                {feature.icon}
+              </div>
+              <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white">{feature.title}</h3>
+              <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const TestimonialsSection = () => {
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="min-h-screen dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      
-      {/* Hero */}
- <section
-  className="relative flex items-center justify-center min-h-[90vh] text-center px-6 bg-cover bg-center"
-  style={{
-    backgroundImage:
-      "url('https://media.istockphoto.com/id/1331058264/photo/online-shopping-concept-with-laptop-banner-shopping-cart-lipstick-high-heel-shoe-credit-card.webp?a=1&b=1&s=612x612&w=0&k=20&c=5S6uZtLXYBEQDu4QAKMzaIZ5TSJ1FsxSePjpjvQzwyE=')",
-  
-  }}
->
+    <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-600 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600 rounded-full blur-3xl" />
+      </div>
 
-  <div 
-    className="absolute inset-0 bg-black/80 opacity-40 z-0" 
-    aria-hidden="true"
-  ></div>
-
-  {/* Content  */}
-  <div className="relative z-10 max-w-3xl mx-auto">
-    <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-white drop-shadow-lg">
-      Run Faster. Shop Smarter.
-    </h1>
-
-    <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200 mb-8 leading-relaxed drop-shadow">
-      Discover trendy fashion, latest gadgets, and everyday essentials — all in one place.  
-      Exclusive deals, lightning-fast delivery, and a secure checkout for a smarter shopping experience.  
-    </p>
-
-    <div className="flex gap-4 flex-wrap justify-center">
-      <Link href="/products">
-        <Button
-          size="lg"
-          className="px-8 py-4 rounded-xl  
-                     hover:scale-105 transition-transform duration-300 text-lg text-white shadow-lg"
-        >
-          Browse Products <ChevronRight className="w-5 h-5 ml-2" />
-        </Button>
-      </Link>
-    </div>
-  </div>
-</section>
-
-
-
-      {/* Features */}
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-          {features.map((feature, i) => (
-            <Card key={i} className="border-0 shadow-md hover:shadow-lg bg-white/80 dark:bg-gray-800/70 backdrop-blur-sm transition-all">
-              <CardContent className="p-6 text-center">
-                <div className="mb-3 flex justify-center text-purple-600">{feature.icon}</div>
-                <CardTitle className="text-base">{feature.title}</CardTitle>
-                <CardDescription className="text-sm text-gray-500 dark:text-gray-400">{feature.description}</CardDescription>
-              </CardContent>
-            </Card>
-          ))}
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-16">
+          <Badge className="mb-4 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border-0">Testimonials</Badge>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Trusted by Thousands</h2>
         </div>
-      </section>
 
-      {/* Testimonials */}
-      <section className="py-20 px-6 bg-gradient-to-r from-purple-100 to-purple-300 w-full">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8">What Our Customers Say</h2>
-          <Card className="border-0 bg-white/10 backdrop-blur-sm shadow-2xl">
-            <CardContent className="p-6">
-              <div className="flex justify-center mb-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={testimonials[currentTestimonial].avatar} alt={testimonials[currentTestimonial].name} />
-                  <AvatarFallback>{testimonials[currentTestimonial].name.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </div>
-              <p className="italic mb-4">“{testimonials[currentTestimonial].content}”</p>
-              <p className="font-semibold">{testimonials[currentTestimonial].name}</p>
-              <p className="text-sm opacity-80">{testimonials[currentTestimonial].role}</p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+        <div className="max-w-4xl mx-auto">
+          <div className="relative h-[400px] md:h-[300px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
+              >
+                <Card className="bg-white/5 backdrop-blur-lg border-white/10 h-full">
+                  <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 h-full">
+                    <div className="flex-shrink-0">
+                      <Avatar className="w-24 h-24 border-4 border-white/10 shadow-xl">
+                        <AvatarImage src={testimonials[current].avatar} />
+                        <AvatarFallback>{testimonials[current].name[0]}</AvatarFallback>
+                      </Avatar>
+                    </div>
+                    <div className="flex-1 text-center md:text-left">
+                      <div className="flex justify-center md:justify-start gap-1 mb-4 text-yellow-400">
+                        {[...Array(testimonials[current].rating)].map((_, i) => (
+                          <Star key={i} className="w-5 h-5 fill-current" />
+                        ))}
+                      </div>
+                      <p className="text-xl md:text-2xl font-medium leading-relaxed mb-6 text-gray-200">
+                        &quot;{testimonials[current].content}&quot;
+                      </p>
+                      <div>
+                        <h4 className="font-bold text-lg text-white">{testimonials[current].name}</h4>
+                        <p className="text-purple-300">{testimonials[current].role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      {/* CTA */}
-      <section className="py-20 px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Shopping?</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          Join our community and discover amazing products at unbeatable prices
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/products">
-            <Button size="lg" className="px-8 py-4 rounded-xl bg-purple-600 hover:bg-purple-700">
-              <ShoppingCart className="w-5 h-5 mr-2" /> Start Shopping
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button variant="outline" size="lg" className="px-8 py-4 rounded-xl">
-              <Users className="w-5 h-5 mr-2" /> Create Account
-            </Button>
-          </Link>
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrent(idx)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${current === idx ? "bg-purple-500 w-8" : "bg-white/20 hover:bg-white/40"
+                  }`}
+                aria-label={`Go to testimonial ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+};
+
+const CTASection = () => {
+  return (
+    <section className="py-24 bg-white dark:bg-gray-950">
+      <div className="container mx-auto px-6">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-12 md:p-20 text-center text-white shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to Experience the Future?</h2>
+            <p className="text-lg md:text-xl text-purple-100 mb-10">
+              Join over 50,000 satisfied customers and upgrade your lifestyle today.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/products">
+                <Button size="lg" className="h-14 px-8 rounded-full bg-white text-purple-600 hover:bg-gray-100 font-bold text-lg shadow-lg">
+                  Start Shopping
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button variant="outline" size="lg" className="h-14 px-8 rounded-full border-white text-white hover:bg-white/10 font-bold text-lg">
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <HeroSection />
+      <FeaturesSection />
+      <CategorySection />
+      <TestimonialsSection />
+      <CTASection />
     </div>
   );
 }

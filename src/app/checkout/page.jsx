@@ -27,65 +27,93 @@ export default function CheckoutPage() {
   const tax = Math.round(subtotal * 0.05);
   const total = subtotal + shipping + tax;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const paymentMethod = e.target.payment.value;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const paymentMethod = e.target.payment.value;
 
-    if (!cartItems || cartItems.length === 0) {
-      alert("Cart is empty. Add some products first.");
-      return;
-    }
-
-    if (!form.name || !form.email || !form.address) {
-      alert("Please fill name, email and address.");
-      return;
-    }
-
-    if (paymentMethod === "cod") {
-      // Cash on Delivery flow - save order locally and clear cart
-      const order = {
-        id: `local-${Date.now()}`,
-        customer: form,
-        items: cartItems,
-        total,
-        payment: "COD",
-        createdAt: new Date().toISOString(),
-      };
-      // save to localStorage as demo - in real app send to your backend DB
-      localStorage.setItem("lastOrder", JSON.stringify(order));
-      dispatch(clearCart());
-      router.push("/order-success");
-      return;
-    }
-
-    // Online (Stripe) flow
-    setLoading(true);
-
-  // Cashfree Checkout flow
-  try {
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cartItems, customer: form }),
-    });
-
-    const data = await res.json();
-
-    if (data.url) {
-      window.location.href = data.url; // redirect to Cashfree payment page
-    } else {
-      alert("Failed to start payment session.");
-    }
-  } catch (err) {
-    console.error("Payment error:", err);
-    alert("Something went wrong. Try again.");
+  // Validation checks
+  if (!cartItems?.length) {
+    alert("Cart is empty. Add some products first.");
+    return;
   }
-  
-      finally {
-        setLoading(false);
+
+  if (!form.name || !form.email || !form.address) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  // For Cash on Delivery
+  if (paymentMethod === "cod") {
+    const order = {
+      id: `order_${Date.now()}`,
+      customer: form,
+      items: cartItems,
+      total,
+      payment: "COD",
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+    localStorage.setItem("lastOrder", JSON.stringify(order));
+    dispatch(clearCart());
+    router.push("/order-success");
+    return;
+  }
+
+  // For Online Payment (Cashfree)
+  if (paymentMethod === "online") {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: cartItems,
+          customer: {
+            name: form.name,
+            email: form.email,
+            address: form.address,
+            phone: "9876543210" // Default phone since we don't collect it
+          },
+          order_amount: total,
+          order_currency: "INR"
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Payment initialization failed");
       }
 
-  };
+      const data = await response.json();
+
+      // Store order details before redirect
+      const orderData = {
+        orderId: data.orderId,
+        items: cartItems,
+        customer: form,
+        total,
+        status: "pending",
+        createdAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem("pendingOrder", JSON.stringify(orderData));
+
+      // Redirect to payment page
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("Invalid payment URL received");
+      }
+    } catch (error) {
+      console.error("Payment Error:", error);
+      alert(error.message || "Payment initialization failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+};
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">

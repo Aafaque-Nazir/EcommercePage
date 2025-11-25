@@ -1,11 +1,55 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { cancelOrder } from "../../redux/slices/orderSlice";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import ProtectedPage from "@/components/ProtectedPage";
+import { 
+  Package, 
+  Truck, 
+  CheckCircle, 
+  XCircle, 
+  Clock, 
+  ShoppingBag,
+  Calendar,
+  MapPin
+} from "lucide-react";
 
+const getStatusIcon = (status) => {
+  switch (status) {
+    case "placed":
+      return <Clock className="w-5 h-5" />;
+    case "shipped":
+      return <Truck className="w-5 h-5" />;
+    case "delivered":
+      return <CheckCircle className="w-5 h-5" />;
+    case "cancelled":
+      return <XCircle className="w-5 h-5" />;
+    default:
+      return <Package className="w-5 h-5" />;
+  }
+};
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case "placed":
+      return "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400";
+    case "shipped":
+      return "bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400";
+    case "delivered":
+      return "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400";
+    case "cancelled":
+      return "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400";
+    default:
+      return "bg-gray-100 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400";
+  }
+};
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
@@ -17,86 +61,165 @@ export default function OrdersPage() {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[80vh]">
-        <p className="text-gray-500 text-lg">No orders placed yet.</p>
-      </div>
+      <ProtectedPage>
+        <div className="min-h-[70vh] flex flex-col items-center justify-center px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center max-w-md"
+          >
+            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShoppingBag className="w-12 h-12 text-gray-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              No Orders Yet
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-8">
+              You haven't placed any orders. Start shopping to see your orders here!
+            </p>
+            <Link href="/products">
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <ShoppingBag className="w-5 h-5 mr-2" />
+                Start Shopping
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </ProtectedPage>
     );
   }
 
   return (
-   <ProtectedPage>
-  <div className="max-w-4xl mx-auto p-6">
-    {/* Page Title */}
-    <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8 mt-6">
-      My Orders
-    </h1>
+    <ProtectedPage>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Page Header */}
+          <div className="mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+              My Orders
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Track and manage your orders
+            </p>
+          </div>
 
-    {/* Orders List */}
-    <div className="space-y-6">
-      {orders.map((order) => (
-        <Card
-          key={order.id}
-          className="rounded-2xl border border-gray-200 hover:shadow-2xl shadow-lg transition-all duration-300 bg-white"
-        >
-          <CardContent className="p-6">
-            {/* Order Header */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-5">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">Order #{order.id}</h2>
-                <p className="text-gray-600 mt-2">
-                  Status:{" "}
-                  <span
-                    className={`font-semibold px-3 py-1 rounded-full text-sm ${
-                      order.status === "cancelled"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-green-100 text-green-700"
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                </p>
-                <p className="text-gray-800 font-bold mt-2 text-lg">₹{order.total.toLocaleString()}</p>
-              </div>
+          {/* Orders List */}
+          <div className="space-y-6">
+            {orders.map((order, index) => (
+              <motion.div
+                key={order.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow">
+                  <CardContent className="p-0">
+                    {/* Order Header */}
+                    <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                          <div className="flex items-center gap-3 mb-2">
+                            <h2 className="text-2xl font-bold">
+                              Order #{order.id}
+                            </h2>
+                            <Badge className={`${getStatusColor(order.status)} flex items-center gap-2 px-3 py-1`}>
+                              {getStatusIcon(order.status)}
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-purple-100 text-sm">
+                            <span className="flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              {new Date().toLocaleDateString()}
+                            </span>
+                            <span className="flex items-center gap-2">
+                              <Package className="w-4 h-4" />
+                              {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                            </span>
+                          </div>
+                        </div>
 
-              {/* Cancel Button */}
-              {order.status === "placed" ? (
-                <Button
-                  variant="destructive"
-                  onClick={() => handleCancel(order.id)}
-                  className="h-fit self-start px-6 py-3 text-base font-semibold rounded-xl shadow-sm hover:shadow-md transition"
-                >
-                  Cancel Order
-                </Button>
-              ) : (
-                <Button
-                  disabled
-                  className="h-fit self-start px-6 py-3 bg-gray-100 text-gray-500 text-base rounded-xl cursor-not-allowed"
-                >
-                  Cancelled
-                </Button>
-              )}
-            </div>
+                        <div className="flex flex-col items-end gap-3">
+                          <div className="text-right">
+                            <p className="text-purple-100 text-sm">Total Amount</p>
+                            <p className="text-3xl font-bold">
+                              ₹{order.total.toLocaleString()}
+                            </p>
+                          </div>
+                          {order.status === "placed" && (
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => handleCancel(order.id)}
+                              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                            >
+                              Cancel Order
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
-            {/* Items List */}
-            <div className="border-t border-gray-100 pt-5">
-              <h3 className="font-bold text-gray-700 mb-3 text-lg">Items in this order</h3>
-              <ul className="space-y-2">
-                {order.items.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex justify-between py-2.5 px-3.5 bg-gray-50 rounded-lg text-gray-700 text-sm sm:text-base font-medium"
-                  >
-                    <span>{item.name} × {item.qty}</span>
-                    <span>₹{(item.price * item.qty).toLocaleString()}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  </div>
-</ProtectedPage>
+                    {/* Order Items */}
+                    <div className="p-6 bg-white dark:bg-gray-800">
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <Package className="w-5 h-5" />
+                        Order Items
+                      </h3>
+                      <div className="space-y-3">
+                        {order.items.map((item, idx) => (
+                          <div key={item.id}>
+                            <div className="flex items-center justify-between py-3">
+                              <div className="flex items-center gap-4 flex-1">
+                                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-900 rounded-lg flex items-center justify-center">
+                                  <Package className="w-8 h-8 text-gray-400" />
+                                </div>
+                                <div className="flex-1">
+                                  <p className="font-medium text-gray-900 dark:text-white">
+                                    {item.name}
+                                  </p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    Qty: {item.qty}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-bold text-gray-900 dark:text-white">
+                                  ₹{(item.price * item.qty).toLocaleString()}
+                                </p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  ₹{item.price.toLocaleString()} each
+                                </p>
+                              </div>
+                            </div>
+                            {idx < order.items.length - 1 && <Separator />}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Order Actions */}
+                      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Button variant="outline" className="flex-1">
+                            <Truck className="w-4 h-4 mr-2" />
+                            Track Order
+                          </Button>
+                          <Button variant="outline" className="flex-1">
+                            Download Invoice
+                          </Button>
+                          <Button variant="outline" className="flex-1">
+                            Need Help?
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </ProtectedPage>
   );
 }
