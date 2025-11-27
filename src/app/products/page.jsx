@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../redux/slices/productsSlice";
 import ProductCard from "../../components/ProductCard";
+import Pagination from "../../components/Pagination";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, SlidersHorizontal, Filter, X } from "lucide-react";
+import { Search, SlidersHorizontal, Filter, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 
 export default function ProductsPage() {
@@ -32,6 +34,8 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("latest");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 16;
 
   const categories = [
     "All",
@@ -79,52 +83,86 @@ export default function ProductsPage() {
     }
 
     setFiltered(items);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [category, search, sort, list]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedProducts = filtered.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll to top of products section
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.1,
+        delayChildren: 0.2
       }
     }
   };
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <section className="min-h-screen bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
+      {/* Background Gradients */}
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-purple-50/50 to-transparent dark:from-purple-950/20 pointer-events-none" />
+      <div className="absolute top-20 right-0 w-96 h-96 bg-pink-100/30 dark:bg-pink-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-40 left-20 w-72 h-72 bg-blue-100/30 dark:bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container mx-auto px-4 max-w-7xl relative z-10 py-12">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6"
+        >
+          <div className="space-y-2">
+            <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-800 to-gray-900 dark:from-white dark:via-purple-200 dark:to-white">
               Explore Collection
             </h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              Discover our curated list of premium products.
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-lg leading-relaxed">
+              Discover our curated list of premium products designed to elevate your lifestyle.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          {/* Search & Sort Controls */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-white/60 dark:bg-gray-900/60 p-2 rounded-2xl backdrop-blur-xl border border-white/20 shadow-lg">
+            <div className="relative w-full sm:w-72 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
               <Input
                 placeholder="Search products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                className="pl-12 h-12 bg-transparent border-transparent focus:bg-white dark:focus:bg-gray-800 transition-all duration-300 rounded-xl"
               />
             </div>
             
             <div className="flex gap-2">
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-white/50 dark:hover:bg-gray-800/50 rounded-xl transition-colors">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,79 +176,154 @@ export default function ProductsPage() {
               {/* Mobile Filter Sheet */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="md:hidden bg-white dark:bg-gray-900">
-                    <Filter className="h-4 w-4" />
+                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50">
+                    <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Filters</SheetTitle>
-                    <SheetDescription>
-                      Narrow down your search.
+                <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-white dark:bg-gray-950">
+                  <SheetHeader className="px-1 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <SheetTitle className="text-2xl font-bold text-gray-900 dark:text-white">Filters</SheetTitle>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => {setCategory("All"); setSearch(""); setSort("latest");}} 
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 px-3"
+                      >
+                        Reset All
+                      </Button>
+                    </div>
+                    <SheetDescription className="text-gray-500 dark:text-gray-400">
+                      Refine your product search to find exactly what you need.
                     </SheetDescription>
                   </SheetHeader>
-                  <div className="py-6 space-y-4">
-                    <h3 className="font-medium mb-2">Categories</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {categories.map((cat) => (
-                        <Badge
-                          key={cat}
-                          variant={category === cat ? "default" : "outline"}
-                          className="cursor-pointer px-3 py-1"
-                          onClick={() => setCategory(cat)}
-                        >
-                          {cat}
-                        </Badge>
-                      ))}
+
+                  <div className="flex-1 overflow-y-auto py-6 px-1 space-y-8 scrollbar-hide">
+                    {/* Categories Section */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Categories</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => setCategory(cat)}
+                            className={`
+                              relative p-4 rounded-xl text-left transition-all duration-200 border group
+                              ${category === cat 
+                                ? "border-purple-600 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-md ring-1 ring-purple-600" 
+                                : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-purple-200 dark:hover:border-purple-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                              }
+                            `}
+                          >
+                            <span className="font-medium text-sm">{cat}</span>
+                            {category === cat && (
+                              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-purple-600 shadow-sm" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
                     </div>
+                    
+                    {/* Sort Section (Mobile Only) */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Sort By</h3>
+                      <div className="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-2 rounded-2xl">
+                         {[
+                           { label: "Latest Arrivals", value: "latest" },
+                           { label: "Price: Low to High", value: "price-low" },
+                           { label: "Price: High to Low", value: "price-high" },
+                           { label: "Name: A - Z", value: "az" },
+                         ].map((option) => (
+                           <button
+                              key={option.value}
+                              onClick={() => setSort(option.value)}
+                              className={`w-full flex items-center justify-between p-3 rounded-xl text-sm transition-all duration-200 ${
+                                sort === option.value
+                                  ? "bg-white dark:bg-gray-800 font-semibold text-gray-900 dark:text-white shadow-sm"
+                                  : "text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50"
+                              }`}
+                           >
+                             {option.label}
+                             {sort === option.value && <Check className="w-4 h-4 text-purple-600" />}
+                           </button>
+                         ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto pb-6">
+                    <SheetClose asChild>
+                      <Button className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-gray-900 hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                        Show {filtered.length} Results
+                      </Button>
+                    </SheetClose>
                   </div>
                 </SheetContent>
               </Sheet>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Desktop Categories */}
-        <div className="hidden md:flex flex-wrap gap-2 mb-10">
-          {categories.map((cat) => (
-            <button
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="hidden md:flex flex-wrap gap-3 mb-12 justify-center"
+        >
+          {categories.map((cat, idx) => (
+            <motion.button
               key={cat}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 + idx * 0.05 }}
               onClick={() => setCategory(cat)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`px-8 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 relative overflow-hidden group ${
                 category === cat
-                  ? "bg-gray-900 text-white dark:bg-white dark:text-black shadow-lg transform scale-105"
-                  : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800"
+                  ? "text-white shadow-xl shadow-purple-500/30 scale-105"
+                  : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 hover:border-purple-200 dark:hover:border-purple-800"
               }`}
             >
-              {cat}
-            </button>
+              {category === cat && (
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600" />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                {cat}
+                {category === cat && (
+                  <motion.span layoutId="activeDot" className="w-1.5 h-1.5 bg-white rounded-full" />
+                )}
+              </span>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Products Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900 rounded-3xl h-[400px] animate-pulse border border-gray-100 dark:border-gray-800" />
+              <div key={i} className="bg-white dark:bg-gray-900 rounded-3xl h-[420px] animate-pulse border border-gray-100 dark:border-gray-800 shadow-sm" />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-              <Search className="w-10 h-10 text-gray-400" />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center justify-center py-32 text-center bg-white/50 dark:bg-gray-900/50 rounded-3xl backdrop-blur-sm border border-dashed border-gray-300 dark:border-gray-700"
+          >
+            <div className="w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
+              <Search className="w-12 h-12 text-purple-500/50" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No products found</h3>
-            <p className="text-gray-500 dark:text-gray-400 max-w-md">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">No products found</h3>
+            <p className="text-gray-500 dark:text-gray-400 max-w-md mb-8">
               We couldn't find any products matching your search. Try adjusting your filters or search term.
             </p>
             <Button 
-              variant="link" 
               onClick={() => {setCategory("All"); setSearch("");}}
-              className="mt-4 text-purple-600"
+              className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl px-8 py-6 h-auto text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Clear all filters
             </Button>
-          </div>
+          </motion.div>
         ) : (
           <motion.div
             variants={container}
@@ -219,17 +332,33 @@ export default function ProductsPage() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >
             <AnimatePresence mode="popLayout">
-              {filtered.map((p) => (
+              {paginatedProducts.map((p) => (
                 <motion.div
                   key={p.id}
                   variants={item}
                   layout
                   exit={{ opacity: 0, scale: 0.9 }}
+                  className="h-full"
                 >
                   <ProductCard product={p} />
                 </motion.div>
               ))}
             </AnimatePresence>
+          </motion.div>
+        )}
+
+        {/* Pagination */}
+        {!loading && filtered.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </motion.div>
         )}
       </div>

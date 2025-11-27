@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProductCard({ product }) {
   return (
-    <Card className="group relative overflow-hidden border-0 shadow-md hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+    <Card className="group relative overflow-hidden border-0 bg-white dark:bg-gray-900 shadow-md hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 h-full flex flex-col ring-1 ring-gray-200 dark:ring-gray-800 hover:ring-purple-500/50 dark:hover:ring-purple-400/50">
       <CardContent className="p-0 flex flex-col h-full">
         {/* Product Image Section */}
         <div className="relative w-full aspect-square overflow-hidden bg-gray-100 dark:bg-gray-900">
@@ -83,7 +83,7 @@ export default function ProductCard({ product }) {
             <Link href={`/products/${product.id}`} className="block">
               <Button 
                 variant="outline" 
-                className="w-full group/btn border-2 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="w-full group/btn border-2 border-gray-100 dark:border-gray-700 hover:border-purple-600 dark:hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 dark:hover:text-purple-300 transition-all duration-300"
               >
                 View Details
                 <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />

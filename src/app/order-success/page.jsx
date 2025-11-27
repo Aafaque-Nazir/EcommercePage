@@ -13,13 +13,13 @@ export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // 1. COD flow (saved in localStorage)
+    // 1. COD flow (saved in localStorage as lastOrder)
     const savedOrder = localStorage.getItem("lastOrder");
     if (savedOrder) {
       const parsedOrder = JSON.parse(savedOrder);
       const newOrder = {
         ...parsedOrder,
-        id: Date.now(),
+        id: parsedOrder.id || Date.now(),
         date: new Date().toLocaleString(),
         status: "placed",
       };
@@ -29,20 +29,37 @@ export default function OrderSuccessPage() {
       return;
     }
 
-    // 2. Online Payment flow (Cashfree/Stripe redirect)
+    // 2. Online Payment flow (Cashfree redirect)
     const orderId = searchParams.get("order_id");
     if (orderId) {
-      const newOrder = {
-        id: orderId,
-        date: new Date().toLocaleString(),
-        status: "paid",
-        customer: {
-          name: "Customer",
-          email: "N/A",
-        },
-        items: [], // You can extend this by fetching order details from server/webhook
-        total: 0, // Cashfree webhook/DB should ideally store actual amount
-      };
+      // Try to get pending order details from localStorage
+      const pendingOrderStr = localStorage.getItem("pendingOrder");
+      let newOrder;
+
+      if (pendingOrderStr) {
+        const pendingOrder = JSON.parse(pendingOrderStr);
+        newOrder = {
+          ...pendingOrder,
+          id: orderId, // Use the actual order ID from URL
+          date: new Date().toLocaleString(),
+          status: "placed", // Assume placed if redirected back successfully
+        };
+        localStorage.removeItem("pendingOrder");
+      } else {
+        // Fallback if localStorage is cleared or missing
+        newOrder = {
+          id: orderId,
+          date: new Date().toLocaleString(),
+          status: "placed",
+          customer: {
+            name: "Customer",
+            email: "N/A",
+          },
+          items: [],
+          total: 0,
+        };
+      }
+      
       dispatch(addOrder(newOrder));
       setOrder(newOrder);
     }
