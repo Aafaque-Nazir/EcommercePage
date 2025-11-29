@@ -12,12 +12,21 @@ import {
   Package, 
   Heart,
   Search,
-  ChevronDown
+  ChevronDown,
+  Smartphone,
+  Watch,
+  Headphones,
+  Camera,
+  Shirt,
+  Footprints,
+  Home,
+  Speaker
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { selectCartCount } from "../redux/slices/cartSlice";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,14 +39,48 @@ import {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [shopMenuOpen, setShopMenuOpen] = useState(false);
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
   const { data: session, status } = useSession();
   const cartCount = useSelector(selectCartCount);
 
-  const mainLinks = [
-    { name: "Home", href: "/" },
-    { name: "Shop", href: "/products" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+  const shopCategories = [
+    { 
+      name: "Electronics", 
+      icon: <Smartphone className="w-5 h-5" />, 
+      href: "/products?category=electronics",
+      desc: "Latest gadgets & devices"
+    },
+    { 
+      name: "Fashion", 
+      icon: <Shirt className="w-5 h-5" />, 
+      href: "/products?category=fashion",
+      desc: "Trendy clothing for all"
+    },
+    { 
+      name: "Audio", 
+      icon: <Headphones className="w-5 h-5" />, 
+      href: "/products?category=audio",
+      desc: "Premium sound gear"
+    },
+    { 
+      name: "Home", 
+      icon: <Home className="w-5 h-5" />, 
+      href: "/products?category=home",
+      desc: "Decor & essentials"
+    },
+    { 
+      name: "Shoes", 
+      icon: <Footprints className="w-5 h-5" />, 
+      href: "/products?category=shoes",
+      desc: "Comfort & style"
+    },
+    { 
+      name: "Wearables", 
+      icon: <Watch className="w-5 h-5" />, 
+      href: "/products?category=wearables",
+      desc: "Smartwatches & bands"
+    },
   ];
 
   useEffect(() => {
@@ -59,12 +102,13 @@ export default function Navbar() {
             ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg"
             : "bg-white dark:bg-gray-900 shadow-sm"
         }`}
+        onMouseLeave={() => setShopMenuOpen(false)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center z-50">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="text-2xl font-black tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
@@ -75,16 +119,96 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-8">
-              {mainLinks.map((link) => (
+              <Link
+                href="/"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                onMouseEnter={() => setShopMenuOpen(false)}
+              >
+                Home
+              </Link>
+
+              {/* Mega Menu Trigger */}
+              <div 
+                className="relative"
+                onMouseEnter={() => setShopMenuOpen(true)}
+              >
                 <Link
-                  key={link.name}
-                  href={link.href}
-                  className="relative text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group"
+                  href="/products"
+                  className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors py-6"
                 >
-                  {link.name}
-                  <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full" />
+                  Shop
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${shopMenuOpen ? "rotate-180" : ""}`} />
                 </Link>
-              ))}
+
+                {/* Mega Menu Content */}
+                <AnimatePresence>
+                  {shopMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
+                    >
+                      <div className="col-span-2 mb-2">
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Shop by Category</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          {shopCategories.map((cat) => (
+                            <Link
+                              key={cat.name}
+                              href={cat.href}
+                              className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                              onClick={() => setShopMenuOpen(false)}
+                            >
+                              <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                {cat.icon}
+                              </div>
+                              <div>
+                                <div className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors">
+                                  {cat.name}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {cat.desc}
+                                </div>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Featured Section in Menu */}
+                      <div className="col-span-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 text-white flex justify-between items-center">
+                        <div>
+                          <Badge className="bg-white/20 hover:bg-white/30 text-white border-0 mb-2">New Arrival</Badge>
+                          <h4 className="font-bold text-lg mb-1">Summer Collection</h4>
+                          <p className="text-purple-100 text-sm mb-4">Get up to 50% off on new arrivals</p>
+                          <Button size="sm" variant="secondary" className="bg-white text-purple-600 hover:bg-gray-100" asChild>
+                            <Link href="/products?sort=latest">Shop Now</Link>
+                          </Button>
+                        </div>
+                        <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                          <Package className="w-10 h-10 text-white" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link
+                href="/about"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                onMouseEnter={() => setShopMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                onMouseEnter={() => setShopMenuOpen(false)}
+              >
+                Contact
+              </Link>
             </div>
 
             {/* Desktop Actions */}
@@ -182,7 +306,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-2xl"
+              className="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden"
             >
               <div className="px-6 py-8 space-y-6 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {/* Mobile Links Section */}
@@ -190,23 +314,74 @@ export default function Navbar() {
                   <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
                     Navigation
                   </p>
-                  {mainLinks.map((link, index) => (
-                    <motion.div
-                      key={link.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                  
+                  <Link
+                    href="/"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    Home
+                  </Link>
+
+                  {/* Mobile Shop Accordion */}
+                  <div className="rounded-xl overflow-hidden">
+                    <button
+                      onClick={() => setMobileShopOpen(!mobileShopOpen)}
+                      className="w-full flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                     >
-                      <Link
-                        href={link.href}
-                        className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors group"
-                        onClick={() => setOpen(false)}
-                      >
-                        <span>{link.name}</span>
-                        <ChevronDown className="w-4 h-4 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </Link>
-                    </motion.div>
-                  ))}
+                      Shop
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileShopOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    
+                    <AnimatePresence>
+                      {mobileShopOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="bg-gray-50 dark:bg-gray-800/50 px-3"
+                        >
+                          <div className="py-2 space-y-1">
+                            {shopCategories.map((cat) => (
+                              <Link
+                                key={cat.name}
+                                href={cat.href}
+                                className="flex items-center gap-3 p-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                                onClick={() => setOpen(false)}
+                              >
+                                <div className="w-6 h-6 flex items-center justify-center text-purple-500">
+                                  {cat.icon}
+                                </div>
+                                {cat.name}
+                              </Link>
+                            ))}
+                            <Link
+                              href="/products"
+                              className="flex items-center gap-3 p-2 rounded-lg text-sm font-semibold text-purple-600 hover:underline"
+                              onClick={() => setOpen(false)}
+                            >
+                              View All Products
+                            </Link>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <Link
+                    href="/about"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    Contact
+                  </Link>
                 </div>
 
                 <div className="border-t border-gray-200 dark:border-gray-800 pt-6">

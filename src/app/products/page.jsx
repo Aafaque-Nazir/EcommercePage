@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "next/navigation";
 import { setProducts } from "../../redux/slices/productsSlice";
 import ProductCard from "../../components/ProductCard";
 import Pagination from "../../components/Pagination";
@@ -28,6 +29,7 @@ import {
 
 export default function ProductsPage() {
   const dispatch = useDispatch();
+  const searchParams = useSearchParams();
   const { list } = useSelector((s) => s.products);
   const [filtered, setFiltered] = useState([]);
   const [category, setCategory] = useState("All");
@@ -46,6 +48,20 @@ export default function ProductsPage() {
     "Wearables",
     "Audio",
   ];
+
+  // Handle URL category parameter on mount
+  useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    if (urlCategory) {
+      // Capitalize first letter to match category format
+      const formattedCategory = urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1).toLowerCase();
+      const categories = ["All", "Clothing", "Electronics", "Home", "Shoes", "Wearables", "Audio"];
+      
+      if (categories.includes(formattedCategory)) {
+        setCategory(formattedCategory);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     setLoading(true);
