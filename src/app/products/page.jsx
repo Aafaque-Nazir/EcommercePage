@@ -140,11 +140,11 @@ export default function ProductsPage() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
+    <section className="min-h-screen bg-gray-950 relative overflow-hidden">
       {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-purple-50/50 to-transparent dark:from-purple-950/20 pointer-events-none" />
-      <div className="absolute top-20 right-0 w-96 h-96 bg-pink-100/30 dark:bg-pink-900/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-40 left-20 w-72 h-72 bg-blue-100/30 dark:bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-green-950/20 to-transparent pointer-events-none" />
+      <div className="absolute top-20 right-0 w-96 h-96 bg-green-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-40 left-20 w-72 h-72 bg-emerald-900/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 max-w-7xl relative z-10 py-12">
         
@@ -156,29 +156,29 @@ export default function ProductsPage() {
           className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6"
         >
           <div className="space-y-2">
-            <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-purple-800 to-gray-900 dark:from-white dark:via-purple-200 dark:to-white">
+            <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-green-200 to-white">
               Explore Collection
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-lg leading-relaxed">
+            <p className="text-lg text-gray-300 max-w-lg leading-relaxed">
               Discover our curated list of premium products designed to elevate your lifestyle.
             </p>
           </div>
 
           {/* Search & Sort Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-white/60 dark:bg-gray-900/60 p-2 rounded-2xl backdrop-blur-xl border border-white/20 shadow-lg">
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-gray-900/60 p-2 rounded-2xl backdrop-blur-xl border border-gray-800 shadow-lg">
             <div className="relative w-full sm:w-72 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-purple-600 transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
               <Input
                 placeholder="Search products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 h-12 bg-transparent border-transparent focus:bg-white dark:focus:bg-gray-800 transition-all duration-300 rounded-xl"
+                className="pl-12 h-12 bg-transparent border-transparent focus:bg-gray-800 transition-all duration-300 rounded-xl"
               />
             </div>
             
             <div className="flex gap-2">
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-white/50 dark:hover:bg-gray-800/50 rounded-xl transition-colors">
+                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-gray-800/50 rounded-xl transition-colors">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -192,14 +192,14 @@ export default function ProductsPage() {
               {/* Mobile Filter Sheet */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50">
+                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-gray-800/50">
                     <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-white dark:bg-gray-950">
+                <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-gray-950">
                   <SheetHeader className="px-1 space-y-4">
                     <div className="flex items-center justify-between">
-                      <SheetTitle className="text-2xl font-bold text-gray-900 dark:text-white">Filters</SheetTitle>
+                      <SheetTitle className="text-2xl font-bold text-white">Filters</SheetTitle>
                       <Button 
                         variant="ghost" 
                         size="sm" 
@@ -217,7 +217,7 @@ export default function ProductsPage() {
                   <div className="flex-1 overflow-y-auto py-6 px-1 space-y-8 scrollbar-hide">
                     {/* Categories Section */}
                     <div className="space-y-4">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Categories</h3>
+                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Categories</h3>
                       <div className="grid grid-cols-2 gap-3">
                         {categories.map((cat) => (
                           <button
@@ -226,14 +226,14 @@ export default function ProductsPage() {
                             className={`
                               relative p-4 rounded-xl text-left transition-all duration-200 border group
                               ${category === cat 
-                                ? "border-purple-600 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 shadow-md ring-1 ring-purple-600" 
-                                : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-purple-200 dark:hover:border-purple-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                ? "border-green-600 bg-green-900/20 text-green-300 shadow-md ring-1 ring-green-600" 
+                                : "border-gray-800 bg-gray-900 text-gray-300 hover:border-green-800 hover:bg-gray-800"
                               }
                             `}
                           >
                             <span className="font-medium text-sm">{cat}</span>
                             {category === cat && (
-                              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-purple-600 shadow-sm" />
+                              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-green-500 shadow-sm" />
                             )}
                           </button>
                         ))}
@@ -242,8 +242,8 @@ export default function ProductsPage() {
                     
                     {/* Sort Section (Mobile Only) */}
                     <div className="space-y-4">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Sort By</h3>
-                      <div className="space-y-2 bg-gray-50 dark:bg-gray-900/50 p-2 rounded-2xl">
+                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Sort By</h3>
+                      <div className="space-y-2 bg-gray-900/50 p-2 rounded-2xl">
                          {[
                            { label: "Latest Arrivals", value: "latest" },
                            { label: "Price: Low to High", value: "price-low" },
@@ -255,21 +255,21 @@ export default function ProductsPage() {
                               onClick={() => setSort(option.value)}
                               className={`w-full flex items-center justify-between p-3 rounded-xl text-sm transition-all duration-200 ${
                                 sort === option.value
-                                  ? "bg-white dark:bg-gray-800 font-semibold text-gray-900 dark:text-white shadow-sm"
-                                  : "text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50"
+                                  ? "bg-gray-800 font-semibold text-white shadow-sm"
+                                  : "text-gray-400 hover:bg-gray-800/50"
                               }`}
                            >
                              {option.label}
-                             {sort === option.value && <Check className="w-4 h-4 text-purple-600" />}
+                             {sort === option.value && <Check className="w-4 h-4 text-green-500" />}
                            </button>
                          ))}
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto pb-6">
+                  <div className="pt-4 border-t border-gray-800 mt-auto pb-6">
                     <SheetClose asChild>
-                      <Button className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-gray-900 hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                      <Button className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                         Show {filtered.length} Results
                       </Button>
                     </SheetClose>
@@ -296,12 +296,12 @@ export default function ProductsPage() {
               onClick={() => setCategory(cat)}
               className={`px-8 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 relative overflow-hidden group ${
                 category === cat
-                  ? "text-white shadow-xl shadow-purple-500/30 scale-105"
-                  : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 hover:border-purple-200 dark:hover:border-purple-800"
+                  ? "text-white shadow-xl shadow-green-500/30 scale-105"
+                  : "bg-gray-900 text-gray-400 hover:bg-gray-800 border border-gray-800 hover:border-green-800"
               }`}
             >
               {category === cat && (
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600" />
+                <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600" />
               )}
               <span className="relative z-10 flex items-center gap-2">
                 {cat}
@@ -317,7 +317,7 @@ export default function ProductsPage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900 rounded-3xl h-[420px] animate-pulse border border-gray-100 dark:border-gray-800 shadow-sm" />
+              <div key={i} className="bg-gray-900 rounded-3xl h-[420px] animate-pulse border border-gray-800 shadow-sm" />
             ))}
           </div>
         ) : filtered.length === 0 ? (
@@ -326,16 +326,16 @@ export default function ProductsPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center justify-center py-32 text-center bg-white/50 dark:bg-gray-900/50 rounded-3xl backdrop-blur-sm border border-dashed border-gray-300 dark:border-gray-700"
           >
-            <div className="w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
-              <Search className="w-12 h-12 text-purple-500/50" />
+            <div className="w-32 h-32 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
+              <Search className="w-12 h-12 text-green-500/50" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">No products found</h3>
+            <h3 className="text-2xl font-bold text-white mb-3">No products found</h3>
             <p className="text-gray-500 dark:text-gray-400 max-w-md mb-8">
               We couldn't find any products matching your search. Try adjusting your filters or search term.
             </p>
             <Button 
               onClick={() => {setCategory("All"); setSearch("");}}
-              className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl px-8 py-6 h-auto text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-green-600 text-white hover:bg-green-700 rounded-xl px-8 py-6 h-auto text-base font-medium shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Clear all filters
             </Button>

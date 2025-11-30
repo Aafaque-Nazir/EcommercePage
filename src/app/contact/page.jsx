@@ -150,15 +150,15 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-950">
       {/* Hero Section */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-24"
+        className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-24"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30">Contact Us</Badge>
+          <Badge className="mb-4 bg-black/30 text-green-400 hover:bg-black/40 border border-green-500/30">Contact Us</Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Get In Touch
           </h1>
@@ -176,8 +176,8 @@ const ContactPage = () => {
             <Card className="border-0 shadow-lg">
               <CardContent className="p-8 md:p-12">
                 <div className="flex items-center mb-8">
-                  <MessageSquare className="w-8 h-8 text-purple-600 mr-3" />
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Send us a Message</h2>
+                  <MessageSquare className="w-8 h-8 text-green-600 mr-3" />
+                  <h2 className="text-3xl font-bold text-white">Send us a Message</h2>
                 </div>
 
                 {/* Status Messages */}
@@ -185,10 +185,10 @@ const ContactPage = () => {
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center"
+                    className="mb-6 p-4 bg-green-900/20 border border-green-600/50 rounded-lg flex items-center"
                   >
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-                    <span className="text-green-800 dark:text-green-200">Thank you! Your message has been sent successfully.</span>
+                    <span className="text-green-300">Thank you! Your message has been sent successfully.</span>
                   </motion.div>
                 )}
 
@@ -196,10 +196,10 @@ const ContactPage = () => {
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center"
+                    className="mb-6 p-4 bg-red-900/20 border border-red-600/50 rounded-lg flex items-center"
                   >
                     <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
-                    <span className="text-red-800 dark:text-red-200">Sorry, there was an error. Please try again.</span>
+                    <span className="text-red-300">Sorry, there was an error. Please try again.</span>
                   </motion.div>
                 )}
 
@@ -207,7 +207,7 @@ const ContactPage = () => {
                   {/* Name and Email Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                         Full Name *
                       </label>
                       <Input
@@ -223,7 +223,7 @@ const ContactPage = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                         Email Address *
                       </label>
                       <Input
@@ -242,7 +242,7 @@ const ContactPage = () => {
                   {/* Phone and Subject Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
                         Phone Number
                       </label>
                       <Input
@@ -258,7 +258,7 @@ const ContactPage = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
                         Subject *
                       </label>
                       <Input
@@ -276,7 +276,7 @@ const ContactPage = () => {
 
                   {/* Message */}
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
                       Message *
                     </label>
                     <textarea
@@ -285,8 +285,8 @@ const ContactPage = () => {
                       value={formData.message}
                       onChange={handleInputChange}
                       rows={6}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors resize-none bg-white dark:bg-gray-900 dark:text-white ${
-                        errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors resize-none bg-gray-900 text-white ${
+                        errors.message ? 'border-red-500' : 'border-gray-700'
                       }`}
                       placeholder="Tell us more about your inquiry..."
                     />
@@ -300,7 +300,7 @@ const ContactPage = () => {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-14 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    className="w-full h-14 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                   >
                     {isSubmitting ? (
                       <>
@@ -324,24 +324,24 @@ const ContactPage = () => {
             {/* Contact Details */}
             <Card className="border-0 shadow-lg">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
                 <div className="space-y-6">
                   {contactInfo.map((item, index) => (
                     <div key={index} className="flex items-start space-x-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center text-purple-600">
+                      <div className="flex-shrink-0 w-12 h-12 bg-green-900/30 rounded-lg flex items-center justify-center text-green-400 border border-green-600/30">
                         {item.icon}
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">{item.title}</h4>
+                        <h4 className="text-sm font-semibold text-gray-400 mb-1">{item.title}</h4>
                         {item.link ? (
-                          <a href={item.link} className="text-gray-900 dark:text-white hover:text-purple-600 transition-colors">
+                          <a href={item.link} className="text-white hover:text-green-400 transition-colors">
                             {item.details}
                           </a>
                         ) : (
-                          <p className="text-gray-900 dark:text-white">{item.details}</p>
+                          <p className="text-white">{item.details}</p>
                         )}
                         {item.subDetails && (
-                          <p className="text-gray-500 dark:text-gray-400 text-sm">{item.subDetails}</p>
+                          <p className="text-gray-400 text-sm">{item.subDetails}</p>
                         )}
                       </div>
                     </div>
@@ -353,14 +353,14 @@ const ContactPage = () => {
             {/* Social Media */}
             <Card className="border-0 shadow-lg">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Follow Us</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Follow Us</h3>
                 <div className="flex gap-3">
                   {socialLinks.map((social, index) => (
                     <a
                       key={index}
                       href={social.href}
                       aria-label={social.label}
-                      className={`w-12 h-12 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg flex items-center justify-center ${social.color} hover:text-white transition-all duration-200 transform hover:scale-110`}
+                      className={`w-12 h-12 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg flex items-center justify-center ${social.color} hover:text-white hover:border-green-500 transition-all duration-200 transform hover:scale-110`}
                     >
                       {social.icon}
                     </a>
@@ -370,13 +370,13 @@ const ContactPage = () => {
             </Card>
 
             {/* Quick Response */}
-            <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white overflow-hidden">
+            <Card className="border-0 shadow-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white overflow-hidden">
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">
                   <CheckCircle className="w-8 h-8 mr-3" />
                   <h3 className="text-xl font-bold">Quick Response</h3>
                 </div>
-                <p className="text-purple-100 mb-4">
+                <p className="text-green-100 mb-4">
                   We typically respond to all inquiries within 24 hours during business days.
                 </p>
                 <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">

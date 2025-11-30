@@ -32,8 +32,8 @@ import HeroSlider from "@/components/HeroSlider";
 
 const categories = [
   { name: "Electronics", icon: <Smartphone className="w-6 h-6" />, color: "bg-blue-500" },
-  { name: "Fashion", icon: <Watch className="w-6 h-6" />, color: "bg-purple-500" },
-  { name: "Audio", icon: <Headphones className="w-6 h-6" />, color: "bg-pink-500" },
+  { name: "Fashion", icon: <Watch className="w-6 h-6" />, color: "bg-green-500" },
+  { name: "Audio", icon: <Headphones className="w-6 h-6" />, color: "bg-emerald-500" },
   { name: "Photography", icon: <Camera className="w-6 h-6" />, color: "bg-orange-500" },
 ];
 
@@ -91,17 +91,17 @@ const features = [
 
 const TrendingSection = () => {
   return (
-    <section className="py-24 bg-white dark:bg-gray-950">
+    <section className="py-24 bg-transparent">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-12">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-bold text-purple-600 uppercase tracking-wider">Hot Right Now</span>
+              <TrendingUp className="w-5 h-5 text-green-600" />
+              <span className="text-sm font-bold text-green-600 uppercase tracking-wider">Hot Right Now</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Trending Products</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Trending Products</h2>
           </div>
-          <Link href="/products" className="hidden md:flex items-center text-gray-500 hover:text-purple-600 font-medium transition-colors">
+          <Link href="/products" className="hidden md:flex items-center text-gray-500 hover:text-green-600 font-medium transition-colors">
             View All <ArrowRight className="ml-2 w-4 h-4" />
           </Link>
         </div>
@@ -109,7 +109,7 @@ const TrendingSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {trendingProducts.map((product) => (
             <Link href={`/products`} key={product.id} className="group">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900 mb-4">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-900 mb-4">
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -117,20 +117,20 @@ const TrendingSection = () => {
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute top-4 left-4">
-                  <Badge className="bg-white/90 text-black hover:bg-white backdrop-blur-sm">
+                  <Badge className="bg-black/90 text-white hover:bg-black backdrop-blur-sm">
                     {product.category}
                   </Badge>
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <Button className="w-full bg-white text-black hover:bg-gray-100 shadow-lg">
+                  <Button className="w-full bg-black text-white hover:bg-gray-900 shadow-lg">
                     Quick View
                   </Button>
                 </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-purple-600 transition-colors">
+              <h3 className="text-lg font-bold text-white mb-1 group-hover:text-green-600 transition-colors">
                 {product.name}
               </h3>
-              <p className="text-gray-500 dark:text-gray-400 font-medium">{product.price}</p>
+              <p className="text-gray-400 font-medium">{product.price}</p>
             </Link>
           ))}
         </div>
@@ -141,7 +141,7 @@ const TrendingSection = () => {
 
 const BrandsSection = () => {
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800">
+    <section className="py-16 bg-gray-900 border-y border-gray-800">
       <div className="container mx-auto px-6">
         <p className="text-center text-sm font-semibold text-gray-400 uppercase tracking-widest mb-10">
           Trusted by World-Class Brands
@@ -150,7 +150,7 @@ const BrandsSection = () => {
           {brands.map((brand) => (
             <div key={brand.name} className="relative h-8 w-24 md:h-10 md:w-32">
               {/* Note: Using simple text for brands if logos fail to load, but ideally these are SVGs */}
-              <div className="flex items-center justify-center w-full h-full text-xl font-black text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <div className="flex items-center justify-center w-full h-full text-xl font-black text-gray-400 hover:text-white transition-colors">
                 {brand.name}
               </div>
             </div>
@@ -163,11 +163,11 @@ const BrandsSection = () => {
 
 const CategorySection = () => {
   return (
-    <section className="py-24 bg-white dark:bg-gray-950">
+    <section className="py-24 bg-transparent">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Shop by Category</h2>
-          <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Shop by Category</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
             Explore our wide range of premium collections, carefully curated for your unique style and needs.
           </p>
         </div>
@@ -180,16 +180,16 @@ const CategorySection = () => {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <Link href={`/products?category=${cat.name.toLowerCase()}`}>
-                <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer bg-gray-50 dark:bg-gray-900">
+                <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer bg-gray-900">
                   <CardContent className="p-8 flex flex-col items-center justify-center h-64 relative">
                     <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 ${cat.color}`} />
                     <div className={`w-20 h-20 rounded-full ${cat.color} bg-opacity-10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                      <div className="text-gray-900 dark:text-white">
+                      <div className="text-white">
                         {cat.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{cat.name}</h3>
-                    <span className="text-sm text-purple-600 dark:text-purple-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 font-medium flex items-center gap-1">
+                    <h3 className="text-xl font-bold text-white">{cat.name}</h3>
+                    <span className="text-sm text-green-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 font-medium flex items-center gap-1">
                       Explore <ArrowRight className="w-3 h-3" />
                     </span>
                   </CardContent>
@@ -205,16 +205,16 @@ const CategorySection = () => {
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 bg-gray-50 dark:bg-gray-900">
+    <section className="py-24 bg-gray-900">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {features.map((feature, i) => (
             <div key={i} className="flex flex-col items-center text-center group">
-              <div className="w-16 h-16 rounded-2xl bg-white dark:bg-gray-800 flex items-center justify-center mb-6 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-md group-hover:shadow-lg group-hover:shadow-purple-500/30">
+              <div className="w-16 h-16 rounded-2xl bg-gray-800 flex items-center justify-center mb-6 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors duration-300 shadow-md group-hover:shadow-lg group-hover:shadow-green-500/30">
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-bold mb-3 text-gray-900 dark:text-white">{feature.title}</h3>
-              <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
+              <h3 className="text-lg font-bold mb-3 text-white">{feature.title}</h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
                 {feature.description}
               </p>
             </div>
@@ -239,13 +239,13 @@ const TestimonialsSection = () => {
     <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-600 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600 rounded-full blur-3xl" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-green-600 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-600 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border-0 px-4 py-1">Testimonials</Badge>
+          <Badge className="mb-4 bg-green-500/20 text-green-300 hover:bg-green-500/30 border-0 px-4 py-1">Testimonials</Badge>
           <h2 className="text-3xl md:text-5xl font-bold mb-4">Trusted by Thousands</h2>
         </div>
 
@@ -279,7 +279,7 @@ const TestimonialsSection = () => {
                       </p>
                       <div>
                         <h4 className="font-bold text-lg text-white">{testimonials[current].name}</h4>
-                        <p className="text-purple-300">{testimonials[current].role}</p>
+                        <p className="text-green-300">{testimonials[current].role}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -293,7 +293,7 @@ const TestimonialsSection = () => {
               <button
                 key={idx}
                 onClick={() => setCurrent(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${current === idx ? "bg-purple-500 w-8" : "bg-white/20 hover:bg-white/40"
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${current === idx ? "bg-green-500 w-8" : "bg-white/20 hover:bg-white/40"
                   }`}
                 aria-label={`Go to testimonial ${idx + 1}`}
               />
@@ -307,18 +307,18 @@ const TestimonialsSection = () => {
 
 const CTASection = () => {
   return (
-    <section className="py-24 bg-white dark:bg-gray-950">
+    <section className="py-24 bg-transparent">
       <div className="container mx-auto px-6">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-12 md:p-20 text-center text-white shadow-2xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-12 md:p-20 text-center text-white shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to Experience the Future?</h2>
-            <p className="text-lg md:text-xl text-purple-100 mb-10">
+            <p className="text-lg md:text-xl text-green-100 mb-10">
               Join over 50,000 satisfied customers and upgrade your lifestyle today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/products">
-                <Button size="lg" className="h-14 px-8 rounded-full bg-white text-purple-600 hover:bg-gray-100 font-bold text-lg shadow-lg hover:scale-105 transition-transform">
+                <Button size="lg" className="h-14 px-8 rounded-full bg-black text-green-600 hover:bg-gray-900 font-bold text-lg shadow-lg hover:scale-105 transition-transform">
                   Start Shopping
                 </Button>
               </Link>

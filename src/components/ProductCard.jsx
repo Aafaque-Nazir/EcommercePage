@@ -52,13 +52,13 @@ export default function ProductCard({ product }) {
       whileHover={{ y: -8 }}
       className="h-full"
     >
-      <Card className="group relative overflow-hidden border-0 bg-white dark:bg-gray-900 shadow-lg hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 h-full flex flex-col rounded-3xl">
+      <Card className="group relative overflow-hidden border-0 bg-card shadow-lg hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-500 h-full flex flex-col rounded-3xl">
         {/* Glassmorphism Background Effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 via-transparent to-pink-50/50 dark:from-purple-900/10 dark:via-transparent dark:to-pink-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-900/10 via-transparent to-emerald-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         
         <CardContent className="p-0 flex flex-col h-full relative z-10">
           {/* Product Image Section */}
-          <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-t-3xl">
+          <div className="relative w-full aspect-square overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 rounded-t-3xl">
             <Link href={`/products/${product.id}`}>
               <Image
                 src={product.image}
@@ -81,8 +81,8 @@ export default function ProductCard({ product }) {
               onClick={toggleWishlist}
               className={`absolute top-4 right-4 z-20 w-10 h-10 rounded-full backdrop-blur-xl flex items-center justify-center transition-all duration-300 shadow-lg ${
                 isInWishlist 
-                  ? 'bg-red-500 text-white' 
-                  : 'bg-white/90 dark:bg-gray-900/90 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800'
+                  ? 'bg-green-500 text-white' 
+                  : 'bg-gray-900/90 text-gray-300 hover:bg-gray-800'
               }`}
             >
               <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`} />
@@ -93,7 +93,7 @@ export default function ProductCard({ product }) {
               <Link href={`/products/${product.id}`} className="flex-1">
                 <Button 
                   size="sm" 
-                  className="w-full rounded-xl bg-white/95 hover:bg-white text-gray-900 shadow-xl backdrop-blur-sm font-semibold"
+                  className="w-full rounded-xl bg-gray-900/95 hover:bg-black text-white shadow-xl backdrop-blur-sm font-semibold"
                 >
                   <Eye className="w-4 h-4 mr-2" />
                   Quick View
@@ -103,7 +103,7 @@ export default function ProductCard({ product }) {
 
             {/* Badges - Top Left */}
             <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-              <Badge className="bg-white/95 dark:bg-gray-900/95 text-black dark:text-white hover:bg-white dark:hover:bg-gray-900 backdrop-blur-sm shadow-lg font-semibold border-0 rounded-xl px-3 py-1">
+              <Badge className="bg-gray-900/95 text-white hover:bg-gray-900 backdrop-blur-sm shadow-lg font-semibold border-0 rounded-xl px-3 py-1">
                 {product.category}
               </Badge>
               
@@ -127,7 +127,7 @@ export default function ProductCard({ product }) {
           </div>
 
           {/* Product Info Section */}
-          <div className="p-5 flex flex-col flex-grow bg-white dark:bg-gray-900 rounded-b-3xl">
+          <div className="p-5 flex flex-col flex-grow bg-card rounded-b-3xl">
             {/* Rating */}
             {product.rating && (
               <div className="flex items-center gap-1 mb-2">
@@ -151,7 +151,7 @@ export default function ProductCard({ product }) {
 
             {/* Product Title */}
             <Link href={`/products/${product.id}`} className="block mb-3 group/title">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-2 group-hover/title:text-purple-600 dark:group-hover/title:text-purple-400 transition-colors leading-snug">
+              <h3 className="font-bold text-lg text-white line-clamp-2 group-hover/title:text-green-400 transition-colors leading-snug">
                 {product.title}
               </h3>
             </Link>
@@ -160,11 +160,11 @@ export default function ProductCard({ product }) {
             <div className="mb-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <span className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                     ₹{product.price.toLocaleString()}
                   </span>
                   {product.oldPrice && (
-                    <span className="text-sm text-gray-400 dark:text-gray-500 line-through font-medium">
+                    <span className="text-sm text-gray-500 line-through font-medium">
                       ₹{product.oldPrice.toLocaleString()}
                     </span>
                   )}
@@ -172,7 +172,7 @@ export default function ProductCard({ product }) {
               </div>
               {product.oldPrice && (
                 <div className="mt-1.5">
-                  <span className="inline-block text-xs font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full">
+                  <span className="inline-block text-xs font-bold text-green-400 bg-green-900/20 px-2.5 py-1 rounded-full">
                     Save ₹{(product.oldPrice - product.price).toLocaleString()}
                   </span>
                 </div>
@@ -187,7 +187,7 @@ export default function ProductCard({ product }) {
         </CardContent>
 
         {/* Premium Glow Effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10" />
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10" />
       </Card>
     </motion.div>
   );

@@ -54,7 +54,7 @@ export default function Navbar() {
     { 
       name: "Fashion", 
       icon: <Shirt className="w-5 h-5" />, 
-      href: "/products?category=fashion",
+      href: "/products?category=clothing",
       desc: "Trendy clothing for all"
     },
     { 
@@ -99,8 +99,8 @@ export default function Navbar() {
       <nav
         className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg"
-            : "bg-white dark:bg-gray-900 shadow-sm"
+            ? "bg-black/95 backdrop-blur-md shadow-lg border-b border-green-900/40"
+            : "bg-black shadow-sm border-b border-green-900/20"
         }`}
         onMouseLeave={() => setShopMenuOpen(false)}
       >
@@ -111,7 +111,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center z-50">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="text-2xl font-black tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+                className="text-2xl font-black tracking-tight text-green-600 "
               >
                 ShopEase
               </motion.div>
@@ -121,7 +121,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-8">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                 onMouseEnter={() => setShopMenuOpen(false)}
               >
                 Home
@@ -134,7 +134,7 @@ export default function Navbar() {
               >
                 <Link
                   href="/products"
-                  className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors py-6"
+                  className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors py-6"
                 >
                   Shop
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${shopMenuOpen ? "rotate-180" : ""}`} />
@@ -148,7 +148,7 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
+                      className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-black rounded-2xl shadow-2xl border border-gray-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
                     >
                       <div className="col-span-2 mb-2">
                         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Shop by Category</h3>
@@ -157,17 +157,17 @@ export default function Navbar() {
                             <Link
                               key={cat.name}
                               href={cat.href}
-                              className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                              className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-900 transition-colors group"
                               onClick={() => setShopMenuOpen(false)}
                             >
-                              <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                              <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-green-500 group-hover:bg-green-600 group-hover:text-white transition-colors">
                                 {cat.icon}
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors">
+                                <div className="font-semibold text-white group-hover:text-green-400 transition-colors">
                                   {cat.name}
                                 </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                <div className="text-xs text-gray-400">
                                   {cat.desc}
                                 </div>
                               </div>
@@ -177,12 +177,12 @@ export default function Navbar() {
                       </div>
                       
                       {/* Featured Section in Menu */}
-                      <div className="col-span-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 text-white flex justify-between items-center">
+                      <div className="col-span-2 bg-gray-900 border border-gray-800 rounded-xl p-6 text-white flex justify-between items-center">
                         <div>
-                          <Badge className="bg-white/20 hover:bg-white/30 text-white border-0 mb-2">New Arrival</Badge>
+                          <Badge className="bg-white/10 text-white border-0 mb-2">New Arrival</Badge>
                           <h4 className="font-bold text-lg mb-1">Summer Collection</h4>
-                          <p className="text-purple-100 text-sm mb-4">Get up to 50% off on new arrivals</p>
-                          <Button size="sm" variant="secondary" className="bg-white text-purple-600 hover:bg-gray-100" asChild>
+                          <p className="text-gray-400 text-sm mb-4">Get up to 50% off on new arrivals</p>
+                          <Button size="sm" variant="secondary" className="bg-white text-black hover:bg-gray-200" asChild>
                             <Link href="/products?sort=latest">Shop Now</Link>
                           </Button>
                         </div>
@@ -197,14 +197,14 @@ export default function Navbar() {
 
               <Link
                 href="/about"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                 onMouseEnter={() => setShopMenuOpen(false)}
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
                 onMouseEnter={() => setShopMenuOpen(false)}
               >
                 Contact
@@ -218,7 +218,7 @@ export default function Navbar() {
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingCart className="w-5 h-5" />
                   {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                       {cartCount}
                     </span>
                   )}
@@ -234,7 +234,7 @@ export default function Navbar() {
                     <Button variant="ghost" className="flex items-center gap-2 h-10 px-3">
                       <Avatar className="w-8 h-8">
                         <AvatarImage src={session.user?.image} alt={session.user?.name} />
-                        <AvatarFallback className="bg-purple-600 text-white text-xs">
+                        <AvatarFallback className="bg-  green-600 text-white text-xs">
                           {session.user?.name?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
@@ -281,7 +281,7 @@ export default function Navbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-700">
+                <Button asChild size="sm" className="bg-green-600 hover:bg-green-700">
                   <Link href="/login">Sign In with Google</Link>
                 </Button>
               )}
@@ -306,7 +306,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden"
+              className="lg:hidden border-t border-gray-800 bg-black shadow-2xl overflow-hidden"
             >
               <div className="px-6 py-8 space-y-6 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {/* Mobile Links Section */}
@@ -317,7 +317,7 @@ export default function Navbar() {
                   
                   <Link
                     href="/"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Home
@@ -327,7 +327,7 @@ export default function Navbar() {
                   <div className="rounded-xl overflow-hidden">
                     <button
                       onClick={() => setMobileShopOpen(!mobileShopOpen)}
-                      className="w-full flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                      className="w-full flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
                     >
                       Shop
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileShopOpen ? "rotate-180" : ""}`} />
@@ -339,17 +339,17 @@ export default function Navbar() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="bg-gray-50 dark:bg-gray-800/50 px-3"
+                          className="bg-gray-900/50 px-3"
                         >
                           <div className="py-2 space-y-1">
                             {shopCategories.map((cat) => (
                               <Link
                                 key={cat.name}
                                 href={cat.href}
-                                className="flex items-center gap-3 p-2 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                                className="flex items-center gap-3 p-2 rounded-lg text-sm text-gray-400 hover:text-green-400"
                                 onClick={() => setOpen(false)}
                               >
-                                <div className="w-6 h-6 flex items-center justify-center text-purple-500">
+                                <div className="w-6 h-6 flex items-center justify-center text-green-500">
                                   {cat.icon}
                                 </div>
                                 {cat.name}
@@ -357,7 +357,7 @@ export default function Navbar() {
                             ))}
                             <Link
                               href="/products"
-                              className="flex items-center gap-3 p-2 rounded-lg text-sm font-semibold text-purple-600 hover:underline"
+                              className="flex items-center gap-3 p-2 rounded-lg text-sm font-semibold text-green-600 hover:underline"
                               onClick={() => setOpen(false)}
                             >
                               View All Products
@@ -370,37 +370,37 @@ export default function Navbar() {
 
                   <Link
                     href="/about"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     About
                   </Link>
                   <Link
                     href="/contact"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Contact
                   </Link>
                 </div>
 
-                <div className="border-t border-gray-200 dark:border-gray-800 pt-6">
+                <div className="border-t border-gray-800 pt-6">
                   {/* Cart - Mobile */}
                   <Link
                     href="/cart"
-                    className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors mb-4"
+                    className="flex items-center justify-between p-4 rounded-xl bg-gray-900 hover:bg-gray-800 transition-colors mb-4"
                     onClick={() => setOpen(false)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                        <ShoppingCart className="w-5 h-5 text-purple-600" />
+                      <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                        <ShoppingCart className="w-5 h-5 text-green-600" />
                       </div>
-                      <span className="font-medium text-gray-900 dark:text-white">
+                      <span className="font-medium text-white">
                         Shopping Cart
                       </span>
                     </div>
                     {cartCount > 0 && (
-                      <span className="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      <span className="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                         {cartCount}
                       </span>
                     )}
@@ -409,16 +409,16 @@ export default function Navbar() {
                   {/* Auth - Mobile */}
                   {session ? (
                     <>
-                      <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl mb-4">
+                      <div className="p-4 bg-gradient-to-r from-green-900/20 to-pink-900/20 rounded-xl mb-4">
                         <div className="flex items-center gap-3 mb-4">
                           <Avatar className="w-12 h-12 ring-2 ring-white dark:ring-gray-800">
                             <AvatarImage src={session.user?.image} alt={session.user?.name} />
-                            <AvatarFallback className="bg-purple-600 text-white font-bold">
+                            <AvatarFallback className="bg-green-600 text-white font-bold">
                               {session.user?.name?.charAt(0) || "U"}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">
+                            <p className="text-sm font-bold text-white truncate">
                               {session.user?.name}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
@@ -430,33 +430,33 @@ export default function Navbar() {
                         <div className="space-y-2">
                           <Link
                             href="/dashboard"
-                            className="flex items-center gap-3 p-3 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            className="flex items-center gap-3 p-3 rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors"
                             onClick={() => setOpen(false)}
                           >
-                            <User className="w-5 h-5 text-purple-600" />
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            <User className="w-5 h-5 text-green-600" />
+                            <span className="text-sm font-medium text-white">
                               My Account
                             </span>
                           </Link>
                           
                           <Link
                             href="/orders"
-                            className="flex items-center gap-3 p-3 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            className="flex items-center gap-3 p-3 rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors"
                             onClick={() => setOpen(false)}
                           >
-                            <Package className="w-5 h-5 text-purple-600" />
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            <Package className="w-5 h-5 text-green-600" />
+                            <span className="text-sm font-medium text-white">
                               My Orders
                             </span>
                           </Link>
                           
                           <Link
                             href="/wishlist"
-                            className="flex items-center gap-3 p-3 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            className="flex items-center gap-3 p-3 rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors"
                             onClick={() => setOpen(false)}
                           >
-                            <Heart className="w-5 h-5 text-purple-600" />
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            <Heart className="w-5 h-5 text-green-600" />
+                            <span className="text-sm font-medium text-white">
                               Wishlist
                             </span>
                           </Link>
@@ -483,7 +483,7 @@ export default function Navbar() {
                     >
                       <Button 
                         asChild 
-                        className="w-full h-14 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg"
+                        className="w-full h-14 text-lg  text-green-600 hover:from-green-700 hover:to-green-700 shadow-lg"
                       >
                         <Link href="/login" onClick={() => setOpen(false)}>
                           Sign In with Google

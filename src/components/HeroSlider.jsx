@@ -15,7 +15,7 @@ const slides = [
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop",
     cta: "Shop Now",
     link: "/products",
-    color: "from-purple-900/40 via-gray-900/80 to-black/90"
+    color: "from-green-900/40 via-gray-900/80 to-black/90"
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const slides = [
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop",
     cta: "Explore Audio",
     link: "/products?category=audio",
-    color: "from-blue-900/40 via-gray-900/80 to-black/90"
+    color: "from-emerald-900/40 via-gray-900/80 to-black/90"
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ const slides = [
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop",
     cta: "View Collection",
     link: "/products?category=fashion",
-    color: "from-pink-900/40 via-gray-900/80 to-black/90"
+    color: "from-green-800/40 via-gray-900/80 to-black/90"
   }
 ];
 
@@ -84,12 +84,14 @@ export default function HeroSlider() {
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <span className="inline-block py-2 px-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sm font-bold uppercase tracking-widest mb-6">
+              <span className="inline-block px-4 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-sm font-medium mb-4 backdrop-blur-sm">
                 {slides[current].subtitle}
               </span>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-tight">
-                {slides[current].title}
-              </h1>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight tracking-tight">
+                <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                  {slides[current].title}
+                </span>
+              </h2>
               <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl">
                 {slides[current].description}
               </p>
@@ -97,7 +99,7 @@ export default function HeroSlider() {
                 <Button 
                   asChild 
                   size="lg" 
-                  className="h-14 px-8 rounded-full text-lg font-bold bg-white text-black hover:bg-gray-200 transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                  className="bg-green-600 hover:bg-green-700 text-white border-0 h-12 px-8 rounded-full font-bold text-base shadow-lg shadow-green-900/20"
                 >
                   <Link href={slides[current].link}>
                     {slides[current].cta} <ChevronRight className="ml-2 w-5 h-5" />
@@ -131,8 +133,8 @@ export default function HeroSlider() {
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`h-1 transition-all duration-300 rounded-full ${
-              current === idx ? "w-8 bg-white" : "w-4 bg-white/30 hover:bg-white/50"
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              idx === current ? "bg-green-500 w-8" : "bg-white/30 hover:bg-white/50"
             }`}
           />
         ))}

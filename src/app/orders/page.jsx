@@ -20,6 +20,8 @@ import {
   Calendar,
   MapPin
 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const getStatusIcon = (status) => {
   switch (status) {
@@ -53,6 +55,7 @@ const getStatusColor = (status) => {
 
 export default function OrdersPage() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const orders = useSelector((state) => state.orders.list);
 
   const handleCancel = (id) => {
@@ -107,7 +110,7 @@ export default function OrdersPage() {
           <div className="space-y-6">
             {orders.map((order, index) => (
               <motion.div
-                key={order.id}
+                key={`${order.id}-${index}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -115,7 +118,7 @@ export default function OrdersPage() {
                 <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow">
                   <CardContent className="p-0">
                     {/* Order Header */}
-                    <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
+                    <div className="bg-black border-b border-gray-800 p-6 text-white">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
                           <div className="flex items-center gap-3 mb-2">
@@ -127,7 +130,7 @@ export default function OrdersPage() {
                               {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-4 text-purple-100 text-sm">
+                          <div className="flex items-center gap-4 text-gray-400 text-sm">
                             <span className="flex items-center gap-2">
                               <Calendar className="w-4 h-4" />
                               {new Date().toLocaleDateString()}
@@ -141,7 +144,7 @@ export default function OrdersPage() {
 
                         <div className="flex flex-col items-end gap-3">
                           <div className="text-right">
-                            <p className="text-purple-100 text-sm">Total Amount</p>
+                            <p className="text-gray-400 text-sm">Total Amount</p>
                             <p className="text-3xl font-bold">
                               ₹{order.total.toLocaleString()}
                             </p>
@@ -161,8 +164,8 @@ export default function OrdersPage() {
                     </div>
 
                     {/* Order Items */}
-                    <div className="p-6 bg-white dark:bg-gray-800">
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <div className="p-6 bg-black border-x border-b border-gray-800">
+                      <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
                         <Package className="w-5 h-5" />
                         Order Items
                       </h3>
@@ -171,23 +174,23 @@ export default function OrdersPage() {
                           <div key={item.id}>
                             <div className="flex items-center justify-between py-3">
                               <div className="flex items-center gap-4 flex-1">
-                                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-900 rounded-lg flex items-center justify-center">
+                                <div className="w-16 h-16 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-800">
                                   <Package className="w-8 h-8 text-gray-400" />
                                 </div>
                                 <div className="flex-1">
-                                  <p className="font-medium text-gray-900 dark:text-white">
+                                  <p className="font-medium text-white">
                                     {item.name}
                                   </p>
-                                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  <p className="text-sm text-gray-400">
                                     Qty: {item.qty}
                                   </p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="font-bold text-gray-900 dark:text-white">
+                                <p className="font-bold text-white">
                                   ₹{(item.price * item.qty).toLocaleString()}
                                 </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-sm text-gray-400">
                                   ₹{item.price.toLocaleString()} each
                                 </p>
                               </div>
@@ -198,16 +201,34 @@ export default function OrdersPage() {
                       </div>
 
                       {/* Order Actions */}
-                      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                      <div className="mt-6 pt-6 border-t border-gray-800">
                         <div className="flex flex-col sm:flex-row gap-3">
-                          <Button variant="outline" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
+                            onClick={() => toast.success("Tracking details have been sent to your email.")}
+                          >
                             <Truck className="w-4 h-4 mr-2" />
                             Track Order
                           </Button>
-                          <Button variant="outline" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
+                            onClick={() => {
+                              toast.loading("Downloading invoice...");
+                              setTimeout(() => {
+                                toast.dismiss();
+                                toast.success("Invoice downloaded successfully.");
+                              }, 2000);
+                            }}
+                          >
                             Download Invoice
                           </Button>
-                          <Button variant="outline" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
+                            onClick={() => router.push("/contact")}
+                          >
                             Need Help?
                           </Button>
                         </div>

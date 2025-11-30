@@ -1,8 +1,15 @@
-
+import { Outfit } from "next/font/google";
 import "../app/globals.css";
 import Providers from "./Providers";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Toaster } from "sonner";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export const metadata = {
   title: "ShopEase - Premium E-commerce Store",
@@ -11,14 +18,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white">
+    <html lang="en" className={outfit.variable} suppressHydrationWarning>
+      <body className="bg-background text-foreground font-sans antialiased selection:bg-green-500/30">
         <Providers>
           <Navbar />
-          <main>
+          <main className="min-h-screen">
             {children}
           </main>
           <Footer />
+          <Toaster position="top-center" richColors />
         </Providers>
       </body>
     </html>

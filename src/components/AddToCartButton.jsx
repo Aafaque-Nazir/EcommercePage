@@ -67,7 +67,7 @@ const AddToCartButton = ({ product }) => {
         className={`flex-1 flex items-center justify-center py-3 px-5 rounded-xl font-medium shadow-md transition-all ${
           isAdded
             ? "bg-green-600 text-white"
-            : "bg-gradient-to-r from-purple-600 to-pink-500 hover:opacity-90 text-white"
+            : "bg-green-600 hover:bg-green-700 text-white hover:shadow-lg hover:shadow-green-600/20"
         }`}
       >
         {isAdded ? (

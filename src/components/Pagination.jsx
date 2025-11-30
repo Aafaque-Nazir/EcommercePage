@@ -64,13 +64,13 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`group relative h-11 w-11 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 
-                     backdrop-blur-sm border border-purple-200/50 dark:border-purple-500/30
-                     hover:from-purple-500/20 hover:to-pink-500/20 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25
+          className={`group relative h-11 w-11 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 
+                     backdrop-blur-sm border border-green-200/50 dark:border-green-500/30
+                     hover:from-green-500/20 hover:to-emerald-500/20 hover:scale-110 hover:shadow-lg hover:shadow-green-500/25
                      disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
                      transition-all duration-300 ease-out flex items-center justify-center`}
         >
-          <ChevronLeft className="h-5 w-5 text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors" />
+          <ChevronLeft className="h-5 w-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300 transition-colors" />
         </button>
 
         {/* Page Numbers */}
@@ -90,16 +90,16 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
                 className={`relative h-11 min-w-[44px] px-4 rounded-xl font-semibold text-sm
                            transition-all duration-300 ease-out overflow-hidden
                            ${currentPage === page
-                             ? `bg-gradient-to-br from-purple-600 via-pink-600 to-purple-600 text-white 
-                                shadow-lg shadow-purple-500/50 dark:shadow-purple-400/40 scale-110 z-10
-                                hover:shadow-xl hover:shadow-purple-500/60 hover:scale-115`
+                             ? `bg-gradient-to-br from-green-600 via-emerald-600 to-green-600 text-white 
+                                shadow-lg shadow-green-500/50 dark:shadow-green-400/40 scale-110 z-10
+                                hover:shadow-xl hover:shadow-green-500/60 hover:scale-115`
                              : `bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm 
                                 border border-gray-200 dark:border-gray-700
                                 text-gray-700 dark:text-gray-300
-                                hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50
-                                dark:hover:from-purple-900/30 dark:hover:to-pink-900/30
-                                hover:border-purple-300 dark:hover:border-purple-600
-                                hover:text-purple-700 dark:hover:text-purple-300
+                                hover:bg-gradient-to-br hover:from-green-50 hover:to-emerald-50
+                                dark:hover:from-green-900/30 dark:hover:to-emerald-900/30
+                                hover:border-green-300 dark:hover:border-green-600
+                                hover:text-green-700 dark:hover:text-green-300
                                 hover:scale-105 hover:shadow-md`
                            }`}
               >
@@ -117,13 +117,13 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`group relative h-11 w-11 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 
-                     backdrop-blur-sm border border-purple-200/50 dark:border-purple-500/30
-                     hover:from-purple-500/20 hover:to-pink-500/20 hover:scale-110 hover:shadow-lg hover:shadow-purple-500/25
+          className={`group relative h-11 w-11 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 
+                     backdrop-blur-sm border border-green-200/50 dark:border-green-500/30
+                     hover:from-green-500/20 hover:to-emerald-500/20 hover:scale-110 hover:shadow-lg hover:shadow-green-500/25
                      disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none
                      transition-all duration-300 ease-out flex items-center justify-center`}
         >
-          <ChevronRight className="h-5 w-5 text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors" />
+          <ChevronRight className="h-5 w-5 text-green-600 dark:text-green-400 group-hover:text-green-700 dark:group-hover:text-green-300 transition-colors" />
         </button>
       </div>
 
@@ -132,7 +132,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         {/* Progress Bar */}
         <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
           <div 
-            className="h-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-full transition-all duration-500 ease-out shadow-lg shadow-purple-500/50"
+            className="h-full bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 rounded-full transition-all duration-500 ease-out shadow-lg shadow-green-500/50"
             style={{ width: `${(currentPage / totalPages) * 100}%` }}
           />
         </div>
@@ -140,7 +140,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         {/* Page Counter */}
         <div className="flex items-center gap-2 text-sm">
           <span className="text-gray-600 dark:text-gray-400">Page</span>
-          <span className="px-3 py-1 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 text-white font-bold shadow-md">
+          <span className="px-3 py-1 rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 text-white font-bold shadow-md">
             {currentPage}
           </span>
           <span className="text-gray-600 dark:text-gray-400">of</span>

@@ -26,10 +26,10 @@ export default function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
+    <div className="min-h-screen bg-gray-950 py-12">
       <div className="max-w-5xl mx-auto px-6">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-10 flex items-center gap-3">
-          <ShoppingBag className="w-8 h-8 text-blue-600" />
+        <h1 className="text-4xl font-extrabold text-white mb-10 flex items-center gap-3">
+          <ShoppingBag className="w-8 h-8 text-green-500" />
           Your Shopping Cart
         </h1>
 
@@ -43,7 +43,7 @@ export default function CartPage() {
             </p>
             <Button
               onClick={handleContinueShopping}
-              className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl"
+              className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl"
             >
               Continue Shopping
             </Button>
@@ -68,7 +68,7 @@ export default function CartPage() {
                         alt={item.title}
                       />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-white">
                           {item.title}
                         </h3>
                         <p className="text-gray-500 mt-1">
@@ -81,7 +81,7 @@ export default function CartPage() {
                     </div>
 
                     <div className="mt-5 sm:mt-0 flex items-center gap-4">
-                      <div className="flex items-center border rounded-lg shadow-sm">
+                      <div className="flex items-center border border-gray-700 rounded-lg shadow-sm">
                         <Button
                           variant="ghost"
                           size="icon"
@@ -91,7 +91,7 @@ export default function CartPage() {
                         >
                           <Minus className="w-4 h-4" />
                         </Button>
-                        <span className="px-4 font-medium">{item.qty}</span>
+                        <span className="px-4 font-medium text-white">{item.qty}</span>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -116,9 +116,9 @@ export default function CartPage() {
               </AnimatePresence>
             </CardContent>
 
-            <div className="px-6 py-6 bg-gray-50 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="px-6 py-6 bg-gray-900 border-t border-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-white">
                   Total: ₹{total.toLocaleString()}
                 </h2>
                 <Button
@@ -132,7 +132,7 @@ export default function CartPage() {
 
               <Button
                 onClick={() => router.push("/checkout")}
-                className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white px-8 py-3 rounded-xl text-lg font-semibold shadow-md"
+                className="bg-green-600 hover:bg-green-700 cursor-pointer text-white px-8 py-3 rounded-xl text-lg font-semibold shadow-md"
               >
                 Proceed to Checkout
               </Button>
