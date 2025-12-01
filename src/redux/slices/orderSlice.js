@@ -11,8 +11,10 @@ const ordersSlice = createSlice({
       state.list.push(action.payload);
     },
     cancelOrder: (state, action) => {
-      const order = state.list.find((o) => o.id === action.payload);
-      if (order) order.status = "cancelled";
+      const order = state.list.find((o) => o.id == action.payload); // Use == to handle string/number comparison
+      if (order) {
+        order.status = "cancelled";
+      }
     },
   },
 });

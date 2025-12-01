@@ -5,10 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cancelOrder } from "../../redux/slices/orderSlice";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import ProtectedPage from "@/components/ProtectedPage";
 import { 
   Package, 
@@ -18,38 +14,55 @@ import {
   Clock, 
   ShoppingBag,
   Calendar,
-  MapPin
+  Download,
+  HelpCircle,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-const getStatusIcon = (status) => {
+const getStatusConfig = (status) => {
   switch (status) {
     case "placed":
-      return <Clock className="w-5 h-5" />;
+      return { 
+        icon: <Clock className="w-4 h-4" />,
+        color: "bg-blue-500",
+        bgColor: "bg-blue-50 dark:bg-blue-950/30",
+        textColor: "text-blue-700 dark:text-blue-300",
+        borderColor: "border-blue-200 dark:border-blue-800"
+      };
     case "shipped":
-      return <Truck className="w-5 h-5" />;
+      return { 
+        icon: <Truck className="w-4 h-4" />,
+        color: "bg-purple-500",
+        bgColor: "bg-purple-50 dark:bg-purple-950/30",
+        textColor: "text-purple-700 dark:text-purple-300",
+        borderColor: "border-purple-200 dark:border-purple-800"
+      };
     case "delivered":
-      return <CheckCircle className="w-5 h-5" />;
+      return { 
+        icon: <CheckCircle className="w-4 h-4" />,
+        color: "bg-green-500",
+        bgColor: "bg-green-50 dark:bg-green-950/30",
+        textColor: "text-green-700 dark:text-green-300",
+        borderColor: "border-green-200 dark:border-green-800"
+      };
     case "cancelled":
-      return <XCircle className="w-5 h-5" />;
+      return { 
+        icon: <XCircle className="w-4 h-4" />,
+        color: "bg-red-500",
+        bgColor: "bg-red-50 dark:bg-red-950/30",
+        textColor: "text-red-700 dark:text-red-300",
+        borderColor: "border-red-200 dark:border-red-800"
+      };
     default:
-      return <Package className="w-5 h-5" />;
-  }
-};
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case "placed":
-      return "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400";
-    case "shipped":
-      return "bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400";
-    case "delivered":
-      return "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400";
-    case "cancelled":
-      return "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400";
-    default:
-      return "bg-gray-100 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400";
+      return { 
+        icon: <Package className="w-4 h-4" />,
+        color: "bg-gray-500",
+        bgColor: "bg-gray-50 dark:bg-gray-950/30",
+        textColor: "text-gray-700 dark:text-gray-300",
+        borderColor: "border-gray-200 dark:border-gray-800"
+      };
   }
 };
 
@@ -58,33 +71,40 @@ export default function OrdersPage() {
   const router = useRouter();
   const orders = useSelector((state) => state.orders.list);
 
-  const handleCancel = (id) => {
-    dispatch(cancelOrder(id));
+  const handleCancel = (orderId) => {
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel this order?"
+    );
+    
+    if (confirmCancel) {
+      dispatch(cancelOrder(orderId));
+      toast.success("Order cancelled successfully");
+    }
   };
 
   if (!orders || orders.length === 0) {
     return (
       <ProtectedPage>
-        <div className="min-h-[70vh] flex flex-col items-center justify-center px-4">
+        <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 bg-[#0a0a0a]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-md"
           >
-            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShoppingBag className="w-12 h-12 text-gray-400" />
+            <div className="w-24 h-24 bg-gray-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShoppingBag className="w-12 h-12 text-gray-500" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl font-bold text-white mb-3">
               No Orders Yet
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-8">
+            <p className="text-gray-400 mb-8">
               You haven't placed any orders. Start shopping to see your orders here!
             </p>
             <Link href="/products">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
-                <ShoppingBag className="w-5 h-5 mr-2" />
+              <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors flex items-center gap-2 mx-auto">
+                <ShoppingBag className="w-5 h-5" />
                 Start Shopping
-              </Button>
+              </button>
             </Link>
           </motion.div>
         </div>
@@ -94,150 +114,158 @@ export default function OrdersPage() {
 
   return (
     <ProtectedPage>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <div className="min-h-screen bg-[#0a0a0a] py-8 md:py-12">
+        <div className="container mx-auto px-4 max-w-5xl">
           {/* Page Header */}
-          <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
               My Orders
             </h1>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-gray-400">
               Track and manage your orders
             </p>
           </div>
 
           {/* Orders List */}
-          <div className="space-y-6">
-            {orders.map((order, index) => (
-              <motion.div
-                key={`${order.id}-${index}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-shadow">
-                  <CardContent className="p-0">
-                    {/* Order Header */}
-                    <div className="bg-black border-b border-gray-800 p-6 text-white">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                          <div className="flex items-center gap-3 mb-2">
-                            <h2 className="text-2xl font-bold">
-                              Order #{order.id}
-                            </h2>
-                            <Badge className={`${getStatusColor(order.status)} flex items-center gap-2 px-3 py-1`}>
-                              {getStatusIcon(order.status)}
-                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center gap-4 text-gray-400 text-sm">
-                            <span className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4" />
-                              {new Date().toLocaleDateString()}
-                            </span>
-                            <span className="flex items-center gap-2">
-                              <Package className="w-4 h-4" />
-                              {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
-                            </span>
-                          </div>
+          <div className="space-y-4">
+            {orders.map((order, index) => {
+              const statusConfig = getStatusConfig(order.status);
+              
+              return (
+                <motion.div
+                  key={`${order.id}-${index}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-[#111] rounded-2xl border border-gray-800 overflow-hidden shadow-lg hover:shadow-xl hover:shadow-green-500/10 transition-all"
+                >
+                  {/* Order Header */}
+                  <div className="p-4 md:p-6 border-b border-gray-800">
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h2 className="text-lg md:text-xl font-bold text-white">
+                            Order #{order.id}
+                          </h2>
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${statusConfig.bgColor} ${statusConfig.textColor} border ${statusConfig.borderColor}`}>
+                            {statusConfig.icon}
+                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                          </span>
                         </div>
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                          <span className="flex items-center gap-1.5">
+                            <Calendar className="w-4 h-4" />
+                            {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <Package className="w-4 h-4" />
+                            {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                          </span>
+                        </div>
+                      </div>
 
-                        <div className="flex flex-col items-end gap-3">
-                          <div className="text-right">
-                            <p className="text-gray-400 text-sm">Total Amount</p>
-                            <p className="text-3xl font-bold">
-                              ₹{order.total.toLocaleString()}
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <div className="text-left sm:text-right">
+                          <p className="text-xs text-gray-500 mb-0.5">Total Amount</p>
+                          <p className="text-2xl md:text-3xl font-bold text-white">
+                            ₹{order.total.toLocaleString()}
+                          </p>
+                        </div>
+                        {order.status === "placed" && (
+                          <button
+                            onClick={() => handleCancel(order.id)}
+                            className="px-4 py-2 text-sm font-medium text-red-400 bg-red-950/30 border border-red-800 rounded-lg hover:bg-red-950/50 transition-colors"
+                          >
+                            Cancel Order
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order Items */}
+                  <div className="p-4 md:p-6">
+                    <div className="space-y-4">
+                      {order.items.map((item, idx) => (
+                        <div 
+                          key={`${item.id}-${idx}`} 
+                          className="flex items-center gap-4 p-3 rounded-xl bg-black/40 border border-gray-800/50"
+                        >
+                          {/* Product Image */}
+                          <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 bg-gray-900 rounded-lg overflow-hidden border border-gray-800">
+                            {item.image ? (
+                              <Image
+                                src={item.image}
+                                alt={item.name || item.title}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Package className="w-8 h-8 text-gray-600" />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Product Info */}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-white text-sm md:text-base line-clamp-1">
+                              {item.name || item.title}
+                            </h4>
+                            <p className="text-sm text-gray-400 mt-0.5">
+                              Qty: {item.qty}
                             </p>
                           </div>
-                          {order.status === "placed" && (
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => handleCancel(order.id)}
-                              className="bg-white/20 hover:bg-white/30 text-white border-white/30"
-                            >
-                              Cancel Order
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Order Items */}
-                    <div className="p-6 bg-black border-x border-b border-gray-800">
-                      <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-                        <Package className="w-5 h-5" />
-                        Order Items
-                      </h3>
-                      <div className="space-y-3">
-                        {order.items.map((item, idx) => (
-                          <div key={item.id}>
-                            <div className="flex items-center justify-between py-3">
-                              <div className="flex items-center gap-4 flex-1">
-                                <div className="w-16 h-16 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-800">
-                                  <Package className="w-8 h-8 text-gray-400" />
-                                </div>
-                                <div className="flex-1">
-                                  <p className="font-medium text-white">
-                                    {item.name}
-                                  </p>
-                                  <p className="text-sm text-gray-400">
-                                    Qty: {item.qty}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-bold text-white">
-                                  ₹{(item.price * item.qty).toLocaleString()}
-                                </p>
-                                <p className="text-sm text-gray-400">
-                                  ₹{item.price.toLocaleString()} each
-                                </p>
-                              </div>
-                            </div>
-                            {idx < order.items.length - 1 && <Separator />}
+                          {/* Price */}
+                          <div className="text-right flex-shrink-0">
+                            <p className="font-bold text-white text-sm md:text-base">
+                              ₹{(item.price * item.qty).toLocaleString()}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              ₹{item.price.toLocaleString()} each
+                            </p>
                           </div>
-                        ))}
-                      </div>
-
-                      {/* Order Actions */}
-                      <div className="mt-6 pt-6 border-t border-gray-800">
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          <Button 
-                            variant="outline" 
-                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
-                            onClick={() => toast.success("Tracking details have been sent to your email.")}
-                          >
-                            <Truck className="w-4 h-4 mr-2" />
-                            Track Order
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
-                            onClick={() => {
-                              toast.loading("Downloading invoice...");
-                              setTimeout(() => {
-                                toast.dismiss();
-                                toast.success("Invoice downloaded successfully.");
-                              }, 2000);
-                            }}
-                          >
-                            Download Invoice
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            className="flex-1 bg-gray-900 border-gray-800 text-white hover:bg-gray-800 hover:text-white transition-all duration-200"
-                            onClick={() => router.push("/contact")}
-                          >
-                            Need Help?
-                          </Button>
                         </div>
+                      ))}
+                    </div>
+
+                    {/* Order Actions */}
+                    <div className="mt-6 pt-6 border-t border-gray-800">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button
+                          onClick={() => toast.success("Tracking details sent to your email")}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
+                        >
+                          <Truck className="w-4 h-4" />
+                          Track Order
+                        </button>
+                        <button
+                          onClick={() => {
+                            toast.loading("Downloading invoice...");
+                            setTimeout(() => {
+                              toast.dismiss();
+                              toast.success("Invoice downloaded");
+                            }, 1500);
+                          }}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
+                        >
+                          <Download className="w-4 h-4" />
+                          Invoice
+                        </button>
+                        <button
+                          onClick={() => router.push("/contact")}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
+                        >
+                          <HelpCircle className="w-4 h-4" />
+                          Help
+                        </button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
