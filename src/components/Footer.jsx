@@ -18,16 +18,16 @@ export default function Footer() {
             Elevate your style with premium products delivered right to your doorstep. Quality meets convenience.
           </p>
           <div className="flex space-x-4">
-            <a href="#" className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300">
+            <a href="#" className="w-10 h-10 rounded-lg bg-black border border-zinc-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white hover:border-green-500 hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300">
               <FaFacebookF />
             </a>
-            <a href="#" className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300">
+            <a href="#" className="w-10 h-10 rounded-lg bg-black border border-zinc-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white hover:border-green-500 hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300">
               <FaTwitter />
             </a>
-            <a href="#" className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300">
+            <a href="#" className="w-10 h-10 rounded-lg bg-black border border-zinc-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white hover:border-green-500 hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300">
               <FaInstagram />
             </a>
-            <a href="#" className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white transition-all duration-300">
+            <a href="#" className="w-10 h-10 rounded-lg bg-black border border-zinc-800 flex items-center justify-center text-gray-400 hover:bg-green-600 hover:text-white hover:border-green-500 hover:shadow-lg hover:shadow-green-500/50 transition-all duration-300">
               <FaLinkedinIn />
             </a>
           </div>
@@ -71,7 +71,7 @@ export default function Footer() {
             <input
               type="email"
               placeholder="Your email"
-              className="px-4 py-3 rounded-xl bg-gray-800 text-white outline-none focus:ring-2 focus:ring-green-500 border border-gray-700 transition-all"
+              className="px-4 py-3 rounded-xl bg-black text-white outline-none focus:ring-2 focus:ring-green-500 border border-zinc-800 transition-all"
               aria-label="Your email"
             />
             <button

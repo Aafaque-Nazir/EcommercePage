@@ -1,10 +1,9 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { cancelOrder } from "../../redux/slices/orderSlice";
 import ProtectedPage from "@/components/ProtectedPage";
 import { 
   Package, 
@@ -16,7 +15,8 @@ import {
   Calendar,
   Download,
   HelpCircle,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -26,18 +26,18 @@ const getStatusConfig = (status) => {
     case "placed":
       return { 
         icon: <Clock className="w-4 h-4" />,
-        color: "bg-blue-500",
-        bgColor: "bg-blue-50 dark:bg-blue-950/30",
-        textColor: "text-blue-700 dark:text-blue-300",
-        borderColor: "border-blue-200 dark:border-blue-800"
+        color: "bg-green-500",
+        bgColor: "bg-green-50 dark:bg-green-950/30",
+        textColor: "text-green-700 dark:text-green-300",
+        borderColor: "border-green-200 dark:border-green-800"
       };
     case "shipped":
       return { 
         icon: <Truck className="w-4 h-4" />,
-        color: "bg-purple-500",
-        bgColor: "bg-purple-50 dark:bg-purple-950/30",
-        textColor: "text-purple-700 dark:text-purple-300",
-        borderColor: "border-purple-200 dark:border-purple-800"
+        color: "bg-green-500",
+        bgColor: "bg-green-50 dark:bg-green-950/30",
+        textColor: "text-green-700 dark:text-green-300",
+        borderColor: "border-green-200 dark:border-green-800"
       };
     case "delivered":
       return { 
@@ -67,9 +67,31 @@ const getStatusConfig = (status) => {
 };
 
 export default function OrdersPage() {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const orders = useSelector((state) => state.orders.list);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/user/orders");
+      const data = await res.json();
+      
+      if (data.success) {
+        setOrders(data.orders);
+      } else {
+        // toast.error(data.error || "Failed to load orders");
+      }
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const handleCancel = (orderId) => {
     const confirmCancel = window.confirm(
@@ -77,10 +99,19 @@ export default function OrdersPage() {
     );
     
     if (confirmCancel) {
-      dispatch(cancelOrder(orderId));
-      toast.success("Order cancelled successfully");
+      toast.info("Cancellation functionality is being updated to server.");
     }
   };
+
+  if (loading) {
+    return (
+      <ProtectedPage>
+        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+            <RefreshCw className="w-8 h-8 text-green-500 animate-spin" />
+        </div>
+      </ProtectedPage>
+    );
+  }
 
   if (!orders || orders.length === 0) {
     return (
@@ -98,7 +129,7 @@ export default function OrdersPage() {
               No Orders Yet
             </h2>
             <p className="text-gray-400 mb-8">
-              You haven't placed any orders. Start shopping to see your orders here!
+              You haven't placed any orders yet, or they are loading.
             </p>
             <Link href="/products">
               <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors flex items-center gap-2 mx-auto">
@@ -117,13 +148,18 @@ export default function OrdersPage() {
       <div className="min-h-screen bg-[#0a0a0a] py-8 md:py-12">
         <div className="container mx-auto px-4 max-w-5xl">
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              My Orders
-            </h1>
-            <p className="text-gray-400">
-              Track and manage your orders
-            </p>
+          <div className="mb-8 flex justify-between items-end">
+            <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                My Orders
+                </h1>
+                <p className="text-gray-400">
+                Track and manage your orders
+                </p>
+            </div>
+            <button onClick={fetchOrders} className="p-2 bg-gray-900 rounded-lg hover:bg-gray-800 transition">
+                <RefreshCw className="w-5 h-5 text-gray-400" />
+            </button>
           </div>
 
           {/* Orders List */}

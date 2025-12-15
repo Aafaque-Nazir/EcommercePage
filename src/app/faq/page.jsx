@@ -166,9 +166,9 @@ const FAQsSection = () => {
   const popularFAQs = faqData.filter(faq => faq.popular);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
+      <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center mb-6">
             <HelpCircle className="w-16 h-16 mr-4 opacity-90" />
@@ -208,9 +208,9 @@ const FAQsSection = () => {
           {/* Sidebar - Categories & Popular */}
           <div className="lg:col-span-1 space-y-6">
             {/* Categories */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-800">
               <div className="flex items-center mb-4">
-                <Filter className="w-5 h-5 text-blue-600 mr-2" />
+                <Filter className="w-5 h-5 text-green-600 mr-2" />
                 <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
               </div>
               <div className="space-y-2">
@@ -220,8 +220,8 @@ const FAQsSection = () => {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`w-full flex items-center px-3 py-2 rounded-lg text-left transition-colors ${
                       selectedCategory === category.id
-                        ? 'bg-blue-100 text-blue-700 border border-blue-200'
-                        : 'hover:bg-gray-100 text-gray-700'
+                        ? 'bg-green-100 text-green-700 border border-green-200'
+                        : 'hover:bg-zinc-800 text-gray-300'
                     }`}
                   >
                     {category.icon}
@@ -233,7 +233,7 @@ const FAQsSection = () => {
               {(searchTerm || selectedCategory !== 'all') && (
                 <button
                   onClick={clearFilters}
-                  className="w-full mt-4 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+                  className="w-full mt-4 px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-sm font-medium transition-colors"
                 >
                   Clear Filters
                 </button>
@@ -241,7 +241,7 @@ const FAQsSection = () => {
             </div>
 
             {/* Popular Questions */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-800">
               <div className="flex items-center mb-4">
                 <Star className="w-5 h-5 text-yellow-500 mr-2" />
                 <h3 className="text-lg font-semibold text-gray-900">Popular Questions</h3>
@@ -255,7 +255,7 @@ const FAQsSection = () => {
                       setSearchTerm('');
                       toggleFAQ(faq.id);
                     }}
-                    className="text-left text-sm text-blue-600 hover:text-blue-800 hover:underline line-clamp-2"
+                    className="text-left text-sm text-green-600 hover:text-green-800 hover:underline line-clamp-2"
                   >
                     {faq.question}
                   </button>
@@ -293,7 +293,7 @@ const FAQsSection = () => {
 
           {/* Main Content - FAQ Items */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+            <div className="bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-800">
               {/* Results Header */}
               <div className="flex items-center justify-between mb-8">
                 <div>
@@ -324,12 +324,12 @@ const FAQsSection = () => {
                   <div className="space-y-3">
                     <button
                       onClick={clearFilters}
-                      className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                      className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
                     >
                       Clear Filters
                     </button>
                     <p className="text-sm text-gray-500">
-                      or <a href="mailto:support@company.com" className="text-blue-600 hover:underline">contact our support team</a>
+                      or <a href="mailto:support@company.com" className="text-green-600 hover:underline">contact our support team</a>
                     </p>
                   </div>
                 </div>
@@ -341,12 +341,12 @@ const FAQsSection = () => {
                   <div
                     key={faq.id}
                     className={`border border-gray-200 rounded-xl transition-all duration-200 ${
-                      openItems.has(faq.id) ? 'shadow-md bg-blue-50 border-blue-200' : 'hover:shadow-sm'
+                      openItems.has(faq.id) ? 'shadow-md bg-zinc-800 border-zinc-700' : 'hover:shadow-sm border-zinc-800'
                     }`}
                   >
                     <button
                       onClick={() => toggleFAQ(faq.id)}
-                      className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-xl"
+                      className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-xl"
                     >
                       <div className="flex items-start flex-1">
                         {faq.popular && (
@@ -357,7 +357,7 @@ const FAQsSection = () => {
                             {faq.question}
                           </h3>
                           <div className="flex items-center mt-2 space-x-2">
-                            <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full capitalize">
+                            <span className="text-xs px-2 py-1 bg-zinc-800 text-gray-400 rounded-full capitalize">
                               {faq.category}
                             </span>
                             {faq.popular && (
@@ -389,7 +389,7 @@ const FAQsSection = () => {
                             {faq.tags.map(tag => (
                               <span
                                 key={tag}
-                                className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full cursor-pointer hover:bg-blue-200 transition-colors"
+                                className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full cursor-pointer hover:bg-green-200 transition-colors"
                                 onClick={() => setSearchTerm(tag)}
                               >
                                 #{tag}
@@ -407,7 +407,7 @@ const FAQsSection = () => {
                               <button className="text-sm text-red-600 hover:text-red-700 font-medium">
                                 👎 No
                               </button>
-                              <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                              <button className="text-sm text-green-600 hover:text-green-700 font-medium">
                                 📧 Contact Support
                               </button>
                             </div>
@@ -426,7 +426,7 @@ const FAQsSection = () => {
                     Still can't find what you're looking for?
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium">
                       Submit a Question
                     </button>
                     <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium">

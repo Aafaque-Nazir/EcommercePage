@@ -41,12 +41,11 @@ export default function ProductsPage() {
 
   const categories = [
     "All",
-    "Clothing",
-    "Electronics",
-    "Home",
-    "Shoes",
-    "Wearables",
-    "Audio",
+    "Laptops",
+    "Headphones",
+    "Smart Watches",
+    "Mobiles",
+    "Accessories",
   ];
 
   // Handle URL category parameter on mount
@@ -54,11 +53,13 @@ export default function ProductsPage() {
     const urlCategory = searchParams.get("category");
     if (urlCategory) {
       // Capitalize first letter to match category format
-      const formattedCategory = urlCategory.charAt(0).toUpperCase() + urlCategory.slice(1).toLowerCase();
-      const categories = ["All", "Clothing", "Electronics", "Home", "Shoes", "Wearables", "Audio"];
+      const groups = ["All", "Laptops", "Headphones", "Smart Watches", "Mobiles", "Accessories"];
       
-      if (categories.includes(formattedCategory)) {
-        setCategory(formattedCategory);
+      // Simple capitalization won't work for "Smart Watches", need to find matching group case-insensitively
+      const found = groups.find(g => g.toLowerCase().replace(/ /g, "-") === urlCategory.toLowerCase());
+      
+      if (found) {
+        setCategory(found);
       }
     }
   }, [searchParams]);
@@ -80,7 +81,7 @@ export default function ProductsPage() {
 
     if (category !== "All") {
       items = items.filter(
-        (p) => p.category.toLowerCase() === category.toLowerCase()
+        (p) => p.category.toLowerCase() === category.toLowerCase().replace(/ /g, "-")
       );
     }
 
@@ -140,7 +141,7 @@ export default function ProductsPage() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-950 relative overflow-hidden">
+    <section className="min-h-screen bg-black relative overflow-hidden">
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-green-950/20 to-transparent pointer-events-none" />
       <div className="absolute top-20 right-0 w-96 h-96 bg-green-900/10 rounded-full blur-3xl pointer-events-none" />
@@ -165,20 +166,20 @@ export default function ProductsPage() {
           </div>
 
           {/* Search & Sort Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-gray-900/60 p-2 rounded-2xl backdrop-blur-xl border border-gray-800 shadow-lg">
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-zinc-900/60 p-2 rounded-2xl backdrop-blur-xl border border-zinc-800 shadow-lg">
             <div className="relative w-full sm:w-72 group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
               <Input
                 placeholder="Search products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 h-12 bg-transparent border-transparent focus:bg-gray-800 transition-all duration-300 rounded-xl"
+                className="pl-12 h-12 bg-transparent border-transparent focus:bg-zinc-800 transition-all duration-300 rounded-xl"
               />
             </div>
             
             <div className="flex gap-2">
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-gray-800/50 rounded-xl transition-colors">
+                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-zinc-800/50 rounded-xl transition-colors">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -192,7 +193,7 @@ export default function ProductsPage() {
               {/* Mobile Filter Sheet */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-gray-800/50">
+                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-zinc-800/50">
                     <Filter className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>

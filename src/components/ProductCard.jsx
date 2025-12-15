@@ -34,7 +34,7 @@ export default function ProductCard({ product }) {
   const getBadge = () => {
     if (discountPercent >= 40) return { text: "Hot Deal", className: "bg-red-500 text-white" };
     if (discountPercent >= 20) return { text: `${discountPercent}% OFF`, className: "bg-orange-500 text-white" };
-    if (product.rating >= 4.5) return { text: "Bestseller", className: "bg-blue-500 text-white" };
+    if (product.rating >= 4.5) return { text: "Bestseller", className: "bg-green-500 text-white" };
     if (product.stock && product.stock < 10) return { text: "Limited", className: "bg-yellow-500 text-black" };
     return null;
   };

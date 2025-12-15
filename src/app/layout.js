@@ -1,9 +1,7 @@
 import { Outfit } from "next/font/google";
 import "../app/globals.css";
 import Providers from "./Providers";
-import Navbar from "../components/Navbar";
-import MobileBottomNav from "../components/MobileBottomNav";
-import Footer from "../components/Footer";
+import ClientLayoutWrapper from "../components/ClientLayoutWrapper";
 import { Toaster } from "sonner";
 
 const outfit = Outfit({
@@ -22,12 +20,9 @@ export default function RootLayout({ children }) {
         <html lang="en" className={outfit.variable} suppressHydrationWarning>
             <body className="bg-background text-foreground font-sans antialiased selection:bg-green-500/30">
                 <Providers>
-                    <Navbar />
-                    <main className="min-h-screen pb-16 md:pb-0">
+                    <ClientLayoutWrapper>
                         {children}
-                    </main>
-                    <Footer />
-                    <MobileBottomNav />
+                    </ClientLayoutWrapper>
                     <Toaster position="top-center" richColors />
                 </Providers>
             </body>

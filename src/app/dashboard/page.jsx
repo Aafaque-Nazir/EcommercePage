@@ -37,13 +37,13 @@ export default function Dashboard() {
       icon: Package,
       label: "My Orders",
       href: "/orders",
-      color: "from-blue-500 to-blue-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Heart,
       label: "Wishlist",
       href: "/wishlist",
-      color: "from-red-500 to-pink-600",
+      color: "from-green-500 to-emerald-600",
     },
     {
       icon: ShoppingCart,

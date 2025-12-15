@@ -26,7 +26,7 @@ export default function CartPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 py-12">
+    <div className="min-h-screen bg-black py-12">
       <div className="max-w-5xl mx-auto px-6">
         <h1 className="text-4xl font-extrabold text-white mb-10 flex items-center gap-3">
           <ShoppingBag className="w-8 h-8 text-green-500" />
@@ -34,20 +34,38 @@ export default function CartPage() {
         </h1>
 
         {items.length === 0 ? (
-          <Card className="p-10 text-center shadow-lg bg-white rounded-2xl">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Your cart is empty 🛒
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Start adding products to see them here.
-            </p>
-            <Button
-              onClick={handleContinueShopping}
-              className="mt-6 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl"
-            >
-              Continue Shopping
-            </Button>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-black p-16 text-center shadow-2xl"
+          >
+            {/* Decorative Elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-green-600/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl" />
+            
+            <div className="relative z-10">
+              {/* Icon */}
+              <div className="mx-auto w-24 h-24 rounded-full bg-zinc-900 border-2 border-zinc-800 flex items-center justify-center mb-6 shadow-lg">
+                <ShoppingBag className="w-12 h-12 text-green-500" />
+              </div>
+              
+              {/* Text */}
+              <h3 className="text-2xl font-bold text-white mb-3">
+                Your cart is empty
+              </h3>
+              <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                Start adding products to see them here.
+              </p>
+              
+              {/* Button */}
+              <Button
+                onClick={handleContinueShopping}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-6 rounded-xl text-lg font-semibold shadow-lg shadow-green-900/30 hover:shadow-xl hover:shadow-green-900/40 transition-all"
+              >
+                Continue Shopping
+              </Button>
+            </div>
+          </motion.div>
         ) : (
           <Card className="overflow-hidden shadow-xl rounded-2xl">
             <CardContent className="p-0">

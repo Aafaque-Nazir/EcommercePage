@@ -40,7 +40,7 @@ export default function AboutPage() {
       desc: "Bank-grade security with PCI-compliant checkout, encrypted payments, and proactive fraud protection systems.",
     },
     {
-      icon: <Truck className="h-6 w-6 text-blue-600" aria-hidden />,
+      icon: <Truck className="h-6 w-6 text-green-600" aria-hidden />,
       title: "Lightning Fast Delivery",
       desc: "Pan-India shipping with real‑time tracking and same‑day delivery options in major metropolitan areas.",
     },
@@ -82,7 +82,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-background text-gray-100 overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 sm:py-20 lg:py-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900/20 via-gray-950 to-gray-950" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900/20 via-black to-black" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -126,7 +126,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-8 sm:py-12 border-y border-gray-900 bg-gray-900/50">
+      <section className="py-8 sm:py-12 border-y border-zinc-900 bg-black">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((s) => (
@@ -159,9 +159,9 @@ export default function AboutPage() {
             
             <div className="grid gap-6">
               {pillars.map((p) => (
-                <Card key={p.title} className="border-0 shadow-md hover:shadow-xl transition-shadow bg-gray-900">
+                <Card key={p.title} className="border-0 shadow-md hover:shadow-xl transition-shadow bg-zinc-900">
                   <CardContent className="p-6 flex gap-4">
-                    <div className="shrink-0 p-3 bg-gray-800 rounded-xl h-fit">
+                    <div className="shrink-0 p-3 bg-black rounded-xl h-fit">
                       {p.icon}
                     </div>
                     <div>
@@ -192,11 +192,11 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="bg-gray-900 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+            <div className="bg-black text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-green-600 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2" />
               <div className="relative z-10">
                 <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                  <Globe className="w-6 h-6 text-blue-400" />
+                  <Globe className="w-6 h-6 text-green-400" />
                   Global Presence
                 </h3>
                 <p className="text-gray-300 mb-6">
@@ -215,7 +215,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-12 sm:py-24 bg-gray-900">
+      <section className="py-12 sm:py-24 bg-black">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">The Dream Team</Badge>
@@ -228,7 +228,7 @@ export default function AboutPage() {
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             {team.map((t) => (
               <div key={t.name} className="group relative">
-                <div className="relative h-80 w-full overflow-hidden rounded-2xl bg-gray-800">
+                <div className="relative h-80 w-full overflow-hidden rounded-2xl bg-zinc-900">
                   <Image
                     src={t.img}
                     alt={t.name}
@@ -252,7 +252,7 @@ export default function AboutPage() {
         <h2 className="text-3xl font-bold mb-10 text-center">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full space-y-4">
           {faqs.map((f, idx) => (
-            <AccordionItem key={idx} value={`item-${idx}`} className="border rounded-xl px-4 data-[state=open]:bg-gray-900 transition-colors">
+            <AccordionItem key={idx} value={`item-${idx}`} className="border rounded-xl px-4 data-[state=open]:bg-zinc-900 transition-colors">
               <AccordionTrigger className="text-lg font-medium hover:no-underline py-6">{f.q}</AccordionTrigger>
               <AccordionContent className="text-gray-400 text-base pb-6 leading-relaxed">
                 {f.a}

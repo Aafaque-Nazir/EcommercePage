@@ -8,7 +8,7 @@ const ordersSlice = createSlice({
   },
   reducers: {
     addOrder: (state, action) => {
-      state.list.push(action.payload);
+      state.list.unshift(action.payload);
     },
     cancelOrder: (state, action) => {
       const order = state.list.find((o) => o.id == action.payload); // Use == to handle string/number comparison

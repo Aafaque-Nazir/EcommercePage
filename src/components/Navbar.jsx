@@ -13,20 +13,21 @@ import {
   Heart,
   Search,
   ChevronDown,
-  Smartphone,
   Watch,
   Headphones,
   Camera,
-  Shirt,
-  Footprints,
-  Home,
-  Speaker
+  Speaker,
+  Laptop,
+  Monitor,
+  Cable,
+  Smartphone
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { selectCartCount } from "../redux/slices/cartSlice";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import SearchBar from "@/components/SearchBar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,45 +42,33 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [shopMenuOpen, setShopMenuOpen] = useState(false);
   const [mobileShopOpen, setMobileShopOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { data: session, status } = useSession();
   const cartCount = useSelector(selectCartCount);
-
   const shopCategories = [
     { 
-      name: "Electronics", 
-      icon: <Smartphone className="w-5 h-5" />, 
-      href: "/products?category=electronics",
-      desc: "Latest gadgets & devices"
+      name: "Laptops", 
+      icon: <Laptop className="w-5 h-5" />, 
+      href: "/products?category=laptops",
+      desc: "Portable Powerhouses"
     },
     { 
-      name: "Fashion", 
-      icon: <Shirt className="w-5 h-5" />, 
-      href: "/products?category=clothing",
-      desc: "Trendy clothing for all"
-    },
-    { 
-      name: "Audio", 
-      icon: <Headphones className="w-5 h-5" />, 
-      href: "/products?category=audio",
-      desc: "Premium sound gear"
-    },
-    { 
-      name: "Home", 
-      icon: <Home className="w-5 h-5" />, 
-      href: "/products?category=home",
-      desc: "Decor & essentials"
-    },
-    { 
-      name: "Shoes", 
-      icon: <Footprints className="w-5 h-5" />, 
-      href: "/products?category=shoes",
-      desc: "Comfort & style"
-    },
-    { 
-      name: "Wearables", 
+      name: "Smart Watches", 
       icon: <Watch className="w-5 h-5" />, 
-      href: "/products?category=wearables",
-      desc: "Smartwatches & bands"
+      href: "/products?category=smart-watches",
+      desc: "Stay Connected"
+    },
+    { 
+      name: "Mobiles", 
+      icon: <Smartphone className="w-5 h-5" />, 
+      href: "/products?category=mobiles",
+      desc: "Latest Smartphones"
+    },
+    { 
+      name: "Headphones", 
+      icon: <Headphones className="w-5 h-5" />, 
+      href: "/products?category=headphones",
+      desc: "Premium Sound"
     },
   ];
 
@@ -148,19 +137,19 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-black rounded-2xl shadow-2xl border border-gray-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
+                      className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-black rounded-2xl shadow-2xl border border-zinc-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
                     >
                       <div className="col-span-2 mb-2">
-                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Shop by Category</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Shop by Category</h3>
                         <div className="grid grid-cols-2 gap-4">
                           {shopCategories.map((cat) => (
                             <Link
                               key={cat.name}
                               href={cat.href}
-                              className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-900 transition-colors group"
+                              className="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-900 transition-colors group"
                               onClick={() => setShopMenuOpen(false)}
                             >
-                              <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-green-500 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                              <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center text-green-500 group-hover:bg-green-600 group-hover:text-white transition-colors">
                                 {cat.icon}
                               </div>
                               <div>
@@ -177,7 +166,7 @@ export default function Navbar() {
                       </div>
                       
                       {/* Featured Section in Menu */}
-                      <div className="col-span-2 bg-gray-900 border border-gray-800 rounded-xl p-6 text-white flex justify-between items-center">
+                      <div className="col-span-2 bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-white flex justify-between items-center">
                         <div>
                           <Badge className="bg-white/10 text-white border-0 mb-2">New Arrival</Badge>
                           <h4 className="font-bold text-lg mb-1">Summer Collection</h4>
@@ -213,6 +202,10 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
+              <div className="w-64 xl:w-80 mr-4">
+                <SearchBar />
+              </div>
+
               {/* Cart */}
               <Link href="/cart">
                 <Button variant="ghost" size="icon" className="relative">
@@ -287,6 +280,7 @@ export default function Navbar() {
               )}
             </div>
 
+
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2"
@@ -306,9 +300,9 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-gray-800 bg-black shadow-2xl overflow-hidden"
+              className="lg:hidden bg-black/98 backdrop-blur-md border-t border-green-900/30 overflow-hidden"
             >
-              <div className="px-6 py-8 space-y-6 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              <div className="px-4 py-6 space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {/* Mobile Links Section */}
                 <div className="space-y-2">
                   <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">
@@ -317,7 +311,7 @@ export default function Navbar() {
                   
                   <Link
                     href="/"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-green-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Home
@@ -327,7 +321,7 @@ export default function Navbar() {
                   <div className="rounded-xl overflow-hidden">
                     <button
                       onClick={() => setMobileShopOpen(!mobileShopOpen)}
-                      className="w-full flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
+                      className="w-full flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-green-400 transition-colors"
                     >
                       Shop
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileShopOpen ? "rotate-180" : ""}`} />
@@ -339,7 +333,7 @@ export default function Navbar() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="bg-gray-900/50 px-3"
+                          className="bg-zinc-900/50 px-3"
                         >
                           <div className="py-2 space-y-1">
                             {shopCategories.map((cat) => (
@@ -370,14 +364,14 @@ export default function Navbar() {
 
                   <Link
                     href="/about"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-green-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     About
                   </Link>
                   <Link
                     href="/contact"
-                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-purple-400 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl text-base font-medium text-gray-200 hover:bg-white/10 hover:text-green-400 transition-colors"
                     onClick={() => setOpen(false)}
                   >
                     Contact
@@ -388,7 +382,7 @@ export default function Navbar() {
                   {/* Cart - Mobile */}
                   <Link
                     href="/cart"
-                    className="flex items-center justify-between p-4 rounded-xl bg-gray-900 hover:bg-gray-800 transition-colors mb-4"
+                    className="flex items-center justify-between p-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-colors mb-4"
                     onClick={() => setOpen(false)}
                   >
                     <div className="flex items-center gap-3">
@@ -409,7 +403,7 @@ export default function Navbar() {
                   {/* Auth - Mobile */}
                   {session ? (
                     <>
-                      <div className="p-4 bg-gradient-to-r from-green-900/20 to-pink-900/20 rounded-xl mb-4">
+                      <div className="p-4 bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-xl mb-4">
                         <div className="flex items-center gap-3 mb-4">
                           <Avatar className="w-12 h-12 ring-2 ring-white dark:ring-gray-800">
                             <AvatarImage src={session.user?.image} alt={session.user?.name} />
@@ -441,7 +435,7 @@ export default function Navbar() {
                           
                           <Link
                             href="/orders"
-                            className="flex items-center gap-3 p-3 rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors"
+                            className="flex items-center gap-3 p-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
                             onClick={() => setOpen(false)}
                           >
                             <Package className="w-5 h-5 text-green-600" />
@@ -492,6 +486,23 @@ export default function Navbar() {
                     </motion.div>
                   )}
                 </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        {/* Mobile Search Expandable */}
+        <AnimatePresence>
+          {mobileSearchOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden bg-black border-t border-zinc-800"
+            >
+              <div className="px-4 py-4">
+                <SearchBar onSearchSubmit={() => setMobileSearchOpen(false)} />
               </div>
             </motion.div>
           )}
