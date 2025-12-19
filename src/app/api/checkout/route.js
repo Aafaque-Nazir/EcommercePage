@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Cashfree } from "cashfree-pg";
 import connectDB from "@/lib/db";
 import Order from "@/models/Order";
+import Product from "@/models/Product";
 
 export async function POST(request) {
   try {
@@ -25,6 +26,17 @@ export async function POST(request) {
       amount: order_amount,
       status: "pending",
     });
+
+    // 2. Decrement Stock for each item
+    // We do this immediately upon order creation (pending/placed) to reserve the stock
+    if (items && items.length > 0) {
+      for (const item of items) {
+        await Product.findByIdAndUpdate(item.id, {
+          $inc: { stock: -item.qty }
+        });
+        console.log(`📉 Decremented stock for ${item.title} by ${item.qty}`);
+      }
+    }
 
     if (useMockPayment) {
       // Mock payment mode - simulate successful payment creation
