@@ -281,6 +281,15 @@ export default function Navbar() {
             </div>
 
 
+            {/* Mobile Actions */}
+            <div className="flex lg:hidden items-center gap-2">
+              <button
+                 className="p-2 text-gray-200 hover:text-green-500 transition-colors"
+                 onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                 aria-label="Search"
+              >
+                  <Search className="w-5 h-5" />
+              </button>
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2"
@@ -289,6 +298,7 @@ export default function Navbar() {
             >
               {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
+            </div>
           </div>
         </div>
 

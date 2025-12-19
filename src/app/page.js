@@ -26,7 +26,7 @@ const categories = [
     name: "Laptops",
     icon: <Laptop className="w-8 h-8" />,
     description: "Power & Potability",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?auto=format&fit=crop&q=80&w=1000",
+    image: "/laptop-modern.png",
     color: "from-green-600/20 to-green-900/20"
   },
   {
@@ -67,26 +67,30 @@ const HeroSection = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2000"
+          src="/hero-modern.png"
           alt="Hero Background"
           fill
-          className="object-cover opacity-60"
+          className="object-cover opacity-80"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
       </div>
 
       {/* Content */}
       <div className="container relative z-10 px-6 text-center">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           <span className="inline-block py-1 px-3 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 text-sm font-medium tracking-wider mb-6 backdrop-blur-sm">
             NEW COLLECTION 2025
           </span>
-          <h1 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tight leading-none">
+          <h1 className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tight leading-none font-heading">
             FUTURE OF <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">TECH IS HERE</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed font-sans">
             Experience the pinnacle of innovation. Premium electronics derived for performance and style.
           </p>
 
@@ -97,12 +101,12 @@ const HeroSection = () => {
               </Button>
             </Link>
             <Link href="/products?sort=newest">
-              <Button size="lg" variant="outline" className="h-14 px-10 rounded-full border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300 font-bold text-lg backdrop-blur-sm">
+              <Button size="lg" variant="outline" className="h-14 px-10 rounded-full border-green-900/50 hover:border-green-500 text-green-400 hover:bg-green-950/30 hover:text-green-300 font-bold text-lg backdrop-blur-sm transition-all">
                 New Arrivals
               </Button>
             </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll Indicator */}
@@ -112,7 +116,7 @@ const HeroSection = () => {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500"
       >
         <div className="w-[1px] h-16 bg-gradient-to-b from-transparent via-gray-500 to-transparent mx-auto mb-2" />
-        <span className="text-xs tracking-[0.2em] uppercase">Scroll</span>
+        <span className="text-xs tracking-[0.2em] uppercase font-sans">Scroll</span>
       </motion.div>
     </section>
   );

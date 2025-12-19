@@ -28,20 +28,30 @@ export default function SearchBar({ onSearchSubmit }) {
 
   // Debounced Search Effect
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const timer = setTimeout(async () => {
       if (query.length >= 2) {
         setLoading(true);
         try {
-          const res = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`);
+          const res = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`, { signal });
+          
+          if (!res.ok) throw new Error("Search failed");
+
           const data = await res.json();
           if (data.success) {
             setResults(data.results);
             setShowResults(true);
           }
         } catch (error) {
-          console.error("Search error", error);
+          if (error.name !== "AbortError") {
+            console.error("Search error", error);
+          }
         } finally {
-          setLoading(false);
+          if (!signal.aborted) {
+            setLoading(false);
+          }
         }
       } else {
         setResults([]);
@@ -49,7 +59,10 @@ export default function SearchBar({ onSearchSubmit }) {
       }
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [query]);
 
   const handleSubmit = (e) => {

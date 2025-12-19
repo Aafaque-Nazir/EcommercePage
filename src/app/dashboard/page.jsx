@@ -54,7 +54,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] py-8 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] py-8 px-4 overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         {/* Profile Header */}
         <motion.div
