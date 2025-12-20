@@ -141,48 +141,84 @@ export default function ProductsPage() {
   };
 
   return (
-    <section className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-green-950/20 to-transparent pointer-events-none" />
-      <div className="absolute top-20 right-0 w-96 h-96 bg-green-900/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-40 left-20 w-72 h-72 bg-emerald-900/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="min-h-screen bg-black relative overflow-hidden selection:bg-green-500/30">
+      {/* Dynamic Background Mesh */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <motion.div 
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-green-600/10 rounded-full blur-[140px]" 
+        />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.04]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black" />
+      </div>
 
-      <div className="container mx-auto px-4 max-w-7xl relative z-10 py-12">
+      <div className="container mx-auto px-4 max-w-7xl relative z-10 py-24">
         
         {/* Header Section */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6"
+          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8"
         >
-          <div className="space-y-2">
-            <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-green-200 to-white">
-              Explore Collection
-            </h1>
-            <p className="text-lg text-gray-300 max-w-lg leading-relaxed">
-              Discover our curated list of premium products designed to elevate your lifestyle.
-            </p>
+          <div className="space-y-4">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-green-400 text-xs font-black tracking-[0.3em] font-sans uppercase"
+            >
+              INVENTORY_GRID // PROTOCOL_AVAILABLE
+            </motion.div>
+            
+            <div className="overflow-hidden">
+              <motion.h1 
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-none font-heading italic uppercase"
+              >
+                EXPLORE <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-500 to-green-600">COLLECTION</span>
+              </motion.h1>
+            </div>
+            
+            <motion.p 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-lg text-zinc-500 max-w-lg leading-relaxed font-medium"
+            >
+              Curated hardware selected for peak performance and uncompromising technical standard.
+            </motion.p>
           </div>
 
           {/* Search & Sort Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-zinc-900/60 p-2 rounded-2xl backdrop-blur-xl border border-zinc-800 shadow-lg">
-            <div className="relative w-full sm:w-72 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto bg-zinc-950/50 p-2 rounded-2xl backdrop-blur-3xl border border-zinc-900 shadow-2xl">
+            <div className="relative w-full sm:w-80 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600 group-focus-within:text-green-500 transition-colors" />
               <Input
-                placeholder="Search products..."
+                placeholder="UNIT_SEARCH..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 h-12 bg-transparent border-transparent focus:bg-zinc-800 transition-all duration-300 rounded-xl"
+                className="pl-12 h-14 bg-black/50 border-zinc-900 text-white placeholder:text-zinc-700 focus:ring-1 focus:ring-green-500/30 transition-all rounded-xl"
               />
             </div>
             
             <div className="flex gap-2">
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="w-[180px] h-12 bg-transparent border-transparent hover:bg-zinc-800/50 rounded-xl transition-colors">
-                  <SelectValue placeholder="Sort by" />
+                <SelectTrigger className="w-[180px] h-14 bg-black/50 border-zinc-900 text-white hover:bg-zinc-900/50 rounded-xl transition-colors">
+                  <SelectValue placeholder="SORT_ORDER" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-zinc-950 border-zinc-900 text-white">
                   <SelectItem value="latest">Latest Arrivals</SelectItem>
                   <SelectItem value="price-low">Price: Low to High</SelectItem>
                   <SelectItem value="price-high">Price: High to Low</SelectItem>
@@ -193,58 +229,55 @@ export default function ProductsPage() {
               {/* Mobile Filter Sheet */}
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="md:hidden h-12 w-12 rounded-xl hover:bg-zinc-800/50">
-                    <Filter className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" className="md:hidden h-14 w-14 rounded-xl bg-black/50 border border-zinc-900 hover:bg-zinc-900/50">
+                    <Filter className="h-5 w-5 text-green-500" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="w-full sm:max-w-md flex flex-col h-full bg-gray-950">
-                  <SheetHeader className="px-1 space-y-4">
+                <SheetContent side="right" className="w-full sm:max-w-md bg-black border-zinc-900 text-white flex flex-col h-full">
+                  <SheetHeader className="pb-8 border-b border-zinc-900">
                     <div className="flex items-center justify-between">
-                      <SheetTitle className="text-2xl font-bold text-white">Filters</SheetTitle>
+                      <SheetTitle className="text-3xl font-black text-white font-heading italic uppercase tracking-tighter">GRID_FILTER</SheetTitle>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={() => {setCategory("All"); setSearch(""); setSort("latest");}} 
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 px-3"
+                        className="text-red-500 hover:text-red-400 hover:bg-red-500/5 px-3 font-black uppercase text-xs tracking-widest"
                       >
                         Reset All
                       </Button>
                     </div>
-                    <SheetDescription className="text-gray-500 dark:text-gray-400">
-                      Refine your product search to find exactly what you need.
-                    </SheetDescription>
                   </SheetHeader>
 
-                  <div className="flex-1 overflow-y-auto py-6 px-1 space-y-8 scrollbar-hide">
+                  <div className="flex-1 overflow-y-auto py-10 space-y-12 scrollbar-hide">
                     {/* Categories Section */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Categories</h3>
-                      <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-6">
+                      <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.4em] ml-2">Categories</h3>
+                      <div className="grid grid-cols-1 gap-3">
                         {categories.map((cat) => (
                           <button
                             key={cat}
                             onClick={() => setCategory(cat)}
                             className={`
-                              relative p-4 rounded-xl text-left transition-all duration-200 border group
+                              relative p-5 rounded-[1.5rem] text-left transition-all duration-300 border flex items-center justify-between
                               ${category === cat 
-                                ? "border-green-600 bg-green-900/20 text-green-300 shadow-md ring-1 ring-green-600" 
-                                : "border-gray-800 bg-gray-900 text-gray-300 hover:border-green-800 hover:bg-gray-800"
+                                ? "border-green-500/50 bg-green-500/5 text-white" 
+                                : "border-zinc-900 bg-zinc-950 text-zinc-500 hover:border-zinc-800"
                               }
                             `}
                           >
-                            <span className="font-medium text-sm">{cat}</span>
+                            <span className="font-black text-xs uppercase tracking-widest">{cat}</span>
                             {category === cat && (
-                              <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-green-500 shadow-sm" />
+                              <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                             )}
                           </button>
                         ))}
                       </div>
                     </div>
                     
-                    {/* Sort Section (Mobile Only) */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Sort By</h3>
-                      <div className="space-y-2 bg-gray-900/50 p-2 rounded-2xl">
+                    {/* Sort Section */}
+                    <div className="space-y-6">
+                      <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.4em] ml-2">Sort Engine</h3>
+                      <div className="space-y-2 bg-zinc-950 p-2 rounded-[2rem] border border-zinc-950">
                          {[
                            { label: "Latest Arrivals", value: "latest" },
                            { label: "Price: Low to High", value: "price-low" },
@@ -254,10 +287,10 @@ export default function ProductsPage() {
                            <button
                               key={option.value}
                               onClick={() => setSort(option.value)}
-                              className={`w-full flex items-center justify-between p-3 rounded-xl text-sm transition-all duration-200 ${
+                              className={`w-full flex items-center justify-between p-4 rounded-xl text-xs transition-all duration-300 font-black uppercase tracking-widest ${
                                 sort === option.value
-                                  ? "bg-gray-800 font-semibold text-white shadow-sm"
-                                  : "text-gray-400 hover:bg-gray-800/50"
+                                  ? "bg-zinc-900 text-white"
+                                  : "text-zinc-600 hover:bg-zinc-900/50"
                               }`}
                            >
                              {option.label}
@@ -268,10 +301,10 @@ export default function ProductsPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-gray-800 mt-auto pb-6">
+                  <div className="pt-8 border-t border-zinc-900 mt-auto pb-8">
                     <SheetClose asChild>
-                      <Button className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
-                        Show {filtered.length} Results
+                      <Button className="w-full h-16 text-lg font-black uppercase tracking-tighter rounded-2xl bg-white text-black hover:bg-green-500 hover:text-white transition-all duration-300 shadow-2xl">
+                        Execute Protocol ({filtered.length})
                       </Button>
                     </SheetClose>
                   </div>
@@ -286,30 +319,25 @@ export default function ProductsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="hidden md:flex flex-wrap gap-3 mb-12 justify-center"
+          className="hidden md:flex flex-wrap gap-4 mb-16 justify-center"
         >
           {categories.map((cat, idx) => (
             <motion.button
               key={cat}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 + idx * 0.05 }}
               onClick={() => setCategory(cat)}
-              className={`px-8 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 relative overflow-hidden group ${
+              className={`px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-300 relative overflow-hidden group ${
                 category === cat
-                  ? "text-white shadow-xl shadow-green-500/30 scale-105"
-                  : "bg-gray-900 text-gray-400 hover:bg-gray-800 border border-gray-800 hover:border-green-800"
+                  ? "text-black shadow-2xl shadow-green-500/20 scale-105"
+                  : "bg-zinc-950 text-zinc-500 hover:bg-zinc-900 border border-zinc-900 hover:border-green-500/30"
               }`}
             >
               {category === cat && (
-                <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600" />
+                <motion.div 
+                  layoutId="activeCat"
+                  className="absolute inset-0 bg-white" 
+                />
               )}
-              <span className="relative z-10 flex items-center gap-2">
-                {cat}
-                {category === cat && (
-                  <motion.span layoutId="activeDot" className="w-1.5 h-1.5 bg-white rounded-full" />
-                )}
-              </span>
+              <span className="relative z-10">{cat}</span>
             </motion.button>
           ))}
         </motion.div>

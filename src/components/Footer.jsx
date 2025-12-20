@@ -37,12 +37,18 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold mb-6 text-white">Quick Links</h3>
           <ul className="space-y-4">
-            {['Home', 'Shop', 'About Us', 'Contact', 'FAQ'].map((item) => (
-              <li key={item}>
-                <a href="#" className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-2 group">
+            {[
+              { name: 'Home', href: '/' },
+              { name: 'Shop', href: '/products' },
+              { name: 'About Us', href: '/about' },
+              { name: 'Contact', href: '/contact' },
+              { name: 'FAQ', href: '/faq' }
+            ].map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-2 group">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {item}
-                </a>
+                  {item.name}
+                </Link>
               </li>
             ))}
           </ul>
@@ -52,12 +58,17 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold mb-6 text-white">Customer Service</h3>
           <ul className="space-y-4">
-            {['Returns', 'Shipping', 'Privacy Policy', 'Terms & Conditions'].map((item) => (
-              <li key={item}>
-                <a href="#" className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-2 group">
+            {[
+              { name: 'Returns', href: '/returns' },
+              { name: 'Shipping', href: '/shipping' },
+              { name: 'Privacy Policy', href: '/privacy' },
+              { name: 'Terms & Conditions', href: '/terms' }
+            ].map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-2 group">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {item}
-                </a>
+                  {item.name}
+                </Link>
               </li>
             ))}
           </ul>

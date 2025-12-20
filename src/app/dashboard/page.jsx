@@ -75,7 +75,7 @@ export default function Dashboard() {
 
             {/* User Info */}
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
+              <h1 className="text-2xl md:text-3xl font-black text-white mb-1 font-heading italic uppercase tracking-tight">
                 {session.user.name}
               </h1>
               <p className="text-gray-400 mb-3">{session.user.email}</p>
@@ -103,7 +103,7 @@ export default function Dashboard() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <h2 className="text-xl font-bold text-white mb-4">Quick Access</h2>
+          <h2 className="text-xl font-black text-white mb-4 font-heading italic uppercase tracking-tight">Quick Access</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quickLinks.map((link, index) => (
               <motion.div
@@ -135,7 +135,7 @@ export default function Dashboard() {
           transition={{ delay: 0.5 }}
           className="bg-[#111] rounded-2xl border border-gray-800 p-6"
         >
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-xl font-black text-white mb-4 flex items-center gap-2 font-heading italic uppercase tracking-tight">
             <Settings className="w-5 h-5 text-green-500" />
             Account Information
           </h2>

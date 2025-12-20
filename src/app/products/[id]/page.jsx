@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/slices/cartSlice";
@@ -117,82 +118,100 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Breadcrumb */}
-      <div className="bg-[#111111] border-b border-gray-800">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 text-sm">
-            <Link href="/" className="text-gray-400 hover:text-green-500 transition-colors">Home</Link>
-            <ChevronLeft className="w-4 h-4 rotate-180 text-gray-600" />
-            <Link href="/products" className="text-gray-400 hover:text-green-500 transition-colors">Products</Link>
-            <ChevronLeft className="w-4 h-4 rotate-180 text-gray-600" />
-            <Link href={`/products?category=${product.category}`} className="text-gray-400 hover:text-green-500 transition-colors">
-              {product.category}
-            </Link>
-            <ChevronLeft className="w-4 h-4 rotate-180 text-gray-600" />
-            <span className="text-white font-medium truncate max-w-xs">{product.title}</span>
-          </div>
-        </div>
+    <div className="min-h-screen bg-black text-gray-100 overflow-x-hidden selection:bg-green-500/30">
+      {/* Dynamic Background Mesh */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-green-600/10 rounded-full blur-[140px]" 
+        />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.04]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      <div className="container mx-auto px-4 py-8 lg:py-12">
-        {/* Back Button */}
-        <Link 
-          href="/products" 
-          className="inline-flex items-center gap-2 text-gray-400 hover:text-green-500 transition-colors mb-8 group"
-        >
-          <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-medium">Back to Products</span>
-        </Link>
+      {/* Breadcrumb & Navigation */}
+      <nav className="relative z-20 border-b border-white/5 bg-black/20 backdrop-blur-md">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
+            <Link href="/products" className="text-zinc-500 hover:text-green-500 transition-colors">INVENTORY</Link>
+            <span className="text-zinc-800">//</span>
+            <Link href={`/products?category=${product.category}`} className="text-zinc-500 hover:text-green-500 transition-colors">
+              {product.category}
+            </Link>
+            <span className="text-green-500/50">//</span>
+            <span className="text-white truncate max-w-[200px]">{product.title}</span>
+          </div>
+          
+          <Link 
+            href="/products" 
+            className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-white transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            EXIT_VIEW
+          </Link>
+        </div>
+      </nav>
+
+      <div className="container mx-auto px-6 py-12 lg:py-20 relative z-10">
 
         {/* Main Product Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mb-16">
           
           {/* LEFT - Image Gallery */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Main Image */}
-            <div className="relative aspect-square bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] rounded-2xl overflow-hidden border border-gray-800 group">
+            <div className="relative aspect-square bg-zinc-950 rounded-[2.5rem] overflow-hidden border border-zinc-900 group shadow-2xl">
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity animate-scanline pointer-events-none z-10" />
               <Image
                 src={productImages[selectedImage]}
                 alt={product.title}
                 fill
-                className="object-contain p-8 group-hover:scale-105 transition-transform duration-500"
+                className="object-contain p-12 group-hover:scale-105 transition-transform duration-700 ease-out"
                 priority
               />
               
               {/* Sale Badge */}
               {product.oldPrice && (
-                <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
-                  {Math.round((1 - product.price / product.oldPrice) * 100)}% OFF
+                <div className="absolute top-8 left-8 bg-white text-black px-6 py-2 rounded-full font-black text-[10px] tracking-[0.2em] shadow-2xl z-20 uppercase">
+                  PRICE_REDUCTION // -{Math.round((1 - product.price / product.oldPrice) * 100)}%
                 </div>
               )}
               
               {/* Zoom Button */}
               <button
                 onClick={() => setShowImageModal(true)}
-                className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm p-3 rounded-full hover:bg-black/70 transition-all"
+                className="absolute top-8 right-8 bg-black/40 backdrop-blur-md p-4 rounded-2xl hover:bg-green-600 hover:text-white transition-all border border-white/10 z-20"
               >
-                <ZoomIn className="w-5 h-5" />
+                <ZoomIn className="w-5 h-5 flex-shrink-0" />
               </button>
             </div>
 
             {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-4">
               {productImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                  className={`relative aspect-square rounded-[1.5rem] overflow-hidden border transition-all duration-300 ${
                     selectedImage === idx 
-                      ? 'border-green-500 scale-105' 
-                      : 'border-gray-800 hover:border-gray-700'
+                      ? 'border-green-500 bg-green-500/5 shadow-lg shadow-green-500/20' 
+                      : 'border-zinc-900 bg-zinc-950/50 hover:border-zinc-700'
                   }`}
                 >
                   <Image
                     src={img}
                     alt={`${product.title} - ${idx + 1}`}
                     fill
-                    className="object-contain p-2"
+                    className="object-contain p-4 opacity-60 group-hover:opacity-100 transition-opacity"
                   />
                 </button>
               ))}
@@ -200,148 +219,163 @@ export default function ProductDetail() {
           </div>
 
           {/* RIGHT - Product Details */}
-          <div className="space-y-6">
-            {/* Category Badge */}
-            <div className="flex items-center gap-3">
-              <span className="px-4 py-2 bg-green-500/10 text-green-500 rounded-full text-sm font-semibold border border-green-500/20">
-                {product.category}
-              </span>
-              <div className="flex items-center gap-1 text-sm text-gray-400">
-                <Package className="w-4 h-4" />
-                <span>In Stock</span>
-              </div>
-            </div>
-
-            {/* Product Title */}
-            <div>
-              <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                {product.title}
-              </h1>
-              
-              {/* Rating */}
+          <div className="space-y-10">
+            <div className="space-y-6">
+              {/* Category & Status */}
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
+                <span className="px-5 py-2.5 bg-green-500/10 text-green-400 rounded-full text-[10px] font-black tracking-[0.3em] border border-green-500/20 uppercase">
+                  {product.category}
+                </span>
+                <div className="flex items-center gap-2 text-[10px] font-black tracking-[0.3em] text-zinc-600 uppercase">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                  UNIT_READY // IN_STOCK
                 </div>
-                <span className="text-gray-400 text-sm">(128 reviews)</span>
-                <span className="text-gray-600">|</span>
-                <span className="text-sm text-green-500 font-medium">SKU: {product.id.toUpperCase()}</span>
+              </div>
+
+              {/* Product Title */}
+              <div className="overflow-hidden">
+                <motion.h1 
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-5xl lg:text-7xl font-black text-white tracking-tighter leading-[0.9] font-heading italic uppercase"
+                >
+                  {product.title}
+                </motion.h1>
+              </div>
+              
+              {/* Rating & Identity */}
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-green-500 text-green-500" />
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">(128 FEEDBACKS)</span>
+                </div>
+                <div className="h-4 w-px bg-zinc-800" />
+                <span className="text-[10px] font-black text-green-500 uppercase tracking-[0.3em]">ID // {product.id.split('-').pop().toUpperCase()}</span>
               </div>
             </div>
 
-            {/* Price */}
-            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] border border-gray-800 rounded-2xl p-6">
+            {/* Price section */}
+            <div className="bg-zinc-950/50 backdrop-blur-3xl border border-zinc-900 rounded-[2rem] p-8 shadow-xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               <div className="flex items-baseline gap-4 mb-2">
-                <span className="text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                <span className="text-6xl font-black text-white font-heading italic tracking-tighter">
                   ₹{product.price.toLocaleString()}
                 </span>
                 {product.oldPrice && (
-                  <span className="text-2xl text-gray-500 line-through">
+                  <span className="text-2xl text-zinc-700 line-through font-bold">
                     ₹{product.oldPrice.toLocaleString()}
                   </span>
                 )}
               </div>
               {product.oldPrice && (
-                <p className="text-green-500 font-medium">
-                  You save ₹{(product.oldPrice - product.price).toLocaleString()} ({Math.round((1 - product.price / product.oldPrice) * 100)}%)
-                </p>
+                <div className="inline-block px-3 py-1 bg-green-500/10 rounded-lg text-green-500 text-[10px] font-black uppercase tracking-widest">
+                  SAVED // ₹{(product.oldPrice - product.price).toLocaleString()}
+                </div>
               )}
-              <p className="text-gray-400 text-sm mt-2">Inclusive of all taxes</p>
+              <p className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] mt-4">Standard credit acquisition includes all local sector taxes.</p>
             </div>
 
             {/* Quantity Selector */}
-            <div className="space-y-3">
-              <label className="text-sm font-semibold text-gray-300">Quantity</label>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center border border-gray-800 rounded-lg bg-[#1a1a1a]">
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.4em] ml-4">Unit Quantity</label>
+              <div className="flex items-center gap-6">
+                <div className="flex items-center bg-zinc-950 border border-zinc-900 rounded-2xl p-1 shadow-inner">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:bg-gray-800 transition-colors rounded-l-lg"
+                    className="w-12 h-12 flex items-center justify-center hover:bg-zinc-900 transition-all rounded-xl text-zinc-500 hover:text-white"
                   >
-                    <Minus className="w-5 h-5" />
+                    <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-6 py-3 font-bold text-lg">{quantity}</span>
+                  <span className="w-16 text-center font-black text-xl text-white font-heading italic">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 hover:bg-gray-800 transition-colors rounded-r-lg"
+                    className="w-12 h-12 flex items-center justify-center hover:bg-zinc-900 transition-all rounded-xl text-zinc-500 hover:text-white"
                   >
-                    <Plus className="w-5 h-5" />
+                    <Plus className="w-4 h-4" />
                   </button>
                 </div>
-                <span className="text-gray-400 text-sm">
-                  {quantity > 5 ? 'Bulk order!' : 'Only 12 left in stock'}
-                </span>
+                <div className="text-[10px] font-black uppercase tracking-widest">
+                  {quantity > 5 ? (
+                    <span className="text-green-500">BULK_TRANSFER_ENABLED</span>
+                  ) : (
+                    <span className="text-zinc-600">UNITS_REMAINING // 12</span>
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4 pt-4">
+            <div className="flex flex-col gap-4 pt-4">
               <AddToCartButton
                 product={product}
                 quantity={quantity}
-                className="col-span-2 h-14 text-lg font-bold rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transition-all shadow-lg shadow-green-500/20 hover:shadow-green-500/40 flex items-center justify-center gap-2"
+                className="w-full h-20 text-xl font-black rounded-2xl bg-white text-black hover:bg-green-500 hover:text-white transition-all shadow-2xl uppercase tracking-tighter italic flex items-center justify-center gap-3 active:scale-95 group"
               >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
+                <ShoppingCart className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                INITIATE // LOAD_CART
               </AddToCartButton>
               
-              <button 
-                onClick={handleBuyNow}
-                className="h-14 border-2 border-green-500 text-green-500 rounded-xl font-bold hover:bg-green-500 hover:text-white transition-all flex items-center justify-center gap-2"
-              >
-                Buy Now
-              </button>
-              
-              <WishlistButton product={product} className="h-14 border-2 border-gray-700 hover:border-red-500 hover:text-red-500 rounded-xl font-bold transition-all flex items-center justify-center gap-2" />
+              <div className="grid grid-cols-2 gap-4">
+                <button 
+                  onClick={handleBuyNow}
+                  className="h-16 border-2 border-zinc-900 bg-zinc-950 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-zinc-900 hover:border-zinc-700 transition-all active:scale-95"
+                >
+                  SECURE_BUY
+                </button>
+                
+                <WishlistButton 
+                  product={product} 
+                  className="h-16 border-2 border-zinc-900 bg-zinc-950 text-zinc-500 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-red-500/50 hover:text-red-500 transition-all active:scale-95" 
+                />
+              </div>
             </div>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-4 pt-6">
-              <div className="flex flex-col items-center text-center p-4 bg-[#1a1a1a] rounded-xl border border-gray-800 hover:border-green-500/30 transition-all group">
-                <Truck className="w-8 h-8 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="font-semibold text-sm text-white">Free Shipping</span>
-                <span className="text-xs text-gray-400">On orders ₹999+</span>
-              </div>
-              
-              <div className="flex flex-col items-center text-center p-4 bg-[#1a1a1a] rounded-xl border border-gray-800 hover:border-green-500/30 transition-all group">
-                <RefreshCw className="w-8 h-8 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="font-semibold text-sm text-white">Easy Returns</span>
-                <span className="text-xs text-gray-400">7-day policy</span>
-              </div>
-              
-              <div className="flex flex-col items-center text-center p-4 bg-[#1a1a1a] rounded-xl border border-gray-800 hover:border-green-500/30 transition-all group">
-                <ShieldCheck className="w-8 h-8 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="font-semibold text-sm text-white">Warranty</span>
-                <span className="text-xs text-gray-400">1 Year</span>
-              </div>
+            <div className="grid grid-cols-3 gap-4 pt-10">
+              {[
+                { icon: <Truck className="w-6 h-6" />, label: "NEURAL_TRANSIT", sub: "Priority" },
+                { icon: <RefreshCw className="w-6 h-6" />, label: "DATA_RECUP", sub: "7-Cycle" },
+                { icon: <ShieldCheck className="w-6 h-6" />, label: "CORE_WARRANTY", sub: "Verified" }
+              ].map((badge, i) => (
+                <div key={i} className="flex flex-col items-center text-center p-6 bg-zinc-950 rounded-[1.5rem] border border-zinc-900 group/badge hover:border-green-500/30 transition-all">
+                  <div className="text-green-500 mb-4 group-hover/badge:scale-110 transition-transform">
+                    {badge.icon}
+                  </div>
+                  <span className="text-[9px] font-black text-white uppercase tracking-widest">{badge.label}</span>
+                  <span className="text-[8px] font-medium text-zinc-600 uppercase tracking-widest mt-1">{badge.sub}</span>
+                </div>
+              ))}
             </div>
 
             {/* Delivery Info */}
-            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] border border-gray-800 rounded-2xl p-6 space-y-4">
-              <h3 className="font-bold text-lg flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-green-500" />
-                Delivery Options
+            <div className="bg-zinc-950/30 border border-zinc-900 rounded-[2rem] p-8 space-y-6 shadow-xl">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-3 text-zinc-500">
+                <MapPin className="w-4 h-4 text-green-500" />
+                Logistics_Node
               </h3>
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <input
                   type="text"
-                  placeholder="Enter PIN code"
-                  className="flex-1 bg-[#0a0a0a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"
+                  placeholder="LOCATION_IDENTIFIER..."
+                  className="flex-1 bg-black border border-zinc-900 rounded-xl px-6 py-4 text-white placeholder-zinc-700 focus:border-green-500/50 focus:outline-none transition-all text-sm font-bold uppercase tracking-widest"
                 />
-                <button className="px-6 py-3 bg-green-500 hover:bg-green-600 rounded-lg font-semibold transition-colors">
-                  Check
+                <button className="px-8 py-4 bg-white text-black hover:bg-green-500 hover:text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all">
+                  SCAN
                 </button>
               </div>
-              <div className="space-y-2 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">
                   <Clock className="w-4 h-4 text-green-500" />
-                  <span>Estimated delivery: 3-5 business days</span>
+                  Estimated Arrival: 3-5 Cycles
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-zinc-400">
                   <Award className="w-4 h-4 text-green-500" />
-                  <span>Cash on Delivery available</span>
+                  CREDIT_UPON_TRANSIT enabled
                 </div>
               </div>
             </div>
@@ -349,84 +383,70 @@ export default function ProductDetail() {
         </div>
 
         {/* Tabs Section */}
-        <div className="mb-16">
+        <div className="mb-24">
           {/* Tab Headers */}
-          <div className="flex gap-2 border-b border-gray-800 mb-8 overflow-x-auto">
+          <div className="flex gap-1 border-b border-zinc-900 mb-12 overflow-x-auto scrollbar-hide">
             {["description", "specifications", "reviews"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-4 font-semibold capitalize transition-all whitespace-nowrap ${
+                className={`px-8 py-6 font-black text-[10px] uppercase tracking-[0.4em] transition-all whitespace-nowrap relative ${
                   activeTab === tab
-                    ? "text-green-500 border-b-2 border-green-500"
-                    : "text-gray-400 hover:text-white"
+                    ? "text-white"
+                    : "text-zinc-600 hover:text-zinc-400"
                 }`}
               >
-                {tab}
+                {activeTab === tab && (
+                  <motion.div 
+                    layoutId="activeTabUnderline"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-green-500 rounded-full" 
+                  />
+                )}
+                {tab}_PROTOCOL
               </button>
             ))}
           </div>
 
           {/* Tab Content */}
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] border border-gray-800 rounded-2xl p-8">
+          <div className="bg-zinc-950/30 border border-zinc-900 rounded-[3rem] p-10 md:p-16 drop-shadow-2xl">
             {activeTab === "description" && (
-              <div className="prose prose-invert max-w-none">
-                <h3 className="text-2xl font-bold text-white mb-4">Product Description</h3>
-                <p className="text-gray-300 text-lg leading-relaxed mb-6">
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-3xl font-black text-white mb-8 font-heading italic uppercase italic tracking-tighter italic">DATA_OVERVIEW</h3>
+                <p className="text-zinc-400 text-lg leading-relaxed mb-12 font-medium">
                   {product.description}
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-xl">
-                      <Check className="w-6 h-6 text-green-500" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                  {[
+                    { title: "PREMIUM_BUILD", desc: "Engineered with highest-grade materials for maximum durability." },
+                    { title: "SECURE_AUTH", desc: "100% genuine hardware with certified origin protocols." },
+                    { title: "ECO_SYSTEM", desc: "Minimally invasive manufacturing and sustainable sourcing." },
+                    { title: "24/7_SUPPORT", desc: "Continuous neural link to our customer assistance units." }
+                  ].map((feat, i) => (
+                    <div key={i} className="flex items-start gap-4 group/feat">
+                      <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-2xl group-hover/feat:bg-green-600 transition-all duration-300">
+                        <Check className="w-5 h-5 text-green-500 group-hover/feat:text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-black text-white text-[10px] tracking-[0.2em] mb-2 uppercase">{feat.title}</h4>
+                        <p className="text-zinc-500 text-xs leading-relaxed font-medium">{feat.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-white mb-1">Premium Quality</h4>
-                      <p className="text-gray-400 text-sm">Made with the finest materials for long-lasting durability.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-xl">
-                      <Check className="w-6 h-6 text-green-500" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white mb-1">Certified Authentic</h4>
-                      <p className="text-gray-400 text-sm">100% genuine product with quality assurance.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-xl">
-                      <Check className="w-6 h-6 text-green-500" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white mb-1">Eco-Friendly</h4>
-                      <p className="text-gray-400 text-sm">Sustainably sourced and environmentally conscious.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-green-500/10 rounded-xl">
-                      <Check className="w-6 h-6 text-green-500" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white mb-1">Expert Support</h4>
-                      <p className="text-gray-400 text-sm">24/7 customer service for any queries.</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             )}
 
             {activeTab === "specifications" && (
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-6">Technical Specifications</h3>
-                <div className="space-y-3">
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-3xl font-black text-white mb-10 font-heading italic uppercase tracking-tighter italic">TECHNICAL_PROTOCOLS</h3>
+                <div className="grid gap-4">
                   {Object.entries(specifications).map(([key, value], idx) => (
                     <div
                       key={idx}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#0a0a0a] rounded-xl border border-gray-800 hover:border-gray-700 transition-colors"
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-black/40 rounded-2xl border border-zinc-900 hover:border-zinc-800 transition-all group"
                     >
-                      <span className="font-semibold text-gray-300">{key}</span>
-                      <span className="text-white">{value}</span>
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{key}</span>
+                      <span className="text-sm font-black text-white uppercase tracking-wider group-hover:text-green-500 transition-colors">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -434,72 +454,69 @@ export default function ProductDetail() {
             )}
 
             {activeTab === "reviews" && (
-              <div>
-                <div className="flex items-center justify-between mb-8">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">Customer Reviews</h3>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center">
+                    <h3 className="text-3xl font-black text-white mb-4 font-heading italic uppercase tracking-tighter italic">PERSONNEL_FEEDBACK</h3>
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                          <Star key={i} className="w-5 h-5 fill-green-500 text-green-500" />
                         ))}
                       </div>
-                      <span className="text-gray-400">4.8 out of 5 (128 reviews)</span>
+                      <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">4.8 AVERAGE // 128 LOGS</span>
                     </div>
                   </div>
-                  <button className="px-6 py-3 bg-green-500 hover:bg-green-600 rounded-xl font-semibold transition-colors">
-                    Write a Review
+                  <button className="px-10 py-5 bg-white text-black hover:bg-green-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl">
+                    TRANSMIT_LOG
                   </button>
                 </div>
 
-                {/* Rating Distribution */}
-                <div className="mb-8 p-6 bg-[#0a0a0a] rounded-xl border border-gray-800">
+                {/* Rating Stats - Tactical Bento style */}
+                <div className="mb-16 p-8 bg-black/40 rounded-[2rem] border border-zinc-900 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center gap-4 mb-3">
-                      <span className="text-sm font-medium text-gray-400 w-16">{rating} Star</span>
-                      <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
-                          style={{ width: `${rating === 5 ? 70 : rating === 4 ? 20 : 10}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-gray-400 w-12">{rating === 5 ? 90 : rating === 4 ? 25 : 13}</span>
+                    <div key={rating} className="p-4 rounded-xl bg-zinc-950 border border-zinc-900 flex flex-col items-center gap-2">
+                       <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">{rating} Stars</span>
+                       <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-green-500" 
+                            style={{ width: `${rating === 5 ? 80 : rating === 4 ? 15 : 5}%` }} 
+                          />
+                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Individual Reviews */}
+                {/* Individual Logs */}
                 <div className="space-y-6">
                   {reviews.map((review) => (
-                    <div key={review.id} className="p-6 bg-[#0a0a0a] rounded-xl border border-gray-800 hover:border-gray-700 transition-all">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center font-bold">
-                              {review.name.charAt(0)}
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-white">{review.name}</h4>
-                              <span className="text-sm text-gray-400">{review.date}</span>
-                            </div>
+                    <div key={review.id} className="p-8 bg-black/40 rounded-[2.5rem] border border-zinc-900 hover:border-zinc-800 transition-all group">
+                      <div className="flex items-start justify-between mb-8">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center font-black text-green-500 group-hover:bg-green-600 group-hover:text-white transition-all text-xl">
+                            {review.name.charAt(0)}
                           </div>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${
-                                  i < review.rating
-                                    ? "fill-yellow-400 text-yellow-400"
-                                    : "text-gray-600"
-                                }`}
-                              />
-                            ))}
+                          <div>
+                            <h4 className="font-black text-white uppercase tracking-widest text-sm italic">{review.name}</h4>
+                            <span className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em]">{review.date}</span>
                           </div>
                         </div>
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < review.rating
+                                  ? "fill-green-500 text-green-500"
+                                  : "text-zinc-800"
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
-                      <p className="text-gray-300 mb-4">{review.comment}</p>
-                      <button className="text-sm text-gray-400 hover:text-green-500 transition-colors">
-                        👍 Helpful ({review.helpful})
+                      <p className="text-zinc-400 text-lg leading-relaxed mb-6 font-medium">"{review.comment}"</p>
+                      <button className="text-[10px] font-black text-zinc-600 hover:text-green-500 transition-colors uppercase tracking-[0.3em]">
+                        DATA_USEFUL // {review.helpful}
                       </button>
                     </div>
                   ))}
@@ -511,30 +528,41 @@ export default function ProductDetail() {
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div>
-            <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="relative">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+              <div>
+                <h2 className="text-4xl font-black text-white font-heading italic uppercase tracking-tighter italic">SIMILAR_UNITS</h2>
+                <p className="text-zinc-500 font-medium uppercase text-[10px] tracking-[0.3em] mt-2">Compatible hardware profiles found</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {relatedProducts.map((relProduct) => (
                 <Link
                   key={relProduct.id}
                   href={`/products/${relProduct.id}`}
-                  className="group bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] border border-gray-800 rounded-2xl overflow-hidden hover:border-green-500/50 transition-all hover:scale-105"
+                  className="group relative bg-zinc-950/50 border border-zinc-900 rounded-[2rem] overflow-hidden hover:border-green-500/30 transition-all duration-500 hover:-translate-y-2 shadow-2xl"
                 >
-                  <div className="relative aspect-square bg-[#0a0a0a] p-6">
+                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity animate-scanline pointer-events-none z-10" />
+                  <div className="relative aspect-square bg-zinc-950 p-10 overflow-hidden">
                     <Image
                       src={relProduct.image}
                       alt={relProduct.title}
                       fill
-                      className="object-contain group-hover:scale-110 transition-transform duration-500"
+                      className="object-contain group-hover:scale-110 transition-transform duration-700 p-4"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-white mb-2 line-clamp-2 group-hover:text-green-500 transition-colors">
+                  <div className="p-8">
+                    <div className="text-[10px] font-black text-green-500/50 uppercase tracking-widest mb-4">IDENTIFIED // {relProduct.category}</div>
+                    <h3 className="font-black text-white mb-4 line-clamp-1 uppercase tracking-tighter text-xl italic group-hover:text-green-400 transition-colors">
                       {relProduct.title}
                     </h3>
-                    <p className="text-2xl font-bold text-green-500">₹{relProduct.price}</p>
+                    <div className="flex justify-between items-center">
+                      <p className="text-2xl font-black text-white font-heading italic">₹{relProduct.price}</p>
+                      <div className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 shadow-xl">
+                        <Plus size={20} />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               ))}

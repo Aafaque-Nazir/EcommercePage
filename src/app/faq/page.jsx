@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { 
   Search, 
   ChevronDown, 
@@ -124,13 +126,9 @@ const FAQsSection = () => {
   // Filter FAQs based on search and category
   useEffect(() => {
     let filtered = faqData;
-
-    // Filter by category
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(faq => faq.category === selectedCategory);
     }
-
-    // Filter by search term
     if (searchTerm.trim()) {
       const search = searchTerm.toLowerCase().trim();
       filtered = filtered.filter(faq => 
@@ -139,7 +137,6 @@ const FAQsSection = () => {
         faq.tags.some(tag => tag.toLowerCase().includes(search))
       );
     }
-
     setFilteredFAQs(filtered);
     setShowNoResults(filtered.length === 0 && (searchTerm.trim() || selectedCategory !== 'all'));
   }, [searchTerm, selectedCategory]);
@@ -162,89 +159,98 @@ const FAQsSection = () => {
     setOpenItems(new Set());
   };
 
-  // Get popular FAQs
   const popularFAQs = faqData.filter(faq => faq.popular);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black font-sans scroll-smooth">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center mb-6">
-            <HelpCircle className="w-16 h-16 mr-4 opacity-90" />
-            <h1 className="text-4xl md:text-5xl font-bold">
-              Frequently Asked Questions
+      <div className="relative overflow-hidden bg-zinc-950 border-b border-zinc-900 py-24">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-green-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-center mb-8"
+          >
+            <HelpCircle className="w-12 h-12 text-green-500 mr-4" />
+            <h1 className="text-4xl md:text-6xl font-heading font-black tracking-tight text-white italic">
+              F.A.Q<span className="text-green-500">_</span>
             </h1>
-          </div>
-          <p className="text-xl md:text-2xl opacity-90 max-w-2xl mx-auto mb-8">
-            Find answers to common questions about our products, services, and policies.
+          </motion.div>
+          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 font-sans">
+            How can we help? Find answers to frequently asked questions about our technology and services.
           </p>
           
           {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search for answers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-12 py-4 text-lg rounded-xl border-0 shadow-lg focus:ring-4 focus:ring-white/20 focus:outline-none text-gray-900"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
+          <div className="relative max-w-2xl mx-auto group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-focus-within:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative flex items-center bg-zinc-900 rounded-2xl border border-zinc-800 focus-within:border-green-500 transition-all">
+              <Search className="ml-5 text-zinc-500 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search the system..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-4 pr-12 py-5 bg-transparent text-white focus:outline-none font-medium"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="mr-5 text-zinc-500 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           
           {/* Sidebar - Categories & Popular */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Categories */}
-            <div className="bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-800">
-              <div className="flex items-center mb-4">
-                <Filter className="w-5 h-5 text-green-600 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">Categories</h3>
+          <div className="lg:col-span-1 space-y-8">
+            <div className="bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-6 border border-zinc-800">
+              <div className="flex items-center mb-6 px-2">
+                <Filter className="w-4 h-4 text-green-500 mr-3" />
+                <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-zinc-500">Categories</h3>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {categories.map(category => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full flex items-center px-3 py-2 rounded-lg text-left transition-colors ${
+                    className={`w-full flex items-center px-4 py-3 rounded-xl text-left transition-all duration-200 ${
                       selectedCategory === category.id
-                        ? 'bg-green-100 text-green-700 border border-green-200'
-                        : 'hover:bg-zinc-800 text-gray-300'
+                        ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                        : 'hover:bg-zinc-800/50 text-zinc-400 border border-transparent'
                     }`}
                   >
-                    {category.icon}
-                    <span className="ml-2 text-sm font-medium">{category.name}</span>
+                    <span className={selectedCategory === category.id ? 'text-green-500' : 'text-zinc-600'}>
+                      {category.icon}
+                    </span>
+                    <span className="ml-3 text-sm font-semibold tracking-wide">{category.name}</span>
                   </button>
                 ))}
               </div>
-              
               {(searchTerm || selectedCategory !== 'all') && (
                 <button
                   onClick={clearFilters}
                   className="w-full mt-4 px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-sm font-medium transition-colors"
                 >
-                  Clear Filters
+                  Reset Filters
                 </button>
               )}
             </div>
 
             {/* Popular Questions */}
-            <div className="bg-zinc-900 rounded-2xl shadow-lg p-6 border border-zinc-800">
+            <div className="bg-zinc-900/50 rounded-2xl p-6 border border-zinc-800">
               <div className="flex items-center mb-4">
-                <Star className="w-5 h-5 text-yellow-500 mr-2" />
-                <h3 className="text-lg font-semibold text-gray-900">Popular Questions</h3>
+                <Star className="w-4 h-4 text-green-500 mr-2" />
+                <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-zinc-500">Popular Queries</h3>
               </div>
               <div className="space-y-3">
                 {popularFAQs.slice(0, 5).map(faq => (
@@ -255,7 +261,7 @@ const FAQsSection = () => {
                       setSearchTerm('');
                       toggleFAQ(faq.id);
                     }}
-                    className="text-left text-sm text-green-600 hover:text-green-800 hover:underline line-clamp-2"
+                    className="text-left text-sm text-zinc-400 hover:text-green-500 transition-colors line-clamp-2"
                   >
                     {faq.question}
                   </button>
@@ -264,177 +270,112 @@ const FAQsSection = () => {
             </div>
 
             {/* Contact Support */}
-            <div className="bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl shadow-lg p-6 text-white">
-              <h3 className="text-lg font-bold mb-3">Still Need Help?</h3>
-              <p className="text-green-100 text-sm mb-4">
-                Can't find what you're looking for? Our support team is here to help!
-              </p>
+            <div className="bg-gradient-to-br from-green-500 to-emerald-700 rounded-2xl p-6 text-black">
+              <h3 className="text-lg font-black uppercase tracking-tighter mb-2 italic">Connection Required?</h3>
+              <p className="text-black/70 text-sm mb-6 font-bold uppercase tracking-tight">Our agents are standing by.</p>
               <div className="space-y-3">
-                <a
-                  href="mailto:support@company.com"
-                  className="flex items-center text-sm text-white hover:text-green-100 transition-colors"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  support@company.com
+                <a href="mailto:support@shopease.com" className="flex items-center text-sm font-black hover:underline gap-2">
+                  <Mail size={16} /> SUPPORT@SHOPEASE.COM
                 </a>
-                <a
-                  href="tel:+911234567890"
-                  className="flex items-center text-sm text-white hover:text-green-100 transition-colors"
-                >
-                  <Phone className="w-4 h-4 mr-2" />
-                  +91 98765 43210
+                <a href="tel:+1234567890" className="flex items-center text-sm font-black hover:underline gap-2">
+                  <Phone size={16} /> +1 (234) 567-890
                 </a>
-                <button className="w-full mt-3 bg-white text-green-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors">
-                  Start Live Chat
-                </button>
+                <Link href="/contact" className="w-full mt-4 bg-black text-white px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-zinc-800 transition-all text-center block">
+                  Establish Terminal Contact
+                </Link>
               </div>
             </div>
           </div>
 
           {/* Main Content - FAQ Items */}
           <div className="lg:col-span-3">
-            <div className="bg-zinc-900 rounded-2xl shadow-lg p-8 border border-zinc-800">
+            <div className="bg-zinc-900/40 rounded-3xl p-8 border border-zinc-800 shadow-2xl">
               {/* Results Header */}
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 pb-6 border-b border-zinc-800">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {selectedCategory === 'all' ? 'All Questions' : categories.find(c => c.id === selectedCategory)?.name}
+                  <h2 className="text-2xl font-heading font-black text-white italic tracking-tight uppercase">
+                    {selectedCategory === 'all' ? 'System Sync' : categories.find(c => c.id === selectedCategory)?.name}
                   </h2>
-                  <p className="text-gray-600 mt-1">
-                    {filteredFAQs.length} question{filteredFAQs.length !== 1 ? 's' : ''} found
-                    {searchTerm && ` for "${searchTerm}"`}
+                  <p className="text-zinc-500 mt-2 text-sm font-medium uppercase tracking-widest">
+                    {filteredFAQs.length} entry found
+                    {searchTerm && ` matching "${searchTerm.toUpperCase()}"`}
                   </p>
                 </div>
-                
                 {filteredFAQs.length > 0 && (
-                  <div className="text-sm text-gray-500">
-                    Click questions to expand answers
+                  <div className="text-[10px] font-black text-green-500 uppercase tracking-[0.2em] mt-4 md:mt-0 flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                    <CheckCircle size={12} /> SECURE_ACCESS
                   </div>
                 )}
               </div>
 
               {/* No Results */}
               {showNoResults && (
-                <div className="text-center py-12">
-                  <HelpCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No results found</h3>
-                  <p className="text-gray-600 mb-6">
-                    We couldn't find any questions matching your search.
-                  </p>
-                  <div className="space-y-3">
-                    <button
-                      onClick={clearFilters}
-                      className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                      Clear Filters
-                    </button>
-                    <p className="text-sm text-gray-500">
-                      or <a href="mailto:support@company.com" className="text-green-600 hover:underline">contact our support team</a>
-                    </p>
-                  </div>
+                <div className="text-center py-20 grayscale opacity-50">
+                  <HelpCircle className="w-20 h-20 text-zinc-700 mx-auto mb-6" />
+                  <h3 className="text-2xl font-bold text-white mb-2 uppercase italic">Query Unsuccessful</h3>
+                  <p className="text-zinc-500 mb-8 max-w-sm mx-auto font-medium">The requested data could not be located in our systems.</p>
+                  <button onClick={clearFilters} className="bg-zinc-800 text-white px-8 py-3 rounded-xl hover:bg-zinc-700 transition-colors font-black uppercase tracking-widest text-xs">
+                    Reset System
+                  </button>
                 </div>
               )}
 
               {/* FAQ Items */}
               <div className="space-y-4">
-                {filteredFAQs.map((faq, index) => (
-                  <div
-                    key={faq.id}
-                    className={`border border-gray-200 rounded-xl transition-all duration-200 ${
-                      openItems.has(faq.id) ? 'shadow-md bg-zinc-800 border-zinc-700' : 'hover:shadow-sm border-zinc-800'
-                    }`}
-                  >
-                    <button
-                      onClick={() => toggleFAQ(faq.id)}
-                      className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-xl"
-                    >
+                {filteredFAQs.map((faq) => (
+                  <div key={faq.id} className={`group transition-all duration-300 rounded-2xl overflow-hidden border ${openItems.has(faq.id) ? 'bg-zinc-800/80 border-green-500/30' : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'}`}>
+                    <button onClick={() => toggleFAQ(faq.id)} className="w-full flex items-center justify-between p-6 text-left focus:outline-none">
                       <div className="flex items-start flex-1">
-                        {faq.popular && (
-                          <Star className="w-5 h-5 text-yellow-500 mr-3 mt-0.5 flex-shrink-0" />
-                        )}
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                        <div className={`mt-1 h-5 w-5 flex-shrink-0 transition-colors duration-300 ${openItems.has(faq.id) ? 'text-green-500' : 'text-zinc-700'}`}>
+                           {faq.popular ? <Star size={18} fill={openItems.has(faq.id) ? "currentColor" : "none"} /> : <HelpCircle size={18} />}
+                        </div>
+                        <div className="ml-4">
+                          <h3 className={`text-lg font-bold tracking-tight transition-all duration-300 ${openItems.has(faq.id) ? 'text-white italic' : 'text-zinc-200'}`}>
                             {faq.question}
                           </h3>
-                          <div className="flex items-center mt-2 space-x-2">
-                            <span className="text-xs px-2 py-1 bg-zinc-800 text-gray-400 rounded-full capitalize">
-                              {faq.category}
-                            </span>
-                            {faq.popular && (
-                              <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">
-                                Popular
-                              </span>
-                            )}
-                          </div>
                         </div>
                       </div>
-                      <div className="flex-shrink-0 ml-4">
-                        {openItems.has(faq.id) ? (
-                          <ChevronUp className="w-5 h-5 text-gray-500" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-500" />
-                        )}
+                      <div className={`flex-shrink-0 ml-4 transition-transform duration-300 ${openItems.has(faq.id) ? 'rotate-180 text-green-500' : 'text-zinc-600'}`}>
+                        <ChevronDown className="w-5 h-5" />
                       </div>
                     </button>
                     
-                    {openItems.has(faq.id) && (
-                      <div className="px-6 pb-6 pt-0">
-                        <div className="border-t border-gray-200 pt-4">
-                          <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                            {faq.answer}
-                          </p>
-                          
-                          {/* Tags */}
-                          <div className="flex flex-wrap gap-2 mt-4">
-                            {faq.tags.map(tag => (
-                              <span
-                                key={tag}
-                                className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full cursor-pointer hover:bg-green-200 transition-colors"
-                                onClick={() => setSearchTerm(tag)}
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Helpful Actions */}
-                          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-                            <p className="text-sm text-gray-600">Was this helpful?</p>
-                            <div className="flex items-center space-x-4">
-                              <button className="text-sm text-green-600 hover:text-green-700 font-medium">
-                                👍 Yes
-                              </button>
-                              <button className="text-sm text-red-600 hover:text-red-700 font-medium">
-                                👎 No
-                              </button>
-                              <button className="text-sm text-green-600 hover:text-green-700 font-medium">
-                                📧 Contact Support
-                              </button>
+                    <AnimatePresence>
+                      {openItems.has(faq.id) && (
+                        <motion.div 
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="px-6 pb-8 pt-2"
+                        >
+                          <div className="pl-9 border-l border-green-500/20">
+                            <p className="text-zinc-400 leading-relaxed text-base font-medium">
+                              {faq.answer}
+                            </p>
+                            <div className="flex flex-wrap gap-2 mt-6">
+                              {faq.tags.map(tag => (
+                                <span key={tag} className="text-[10px] uppercase font-black px-2 py-0.5 bg-zinc-800 text-zinc-500 rounded border border-zinc-700 hover:text-green-500 hover:border-green-500/50 transition-all cursor-pointer">
+                                  #{tag.toUpperCase()}
+                                </span>
+                              ))}
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ))}
               </div>
 
-              {/* Load More (for pagination if needed) */}
-              {filteredFAQs.length > 0 && (
-                <div className="text-center mt-8 pt-8 border-t border-gray-200">
-                  <p className="text-gray-600 mb-4">
-                    Still can't find what you're looking for?
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium">
-                      Submit a Question
-                    </button>
-                    <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium">
-                      Contact Support
-                    </button>
-                  </div>
+              {/* Bottom Support */}
+              <div className="mt-16 pt-10 border-t border-zinc-800 text-center">
+                <h4 className="text-white font-black tracking-[0.3em] text-xs mb-8 uppercase opacity-50">CONNECTION_STATUS: REQUIRED</h4>
+                <div className="flex flex-wrap items-center justify-center gap-6">
+                   <Link href="/contact" className="flex items-center gap-3 px-10 py-4 bg-green-600 hover:bg-green-500 text-black font-black uppercase tracking-tighter rounded-2xl transition-all shadow-xl shadow-green-600/20 active:scale-95">
+                      <MessageCircle size={20} /> Establish Terminal Contact
+                   </Link>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

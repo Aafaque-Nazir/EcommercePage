@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { AnimatePresence } from 'framer-motion';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -150,241 +151,227 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black text-gray-100 overflow-x-hidden selection:bg-green-500/30">
       {/* Hero Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-24"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-4 bg-black/30 text-green-400 hover:bg-black/40 border border-green-500/30">Contact Us</Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Get In Touch
-          </h1>
-          <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">
-            Have a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-          </p>
+      <section className="relative h-[600px] flex items-center justify-center overflow-hidden bg-black">
+        {/* Dynamic Background Mesh */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <motion.div 
+            animate={{
+              scale: [1, 1.3, 1],
+              rotate: [0, -45, 0],
+            }}
+            transition={{
+              duration: 30,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute -top-[10%] -left-[10%] w-[80%] h-[80%] bg-emerald-600/10 rounded-full blur-[160px]" 
+          />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.05]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
+          {/* Scientific Grid Overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
         </div>
-      </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            className="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-green-400 text-xs font-black tracking-[0.4em] mb-8 backdrop-blur-md font-sans uppercase"
+          >
+            NEURAL_LINK // ESTABLISHING CONNECTION
+          </motion.div>
+          
+          <div className="overflow-hidden mb-8">
+            <motion.h1 
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-none font-heading italic uppercase text-white"
+            >
+              GET IN <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-500 to-green-600">TOUCH</span>
+            </motion.h1>
+          </div>
+          
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-lg md:text-2xl text-zinc-500 max-w-3xl mx-auto font-medium"
+          >
+            Initiate a secure data transfer. Our human interface units are standing by to process your inquiries.
+          </motion.p>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10 -mt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           
           {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8 md:p-12">
-                <div className="flex items-center mb-8">
-                  <MessageSquare className="w-8 h-8 text-green-600 mr-3" />
-                  <h2 className="text-3xl font-bold text-white">Send us a Message</h2>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="lg:col-span-2"
+          >
+            <Card className="border border-zinc-900 bg-zinc-950/80 backdrop-blur-3xl rounded-[3rem] shadow-2xl overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none" />
+              <CardContent className="p-10 md:p-16 relative z-10">
+                <div className="flex items-center mb-12">
+                  <div className="w-16 h-16 rounded-2xl bg-black border border-white/10 flex items-center justify-center text-green-500 mr-6 shadow-xl">
+                    <MessageSquare size={32} />
+                  </div>
+                  <div>
+                    <h2 className="text-4xl font-black text-white font-heading italic uppercase tracking-tighter leading-none">TERMINAL_INPUT</h2>
+                    <p className="text-zinc-600 font-black text-[10px] tracking-[0.3em] uppercase mt-2">Initialize secure message transfer</p>
+                  </div>
                 </div>
 
                 {/* Status Messages */}
-                {submitStatus === 'success' && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-green-900/20 border border-green-600/50 rounded-lg flex items-center"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-                    <span className="text-green-300">Thank you! Your message has been sent successfully.</span>
-                  </motion.div>
-                )}
+                <AnimatePresence>
+                  {submitStatus === 'success' && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-10 p-6 bg-green-500/10 border border-green-500/30 rounded-2xl flex items-center"
+                    >
+                      <CheckCircle className="w-6 h-6 text-green-500 mr-4 shrink-0" />
+                      <span className="text-green-400 font-medium">Protocol executed successfully. Data received and queued for processing.</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                {submitStatus === 'error' && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-red-900/20 border border-red-600/50 rounded-lg flex items-center"
-                  >
-                    <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
-                    <span className="text-red-300">Sorry, there was an error. Please try again.</span>
-                  </motion.div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name and Email Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                        Full Name *
-                      </label>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] ml-4">Full Identity</label>
                       <Input
-                        type="text"
-                        id="name"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className={errors.name ? 'border-red-500' : ''}
-                        placeholder="John Doe"
+                        className={`h-16 px-8 rounded-2xl bg-black/50 border-zinc-800 text-white placeholder:text-zinc-700 focus:ring-2 focus:ring-green-500/30 focus:border-green-500/50 transition-all font-medium ${errors.name ? 'border-red-500' : ''}`}
+                        placeholder="ALICE_VANCE"
                       />
-                      {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
                     </div>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                        Email Address *
-                      </label>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] ml-4">Communication Node</label>
                       <Input
-                        type="email"
-                        id="email"
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className={errors.email ? 'border-red-500' : ''}
-                        placeholder="john@example.com"
+                        className={`h-16 px-8 rounded-2xl bg-black/50 border-zinc-800 text-white placeholder:text-zinc-700 focus:ring-2 focus:ring-green-500/30 focus:border-green-500/50 transition-all font-medium ${errors.email ? 'border-red-500' : ''}`}
+                        placeholder="ALICE@CITADEL.COM"
                       />
-                      {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                     </div>
                   </div>
 
-                  {/* Phone and Subject Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
-                        Phone Number
-                      </label>
-                      <Input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className={errors.phone ? 'border-red-500' : ''}
-                        placeholder="+91 98765 43210"
-                      />
-                      {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
-                    </div>
-
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
-                        Subject *
-                      </label>
-                      <Input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        className={errors.subject ? 'border-red-500' : ''}
-                        placeholder="How can we help you?"
-                      />
-                      {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
-                    </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] ml-4">Subject Directive</label>
+                    <Input
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className={`h-16 px-8 rounded-2xl bg-black/50 border-zinc-800 text-white placeholder:text-zinc-700 focus:ring-2 focus:ring-green-500/30 focus:border-green-500/50 transition-all font-medium ${errors.subject ? 'border-red-500' : ''}`}
+                      placeholder="HARDWARE_INQUIRY_01"
+                    />
                   </div>
 
-                  {/* Message */}
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                      Message *
-                    </label>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] ml-4">Data Payload</label>
                     <textarea
-                      id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleInputChange}
                       rows={6}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors resize-none bg-black text-white ${
-                        errors.message ? 'border-red-500' : 'border-zinc-800'
-                      }`}
-                      placeholder="Tell us more about your inquiry..."
+                      className={`w-full px-8 py-6 rounded-3xl bg-black/50 border border-zinc-800 text-white placeholder:text-zinc-700 focus:ring-2 focus:ring-green-500/30 focus:border-green-500/50 transition-all font-medium resize-none ${errors.message ? 'border-red-500' : ''}`}
+                      placeholder="Transmitting your request details..."
                     />
-                    {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
-                    <p className="mt-2 text-sm text-gray-500">
-                      {formData.message.length}/500 characters
-                    </p>
                   </div>
 
-                  {/* Submit Button */}
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-14 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                    className="w-full h-[72px] rounded-2xl bg-white text-black hover:bg-green-500 hover:text-white font-black text-xl uppercase tracking-tighter transition-all duration-300 transform active:scale-95 group relative overflow-hidden"
                   >
-                    {isSubmitting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5 mr-2" />
-                        Send Message
-                      </>
-                    )}
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      {isSubmitting ? 'PROCESSING...' : (
+                        <>EXECUTE TRANSFER <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                      )}
+                    </span>
                   </Button>
                 </form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
-          {/* Contact Information */}
-          <div className="space-y-6">
-            {/* Contact Details */}
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
-                <div className="space-y-6">
+          {/* Contact Information Cards */}
+          <div className="space-y-8">
+            <motion.div 
+               initial={{ opacity: 0, x: 20 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ delay: 0.6 }}
+            >
+              <Card className="border border-zinc-900 bg-zinc-950 p-10 rounded-[3rem] shadow-xl group hover:border-green-500/30 transition-all">
+                <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.4em] mb-10">Static Coordinates</h3>
+                <div className="space-y-10">
                   {contactInfo.map((item, index) => (
-                    <div key={index} className="flex items-start space-x-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-green-900/30 rounded-lg flex items-center justify-center text-green-400 border border-green-600/30">
+                    <div key={index} className="flex items-start gap-6 group/item">
+                      <div className="w-12 h-12 rounded-xl bg-black border border-white/5 flex items-center justify-center text-green-500 group-hover/item:bg-green-600 group-hover/item:text-white transition-all transform group-hover/item:scale-110">
                         {item.icon}
                       </div>
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-1">{item.title}</h4>
-                        {item.link ? (
-                          <a href={item.link} className="text-white hover:text-green-400 transition-colors">
-                            {item.details}
-                          </a>
-                        ) : (
-                          <p className="text-white">{item.details}</p>
-                        )}
-                        {item.subDetails && (
-                          <p className="text-gray-400 text-sm">{item.subDetails}</p>
-                        )}
+                        <h4 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">{item.title}</h4>
+                        <p className="text-lg font-black text-white font-heading italic uppercase tracking-tighter leading-none">{item.details}</p>
+                        {item.subDetails && <p className="text-zinc-600 text-sm mt-1 font-medium">{item.subDetails}</p>}
                       </div>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
-            {/* Social Media */}
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-white mb-6">Follow Us</h3>
-                <div className="flex gap-3">
-                  {socialLinks.map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.href}
-                      aria-label={social.label}
-                      className={`w-12 h-12 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg flex items-center justify-center ${social.color} hover:text-white hover:border-green-500 transition-all duration-200 transform hover:scale-110`}
-                    >
-                      {social.icon}
-                    </a>
-                  ))}
+            <motion.div 
+               initial={{ opacity: 0, x: 20 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ delay: 0.8 }}
+            >
+              <Card className="border-0 bg-gradient-to-br from-green-600 to-emerald-700 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity animate-scanline pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <CheckCircle size={32} />
+                    <h3 className="text-2xl font-black font-heading italic uppercase tracking-tighter">QUICK_SYNC</h3>
+                  </div>
+                  <p className="text-green-100 font-medium mb-8 text-lg">Our central processing unit responds to most data transfers within 2.4 hours.</p>
+                  <div className="p-6 rounded-2xl bg-black/20 backdrop-blur-md border border-white/10">
+                    <p className="text-xs font-black uppercase tracking-widest mb-2 opacity-60">Avg. Transmission Delay</p>
+                    <p className="text-5xl font-black font-heading italic">02:40:00</p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
-            {/* Quick Response */}
-            <Card className="border-0 shadow-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white overflow-hidden">
-              <CardContent className="p-8">
-                <div className="flex items-center mb-4">
-                  <CheckCircle className="w-8 h-8 mr-3" />
-                  <h3 className="text-xl font-bold">Quick Response</h3>
-                </div>
-                <p className="text-green-100 mb-4">
-                  We typically respond to all inquiries within 24 hours during business days.
-                </p>
-                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                  <p className="text-sm font-medium mb-1">Average Response Time</p>
-                  <p className="text-3xl font-bold">2-4 Hours</p>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Social Matrix */}
+            <motion.div 
+               initial={{ opacity: 0, x: 20 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ delay: 1 }}
+               className="flex gap-4"
+            >
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.href}
+                  className="flex-1 h-20 rounded-2xl bg-zinc-950 border border-zinc-900 flex items-center justify-center text-zinc-600 hover:text-green-500 hover:border-green-500/50 hover:bg-zinc-900 transition-all transform hover:scale-105"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>

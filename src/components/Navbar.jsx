@@ -100,7 +100,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center z-50">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="text-2xl font-black tracking-tight text-green-600 "
+                className="text-2xl font-black tracking-tight text-green-600 font-heading"
               >
                 ShopEase
               </motion.div>
@@ -140,7 +140,7 @@ export default function Navbar() {
                       className="absolute top-full left-1/2 -translate-x-1/2 w-[600px] bg-black rounded-2xl shadow-2xl border border-zinc-800 overflow-hidden p-6 grid grid-cols-2 gap-6"
                     >
                       <div className="col-span-2 mb-2">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Shop by Category</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 font-heading">Shop by Category</h3>
                         <div className="grid grid-cols-2 gap-4">
                           {shopCategories.map((cat) => (
                             <Link
@@ -168,8 +168,8 @@ export default function Navbar() {
                       {/* Featured Section in Menu */}
                       <div className="col-span-2 bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-white flex justify-between items-center">
                         <div>
-                          <Badge className="bg-white/10 text-white border-0 mb-2">New Arrival</Badge>
-                          <h4 className="font-bold text-lg mb-1">Summer Collection</h4>
+                          <Badge className="bg-white/10 text-white border-0 mb-2 font-sans tracking-widest">New Arrival</Badge>
+                          <h4 className="font-bold text-lg mb-1 font-heading italic uppercase tracking-tight">Summer Collection</h4>
                           <p className="text-gray-400 text-sm mb-4">Get up to 50% off on new arrivals</p>
                           <Button size="sm" variant="secondary" className="bg-white text-black hover:bg-gray-200" asChild>
                             <Link href="/products?sort=latest">Shop Now</Link>

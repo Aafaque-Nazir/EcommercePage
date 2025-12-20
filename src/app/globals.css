@@ -157,13 +157,38 @@
   --sidebar-ring: oklch(0.65 0.25 145);
 }
 
+@layer utilities {
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(1000%);
+    }
+  }
+
+  .animate-scanline {
+    animation: scanline 2s linear infinite;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
   }
 }
 

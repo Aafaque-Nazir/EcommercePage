@@ -1,14 +1,8 @@
-import { Outfit, Space_Grotesk, Inter } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "../app/globals.css";
 import Providers from "./Providers";
 import ClientLayoutWrapper from "../components/ClientLayoutWrapper";
 import { Toaster } from "sonner";
-
-const outfit = Outfit({
-    subsets: ["latin"],
-    variable: "--font-outfit",
-    display: "swap",
-});
 
 const spaceGrotesk = Space_Grotesk({
     subsets: ["latin"],
@@ -29,7 +23,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" className={`${outfit.variable} ${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
+        <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
             <body className="bg-background text-foreground font-sans antialiased selection:bg-green-500/30">
                 <Providers>
                     <ClientLayoutWrapper>
